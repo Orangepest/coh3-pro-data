@@ -283,8 +283,7 @@ with tab_tech:
 
         # Per-unit drill down
         st.subheader("Unit Timing Drill-Down")
-        prod_units = bo[bo["action_type"] == "production"]["unit"].unique()
-        prod_units.sort()
+        prod_units = sorted(bo[bo["action_type"] == "production"]["unit"].unique())
         if len(prod_units) > 0:
             selected_unit = st.selectbox("Select unit", prod_units)
             fut = first_unit_timing(bo, selected_unit)

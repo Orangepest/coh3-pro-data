@@ -42,6 +42,7 @@ st.set_page_config(
 FACTION_COLORS = {
     "american": "#4CAF50",
     "british": "#2196F3",
+    "british_africa": "#2196F3",
     "dak": "#FFC107",
     "german": "#9E9E9E",
 }
@@ -469,6 +470,7 @@ with tab_trends:
         mt = meta_trends(df)
         if not mt.empty:
             mt_reset = mt.reset_index()
+            mt_reset["month"] = mt_reset["month"].astype(str)
 
             st.subheader("Monthly Faction Win Rate")
             fig = px.line(

@@ -269,49 +269,104 @@ with tab_tech:
             m, sec = divmod(int(s), 60)
             return f"{m}:{sec:02d}"
 
-        tt = tech_timings(bo)
-        if not tt.empty:
-            st.subheader("Average Tech Timings")
-            tt_chart = tt.reset_index().sort_values("avg_seconds")
-            tt_chart["avg_label"] = tt_chart["avg_seconds"].apply(secs_to_mss)
-            fig = px.bar(
-                tt_chart,
-                x="avg_seconds", y="unit",
-                orientation="h",
-                text="avg_label",
-                labels={"avg_seconds": "Average Time (seconds)", "unit": "Tech / Building"},
-                hover_data=["count"],
-            )
-            fig.update_traces(textposition="outside")
-            fig.update_layout(height=max(400, len(tt) * 35))
-            st.plotly_chart(fig, use_container_width=True)
+        # Category filter
+        categories = ["All", "production", "tech", "battlegroup", "ability"]
+        selected_cat = st.selectbox("Category", categories, key="tech_cat")
 
-            # Table with m:ss columns
-            tt_display = tt.copy()
-            for col in ["avg_seconds", "median_seconds", "earliest", "latest"]:
-                tt_display[col] = tt_display[col].apply(secs_to_mss)
-            tt_display.columns = ["count", "avg", "median", "earliest", "latest"]
-            st.dataframe(tt_display, use_container_width=True)
+        bo_filtered = bo if selected_cat == "All" else bo[bo["action_type"] == selected_cat]
+
+        # Timing chart for filtered category
+        if not bo_filtered.empty:
+            st.subheader(f"Average Timings - {selected_cat.title()}")
+            filtered_stats = bo_filtered.groupby("unit").agg(
+                count=("seconds", "count"),
+                avg_seconds=("seconds", "mean"),
+                median_seconds=("seconds", "median"),
+                earliest=("seconds", "min"),
+                latest=("seconds", "max"),
+            ).round(0)
+            filtered_stats = filtered_stats[filtered_stats["count"] >= 3]
+
+            if not filtered_stats.empty:
+                chart_data = filtered_stats.reset_index().sort_values("avg_seconds")
+                chart_data["avg_label"] = chart_data["avg_seconds"].apply(secs_to_mss)
+                fig = px.bar(
+                    chart_data,
+                    x="avg_seconds", y="unit",
+                    orientation="h",
+                    text="avg_label",
+                    labels={"avg_seconds": "Average Time (seconds)", "unit": "Unit / Ability"},
+                    hover_data=["count"],
+                )
+                fig.update_traces(textposition="outside")
+                fig.update_layout(height=max(400, len(chart_data) * 35))
+                st.plotly_chart(fig, use_container_width=True)
+
+                # Table with m:ss
+                display = filtered_stats.copy()
+                for col in ["avg_seconds", "median_seconds", "earliest", "latest"]:
+                    display[col] = display[col].apply(secs_to_mss)
+                display.columns = ["count", "avg", "median", "earliest", "latest"]
+                st.dataframe(display, use_container_width=True)
+
+        # Battlegroup breakdown - what gets built after each BG pick
+        st.subheader("Battlegroup Ability Breakdown")
+        st.caption("What abilities/units are used after picking each battlegroup")
+
+        bg_picks = bo[bo["action_type"] == "battlegroup"]["unit"].value_counts()
+        bg_list = bg_picks[bg_picks >= 5].index.tolist()
+
+        if bg_list:
+            selected_bg = st.selectbox("Select battlegroup", bg_list, key="bg_breakdown")
+
+            # Find replays where this BG was picked, get abilities used by same player
+            bg_replays = bo[
+                (bo["action_type"] == "battlegroup") & (bo["unit"] == selected_bg)
+            ][["replay_id", "player_name", "seconds"]].rename(columns={"seconds": "bg_pick_time"})
+
+            if not bg_replays.empty:
+                # Join with abilities used after the BG pick
+                merged = bo.merge(bg_replays, on=["replay_id", "player_name"])
+                after_bg = merged[
+                    (merged["seconds"] > merged["bg_pick_time"])
+                    & (merged["action_type"].isin(["ability", "production"]))
+                ]
+
+                if not after_bg.empty:
+                    ability_stats = after_bg.groupby("unit").agg(
+                        times_used=("seconds", "count"),
+                        avg_time=("seconds", "mean"),
+                    ).round(0).sort_values("times_used", ascending=False).head(15)
+                    ability_stats["avg_time"] = ability_stats["avg_time"].apply(secs_to_mss)
+
+                    games_with_bg = len(bg_replays)
+                    st.metric(f"Games with {selected_bg}", games_with_bg)
+                    st.dataframe(ability_stats, use_container_width=True)
 
         # Per-unit drill down
         st.subheader("Unit Timing Drill-Down")
-        prod_units = sorted(bo[bo["action_type"] == "production"]["unit"].unique())
-        if len(prod_units) > 0:
-            selected_unit = st.selectbox("Select unit", prod_units)
-            fut = first_unit_timing(bo, selected_unit)
+        all_units = sorted(bo_filtered["unit"].unique())
+        if len(all_units) > 0:
+            selected_unit = st.selectbox("Select unit", all_units, key="unit_drilldown")
+            unit_data = bo_filtered[bo_filtered["unit"] == selected_unit]
+            # Get first occurrence per player per game
+            fut = unit_data.groupby(["replay_id", "player_name"])["seconds"].min().reset_index()
+            fut.columns = ["replay_id", "player_name", "first_built_s"]
+            fut["first_built_min"] = (fut["first_built_s"] / 60).round(1)
+
             if not fut.empty:
                 fig2 = px.histogram(
                     fut, x="first_built_min",
                     nbins=20,
-                    labels={"first_built_min": "First Built (minutes)"},
-                    title=f"When {selected_unit} is first built",
+                    labels={"first_built_min": "First Used (minutes)"},
+                    title=f"When {selected_unit} first appears",
                 )
                 st.plotly_chart(fig2, use_container_width=True)
 
                 col1, col2, col3 = st.columns(3)
-                col1.metric("Median", f"{fut['first_built_min'].median():.1f} min")
-                col2.metric("Earliest", f"{fut['first_built_min'].min():.1f} min")
-                col3.metric("Games Built In", f"{len(fut)} / {bo['replay_id'].nunique()}")
+                col1.metric("Median", f"{secs_to_mss(fut['first_built_s'].median())}")
+                col2.metric("Earliest", f"{secs_to_mss(fut['first_built_s'].min())}")
+                col3.metric("Games Used In", f"{len(fut)} / {bo['replay_id'].nunique()}")
             else:
                 st.info(f"No data for {selected_unit}")
     else:

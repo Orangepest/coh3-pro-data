@@ -264,22 +264,34 @@ with tab_tech:
     if not bo.empty:
         st.caption(f"Patch: {selected_patch}")
 
+        def secs_to_mss(s):
+            """Convert seconds to m:ss string."""
+            m, sec = divmod(int(s), 60)
+            return f"{m}:{sec:02d}"
+
         tt = tech_timings(bo)
         if not tt.empty:
             st.subheader("Average Tech Timings")
+            tt_chart = tt.reset_index().sort_values("avg_seconds")
+            tt_chart["avg_label"] = tt_chart["avg_seconds"].apply(secs_to_mss)
             fig = px.bar(
-                tt.reset_index().sort_values("avg_seconds"),
+                tt_chart,
                 x="avg_seconds", y="unit",
                 orientation="h",
-                text="count",
-                labels={"avg_seconds": "Average Time (seconds)", "unit": "Tech / Building", "count": "Sample Size"},
-                hover_data=["median_seconds", "earliest", "latest"],
+                text="avg_label",
+                labels={"avg_seconds": "Average Time (seconds)", "unit": "Tech / Building"},
+                hover_data=["count"],
             )
-            fig.update_traces(texttemplate="n=%{text}", textposition="outside")
+            fig.update_traces(textposition="outside")
             fig.update_layout(height=max(400, len(tt) * 35))
             st.plotly_chart(fig, use_container_width=True)
 
-            st.dataframe(tt, use_container_width=True)
+            # Table with m:ss columns
+            tt_display = tt.copy()
+            for col in ["avg_seconds", "median_seconds", "earliest", "latest"]:
+                tt_display[col] = tt_display[col].apply(secs_to_mss)
+            tt_display.columns = ["count", "avg", "median", "earliest", "latest"]
+            st.dataframe(tt_display, use_container_width=True)
 
         # Per-unit drill down
         st.subheader("Unit Timing Drill-Down")

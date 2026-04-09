@@ -59,11 +59,16 @@ def parse_and_store_matches(data: dict, conn):
         if not match_id:
             continue
 
-        # Check match type - we only care about 1v1 ranked
+        # Check match type - we want 1v1 automatch (type 20) and custom 1v1 (2 players)
         match_type_id = match.get("matchtype_id", 0)
-        match_type = MATCH_TYPES.get(match_type_id, f"unknown_{match_type_id}")
-        if match_type != "ranked_1v1":
+        num_players = len(match.get("matchhistoryreportresults", []))
+        description = match.get("description", "")
+
+        # Type 20 = 1v1 automatch, or type 0 with 2 players (custom 1v1)
+        is_1v1 = (match_type_id == 20) or (match_type_id == 0 and num_players == 2)
+        if not is_1v1:
             continue
+        match_type = "automatch_1v1" if match_type_id == 20 else "custom_1v1"
 
         # Check if match already exists
         existing = conn.execute(
@@ -107,19 +112,18 @@ def parse_and_store_matches(data: dict, conn):
                         elo_diff = elo_after - elo_before
                     break
 
-            # Upsert player info
+            # Upsert player info (always ensure player exists for FK)
             profile_info = profiles.get(pid, {})
-            if profile_info:
-                conn.execute("""
-                    INSERT INTO players (profile_id, alias, steam_id, country, last_updated)
-                    VALUES (?, ?, ?, ?, ?)
-                    ON CONFLICT(profile_id) DO UPDATE SET
-                        alias=excluded.alias,
-                        steam_id=excluded.steam_id,
-                        country=excluded.country,
-                        last_updated=excluded.last_updated
-                """, (pid, profile_info.get("alias", ""), profile_info.get("steam_id", ""),
-                       profile_info.get("country", ""), now))
+            conn.execute("""
+                INSERT INTO players (profile_id, alias, steam_id, country, last_updated)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(profile_id) DO UPDATE SET
+                    alias=CASE WHEN excluded.alias != '' THEN excluded.alias ELSE players.alias END,
+                    steam_id=CASE WHEN excluded.steam_id != '' THEN excluded.steam_id ELSE players.steam_id END,
+                    country=CASE WHEN excluded.country != '' THEN excluded.country ELSE players.country END,
+                    last_updated=excluded.last_updated
+            """, (pid, profile_info.get("alias", ""), profile_info.get("steam_id", ""),
+                   profile_info.get("country", ""), now))
 
             conn.execute("""
                 INSERT OR IGNORE INTO match_players

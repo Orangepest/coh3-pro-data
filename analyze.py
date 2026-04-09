@@ -31,7 +31,7 @@ def load_matches_df() -> pd.DataFrame:
         FROM matches m
         JOIN match_players mp ON m.match_id = mp.match_id
         LEFT JOIN players p ON mp.profile_id = p.profile_id
-        WHERE m.match_type = 'ranked_1v1'
+        WHERE m.match_type IN ('ranked_1v1', 'automatch_1v1', 'custom_1v1')
     """, conn)
     conn.close()
 

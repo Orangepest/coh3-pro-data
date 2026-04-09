@@ -395,6 +395,22 @@ with tab_players:
         selected_player = st.selectbox("Select player", player_list, key="player_select")
 
         if selected_player:
+            # Show ELO across factions from leaderboard data
+            if not lb.empty:
+                player_lb = lb[lb["alias"] == selected_player]
+                if player_lb.empty:
+                    # Try fuzzy match - cohdb names may differ slightly from Relic aliases
+                    player_lb = lb[lb["alias"].str.lower() == selected_player.lower()]
+                if not player_lb.empty:
+                    elo_cols = st.columns(len(player_lb))
+                    for i, (_, row) in enumerate(player_lb.iterrows()):
+                        color = FACTION_COLORS.get(row["faction"], "#888")
+                        elo_cols[i].metric(
+                            f"{row['faction'].upper()}",
+                            f"{int(row['elo'])} ELO",
+                            f"W{int(row['wins'])} / L{int(row['losses'])}",
+                        )
+
             result = player_build_tendencies(bo, selected_player)
             if "error" not in result:
                 st.metric("Games Analyzed", result["total_games"])

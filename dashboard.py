@@ -8,6 +8,19 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import sqlite3
+import traceback
+from contextlib import contextmanager
+
+
+@contextmanager
+def safe_section(name: str):
+    """Wrap a dashboard section so errors don't crash other sections."""
+    try:
+        yield
+    except Exception as e:
+        st.error(f"Error in {name}: {type(e).__name__}: {e}")
+        with st.expander("Show traceback"):
+            st.code(traceback.format_exc())
 
 from analyze import (
     load_matches_df,
@@ -84,10 +97,22 @@ selected_patch = st.sidebar.selectbox("Patch", patch_options)
 st.sidebar.markdown("---")
 st.sidebar.markdown("Data sources: cohdb.com, Relic API, coh3stats.com")
 
-# --- Load data ---
-df = get_matches()
-lb = get_leaderboard()
-bo = get_build_orders(selected_patch)
+# --- Load data (defensive, never crash the dashboard) ---
+try:
+    df = get_matches()
+except Exception as e:
+    st.sidebar.error(f"Failed to load matches: {e}")
+    df = pd.DataFrame()
+try:
+    lb = get_leaderboard()
+except Exception as e:
+    st.sidebar.error(f"Failed to load leaderboard: {e}")
+    lb = pd.DataFrame()
+try:
+    bo = get_build_orders(selected_patch)
+except Exception as e:
+    st.sidebar.error(f"Failed to load build orders: {e}")
+    bo = pd.DataFrame()
 
 # --- Tabs ---
 tab_overview, tab_maps, tab_builds, tab_tech, tab_players, tab_trends, tab_sql = st.tabs([
@@ -98,7 +123,7 @@ tab_overview, tab_maps, tab_builds, tab_tech, tab_players, tab_trends, tab_sql =
 # =========================================================================
 # TAB 1: Overview
 # =========================================================================
-with tab_overview:
+with tab_overview, safe_section("Overview"):
     st.header("Overview")
 
     # Summary stats
@@ -167,7 +192,7 @@ with tab_overview:
 # =========================================================================
 # TAB 2: Map Stats
 # =========================================================================
-with tab_maps:
+with tab_maps, safe_section("Map Stats"):
     st.header("Map Statistics")
 
     if not df.empty:
@@ -210,7 +235,7 @@ with tab_maps:
 # =========================================================================
 # TAB 3: Build Orders
 # =========================================================================
-with tab_builds:
+with tab_builds, safe_section("Build Orders"):
     st.header("Build Orders")
 
     if not bo.empty:
@@ -259,7 +284,7 @@ with tab_builds:
 # =========================================================================
 # TAB 4: Tech Timings
 # =========================================================================
-with tab_tech:
+with tab_tech, safe_section("Tech Timings"):
     st.header("Tech Timings")
 
     if not bo.empty:
@@ -377,7 +402,7 @@ with tab_tech:
 # =========================================================================
 # TAB 5: Players
 # =========================================================================
-with tab_players:
+with tab_players, safe_section("Players"):
     st.header("Players")
 
     # Top players from Relic API match data
@@ -463,7 +488,7 @@ with tab_players:
 # =========================================================================
 # TAB 6: Meta Trends
 # =========================================================================
-with tab_trends:
+with tab_trends, safe_section("Meta Trends"):
     st.header("Meta Trends")
 
     if not df.empty and "month" in df.columns:
@@ -501,7 +526,7 @@ with tab_trends:
 # =========================================================================
 # TAB 7: SQL Query
 # =========================================================================
-with tab_sql:
+with tab_sql, safe_section("SQL Query"):
     st.header("SQL Query")
 
     # Schema reference

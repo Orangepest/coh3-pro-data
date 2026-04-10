@@ -10,6 +10,11 @@ GAME_DATA = Path(__file__).parent / "game_data"
 
 
 def load_locstring():
+    """Load English localization. Prefer en-locstring.json (more complete) over locstring.json."""
+    en_path = GAME_DATA / "en-locstring.json"
+    if en_path.exists():
+        with open(en_path) as f:
+            return json.load(f)
     with open(GAME_DATA / "locstring.json") as f:
         return json.load(f)
 

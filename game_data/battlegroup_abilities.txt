@@ -54,22 +54,22 @@
        - Obice 305mm Barrage
        - L6/40 Light Tank
 
-  >> kriegsmarine
+  >> Kriegsmarine Battlegroup
      (id: kriegsmarine)
 
-     [LEFT] LEFT
-       - kriegsmarine_sld_starburst_flares_ak
-       - kriegsmarine_naval_intervention_ak
-       - kriegsmarine_kriegsmariner_squad_ak
-       - kriegsmarine_stuka_tri_bomb_ak
-       - kriegsmarine_fritz_x_ak
+     [LEFT] Off-shore Support
+       - SLD Starburst Flares
+       - Naval Intervention
+       - Kriegsmariner Squad
+       - Stuka Overflight
+       - Fritz X Guided Bomb
 
-     [RIGHT] RIGHT
-       - kriegsmarine_supply_reserves_ak
-       - kriegsmarine_strategic_mobility_ak
-       - kriegsmarine_supply_interdiction_ak
-       - kriegsmarine_improved_hardpoints_ak
-       - kriegsmarine_hardpoints_ak
+     [RIGHT] Logistics Operations
+       - Supply Reserves
+       - Strategic Mobility
+       - Supply Interdiction
+       - Improved Hardpoints
+       - Hardpoints
 
   >> Panzerjäger Kommand Battlegroup
      (id: panzerjager_kommand)
@@ -160,22 +160,22 @@
        - 155mm Rapid Artillery Barrage
        - Free Fire Drills
 
-  >> partisans
+  >> Italian Partisan Battlegroup
      (id: partisans)
 
-     [LEFT] LEFT
-       - partisans_tunnel_network_us
-       - partisans_smuggling_routes_us
-       - partisans_medical_caches_us
-       - partisans_underground_detonation_us
-       - partisans_oss_coordination_us
+     [LEFT] Underground Network
+       - Tunnel Network
+       - Smuggling Routes
+       - Medical Caches
+       - Underground Detonation
+       - OSS Coordination
 
-     [RIGHT] RIGHT
-       - partisans_resistance_fighters_us
-       - partisans_saboteur_infiltration_us
-       - partisans_forward_headquarters_us
-       - partisans_false_orders_us
-       - partisans_spy_network_us
+     [RIGHT] Insurgency Tactics
+       - Resistance Fighter Infiltration
+       - Saboteur Infiltration
+       - Forward Headquarters
+       - False Orders
+       - Spy Network
 
   >> Special Operations Battlegroup
      (id: special_operations)
@@ -300,21 +300,21 @@
        - Artillery Saturation
        - Towed ML 4.2-inch Heavy Mortar
 
-  >> polish_cavalry
+  >> Polish Cavalry Battlegroup
      (id: polish_cavalry)
 
-     [LEFT] LEFT
-       - polish_cavalry_recon_mission_uk
-       - polish_cavalry_strategic_targets_uk
-       - polish_cavalry_vengeance_uk
-       - polish_cavalry_lancers_uk
-       - polish_cavalry_no_man_left_behind_uk
+     [LEFT] Army in Exile
+       - Recon Mission
+       - Strategic Targets
+       - Vengeance
+       - Polish Lancer Section
+       - No Man Left Behind
 
-     [RIGHT] RIGHT
-       - polish_cavalry_tulip_rockets_uk
-       - polish_cavalry_land_mattress_uk
-       - polish_cavalry_panzerbane_uk
-       - polish_cavalry_decapitation_strike_uk
+     [RIGHT] Rocketry
+       - Tulip Rocket Launchers
+       - Land Mattress Team
+       - Panzerbane Rockets
+       - Decapitation Strike
        - polish_cavalry_sherman_firefly_uk
 
 ===========================================================================
@@ -335,7 +335,7 @@
        - Rapid Production
        - 2.5-tonne Cargo Truck
        - Tiger Heavy Tank
-       - Panzer IV Command Tank Sd.Kfz. 161/1
+       - Panzer IV Command Tank
        - Blitzkrieg
 
   >> Italian Coastal Battlegroup
@@ -372,22 +372,22 @@
        - Heavy Artillery Barrage
        - Pre-Registered Artillery
 
-  >> last_stand
+  >> Last Stand Battlegroup
      (id: last_stand)
 
-     [LEFT] LEFT
-       - last_stand_borgward_iv_ger
-       - last_stand_final_battle_ger
-       - last_stand_scavenge_ger
-       - last_stand_nebelwerfer_overwatch_ger
-       - last_stand_panzerfaust_rollout_ger
+     [LEFT] Desperate Battle
+       - Borgward IV Wanze Demolition Vehicle
+       - Final Battle
+       - Scavenge Doctrine
+       - Nebelwerfer Overwatch
+       - Panzerfaust Rollout
 
-     [RIGHT] RIGHT
-       - Sturmpioneers
-       - last_stand_last_ditch_defenses_ger
-       - last_stand_improvised_barrage_ger
-       - last_stand_recovery_efforts_ger
-       - last_stand_immobilize_and_fortify_ger
+     [RIGHT] Defense in Depth
+       - Sturmpioneer Squad
+       - Last Ditch Defenses
+       - Improvised Barrage
+       - Recovery Efforts
+       - Immobilize and Fortify
 
   >> Luftwaffe Battlegroup
      (id: luftwaffe)

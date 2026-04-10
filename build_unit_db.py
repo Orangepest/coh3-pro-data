@@ -177,9 +177,9 @@ SKIP_SBPS = {
     "l6_40_recrewable_ger",
     "borgward_iv_ger",           # Last Stand BG only
     "halftrack_recrewable_ger",  # 251 recrewable variant
-    "kettenkrad_ger",            # Kettenkrad in wehr - shouldn't be there (DAK unit)
-    "armored_car_ger",           # 221 in wehr - shouldn't be there (DAK 221, but Wehr has different)
-    "recovery_vehicle_ger",      # 18-tonne recovery vehicle - probably DAK only?
+    "recovery_vehicle_ger",      # 18-tonne recovery vehicle - campaign
+    # Note: kettenkrad_ger and armored_car_ger ARE valid Wehr base units (T0 / 221 Scout Car)
+    # Note: guards_uk / guards_africa_uk ARE valid UK T4 base (Foot Guards)
 
     # === Aircraft entities (not playable squads) ===
     "b25j_bomber_us", "c47_douglas_us",
@@ -356,6 +356,21 @@ KNOWN_UPGRADES = {
 }
 
 
+def build_canonical_lookup():
+    """Build sbps_id -> (faction, tier, locked) lookup from canonical roster."""
+    from canonical_roster import CANONICAL_BASE
+    lookup = {}
+    for faction, tiers in CANONICAL_BASE.items():
+        for tier, units in tiers.items():
+            for u in units:
+                lookup[u["sbps_id"]] = {
+                    "faction": faction,
+                    "tier": tier,
+                    "tier_upgrade_locked": u.get("tier_upgrade_locked", False),
+                }
+    return lookup
+
+
 def build_unit_db():
     print("Loading locstring...")
     locstring = load_locstring()
@@ -391,13 +406,29 @@ def build_unit_db():
     squads = parse_sbps(locstring)
     print(f"  Found {len(squads)} squads")
 
+    # Build canonical roster lookup
+    canonical = build_canonical_lookup()
+    print(f"  Canonical roster has {len(canonical)} base units")
+
     # Annotate with BG info
     for sq in squads:
+        # Canonical roster info
+        canon = canonical.get(sq["sbps_id"])
+        if canon:
+            sq["is_canonical_base"] = True
+            sq["tier"] = canon["tier"]
+            sq["tier_upgrade_locked"] = canon["tier_upgrade_locked"]
+        else:
+            sq["is_canonical_base"] = False
+            sq["tier"] = None
+            sq["tier_upgrade_locked"] = False
+
         link = sbps_to_bg.get(sq["sbps_id"])
         if link:
             sq["is_callin"] = True
             sq["battlegroup"] = link["bg_id"]
-            sq["dual_availability"] = link["dual_availability"]
+            # If unit is BOTH canonical base AND a BG callin, it's dual
+            sq["dual_availability"] = link["dual_availability"] or sq["is_canonical_base"]
             sq["unlocking_ability"] = link["ability_id"]
         elif sq["sbps_id"] in FORCE_DOCTRINAL_SBPS:
             sq["is_callin"] = True

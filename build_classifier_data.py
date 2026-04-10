@@ -53,7 +53,7 @@ SKIP_SBPS = {
     "sas_squad_uk", "sas_africa_uk",
     "ssb_commando",
     # Other doctrinal-only UK units that the parser may show in base
-    "guards_uk", "guards_africa_uk",                       # Foot Guards
+    # NOTE: Foot Guards (guards_uk) IS UK T4 base - keep it!
     "australian_light_infantry_uk",                        # Aus Light Inf - DLC/dual
     "canadian_heavy_infantry_uk",                          # Canadian Shock - dual
     "gurkhas_uk",                                          # Gurkhas - dual

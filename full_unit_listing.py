@@ -1,54 +1,20 @@
 """
-Print my full understanding of every CoH3 unit.
-Filters out internal/duplicate entries and groups cleanly by faction → BG → role.
+Print canonical CoH3 unit listing organized by faction → tier → role.
+Uses canonical_roster.py as the source of truth for base, with battlegroup
+call-ins layered on top.
 """
 
 import json
+from collections import defaultdict
 from pathlib import Path
+
 from db import get_conn
+from canonical_roster import CANONICAL_BASE, DAK_CALLIN_TREE
 
 UNIT_DB = Path(__file__).parent / "game_data" / "unit_db.json"
 
-# Filter rules
-INTERNAL_NAMES = {"sp", "specialist", "specialists", "parent_pbg",
-                  "mass_production", "infantry_assault"}
 
-
-def is_internal(name: str, sbps_id: str) -> bool:
-    if name in INTERNAL_NAMES:
-        return True
-    if name.islower() and "_" in name:
-        return True
-    if sbps_id.endswith("_sp") or "_sp_" in sbps_id:
-        return True
-    if "_loiter_" in sbps_id or sbps_id.startswith("partisan_tunnel"):
-        return True
-    if sbps_id.startswith("medic_"):  # medic squads aren't really "units"
-        return False  # actually let's keep them
-    return False
-
-
-def is_duplicate_variant(sq, all_squads):
-    """Skip clearly redundant variant entries (recrewable, africa, 3man, paradrop)."""
-    sid = sq["sbps_id"]
-    # Skip africa variants - the regular variant exists
-    if sid.endswith("_africa_uk"):
-        base_id = sid.replace("_africa_uk", "_uk")
-        if any(s["sbps_id"] == base_id for s in all_squads):
-            return True
-    # Skip recrewable variants - they're the same unit when picked up
-    if "_recrew" in sid:
-        return True
-    # Skip 3man variants
-    if "_3man_" in sid or "_3_man_" in sid:
-        return True
-    # Skip paradrop variants - we want the base unit shown once
-    if "_paradrop_" in sid:
-        return True
-    return False
-
-
-def load_data():
+def load_db():
     with open(UNIT_DB) as f:
         return json.load(f)
 
@@ -64,34 +30,15 @@ def get_usage():
     return {r["unit"]: r["n"] for r in rows}
 
 
-def usage_for(name, usage):
+def usage_str(name, usage):
     n = usage.get(name, 0)
     return f" ({n})" if n else ""
 
 
 def main():
-    data = load_data()
-    squads = data["squads"]
-    bgs = data["battlegroups"]
+    db = load_db()
+    bgs = db["battlegroups"]
     usage = get_usage()
-
-    # Filter
-    clean = [s for s in squads if not is_internal(s["name"], s["sbps_id"])]
-    clean = [s for s in clean if not is_duplicate_variant(s, squads)]
-
-    # Dedup by (name, faction) - prefer non-callin if both
-    from collections import defaultdict
-    by_key = defaultdict(list)
-    for s in clean:
-        by_key[(s["name"], s["faction"])].append(s)
-
-    deduped = []
-    for entries in by_key.values():
-        # Prefer dual_availability > callin > base
-        entries.sort(key=lambda x: (
-            0 if x.get("dual_availability") else (1 if x["is_callin"] else 2)
-        ))
-        deduped.append(entries[0])
 
     factions = ["us", "wehr", "uk", "dak"]
     faction_label = {
@@ -100,12 +47,12 @@ def main():
         "uk": "BRITISH FORCES",
         "dak": "DAK (Afrika Korps)",
     }
-    role_order = ["infantry", "team_weapons", "vehicles", "emplacements"]
-    role_label = {
-        "infantry": "Infantry",
-        "team_weapons": "Team Weapons",
-        "vehicles": "Vehicles",
-        "emplacements": "Emplacements / Buildings",
+    tier_label = {
+        "t0": "T0 / HQ",
+        "t1": "T1",
+        "t2": "T2",
+        "t3": "T3",
+        "t4": "T4",
     }
 
     for fac in factions:
@@ -114,52 +61,74 @@ def main():
         print(f"  {faction_label[fac]}")
         print("=" * 75)
 
-        fac_units = [s for s in deduped if s["faction"] == fac]
-
-        # === BASE TECH TREE ===
-        base = [s for s in fac_units if not s["is_callin"]]
+        # ===== BASE TECH TREE (from canonical roster) =====
         print("\n  --- BASE TECH TREE ---")
-        for role in role_order:
-            in_role = [s for s in base if s["role"] == role]
-            if not in_role:
+        for tier in ["t0", "t1", "t2", "t3", "t4"]:
+            units = CANONICAL_BASE[fac].get(tier, [])
+            if not units:
                 continue
-            print(f"\n    {role_label[role]}:")
-            for s in sorted(in_role, key=lambda x: -usage.get(x["name"], 0)):
-                print(f"      {s['name']}{usage_for(s['name'], usage)}")
+            free = [u for u in units if not u.get("tier_upgrade_locked")]
+            locked = [u for u in units if u.get("tier_upgrade_locked")]
+            print(f"\n    {tier_label[tier]}:")
+            for u in free:
+                print(f"      {u['name']}{usage_str(u['name'], usage)}")
+            if locked:
+                print(f"      [tier upgrade unlocks:]")
+                for u in locked:
+                    print(f"        {u['name']}{usage_str(u['name'], usage)}")
 
-        # === DUAL AVAILABILITY ===
-        dual = [s for s in fac_units if s.get("dual_availability")]
-        if dual:
-            print("\n  --- DUAL (BASE + BG UNLOCK) ---")
-            for s in sorted(dual, key=lambda x: -usage.get(x["name"], 0)):
-                bg_name = bgs.get(s["battlegroup"], {}).get("display_name", s["battlegroup"])
-                print(f"      {s['name']} [{role_label.get(s['role'], s['role'])}] - unlocked via {bg_name}{usage_for(s['name'], usage)}")
+        # ===== DAK SPECIAL: T0 CALLIN TREE =====
+        if fac == "dak":
+            print("\n  --- T0 CALLIN TREE ---")
+            print("\n    Base callins (from HQ abilities):")
+            for u in DAK_CALLIN_TREE["base"]:
+                print(f"      {u}")
+            print("\n    [T4 upgrade transforms callins into:]")
+            for u in DAK_CALLIN_TREE["t4_upgraded"]:
+                print(f"      {u}")
 
-        # === BATTLEGROUP CALL-INS ===
-        callins = [s for s in fac_units if s["is_callin"] and not s.get("dual_availability")]
-        if callins:
-            print("\n  --- BATTLEGROUP CALL-INS ---")
-            by_bg = defaultdict(list)
-            for s in callins:
-                by_bg[s["battlegroup"]].append(s)
-            for bg_id in sorted(by_bg.keys(),
-                                key=lambda b: bgs.get(b, {}).get("display_name", b) or ""):
-                bg_name = bgs.get(bg_id, {}).get("display_name", bg_id)
-                print(f"\n    >> {bg_name}")
-                for s in sorted(by_bg[bg_id], key=lambda x: -usage.get(x["name"], 0)):
-                    print(f"      {s['name']} [{role_label.get(s['role'], s['role'])}]{usage_for(s['name'], usage)}")
+        # ===== BATTLEGROUP CALL-INS =====
+        # All squads in this faction that are flagged as callins
+        fac_callins = [
+            s for s in db["squads"]
+            if s["faction"] == fac and s["is_callin"]
+        ]
 
-    # === BATTLEGROUPS BY FACTION ===
-    print("\n\n" + "=" * 75)
-    print("  ALL BATTLEGROUPS")
-    print("=" * 75)
-    by_fac = defaultdict(list)
-    for bg_id, bg in bgs.items():
-        by_fac[bg.get("faction", "?")].append((bg_id, bg.get("display_name", bg_id)))
-    for fac in factions:
-        print(f"\n  {faction_label[fac]}:")
-        for _, name in sorted(by_fac.get(fac, []), key=lambda x: x[1]):
-            print(f"    - {name}")
+        if fac_callins:
+            # Mark dual ones separately
+            pure_callins = [s for s in fac_callins if not s.get("dual_availability")]
+            duals = [s for s in fac_callins if s.get("dual_availability")]
+
+            if duals:
+                print("\n  --- DUAL (BASE + BG UNLOCK) ---")
+                seen = set()
+                for s in sorted(duals, key=lambda x: -usage.get(x["name"], 0)):
+                    key = (s["name"], s.get("battlegroup"))
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    bg_name = bgs.get(s["battlegroup"], {}).get("display_name") or s.get("battlegroup", "?")
+                    tier = s.get("tier")
+                    tier_str = f" [base {tier.upper()}]" if tier else ""
+                    print(f"      {s['name']}{tier_str} - also via {bg_name}{usage_str(s['name'], usage)}")
+
+            if pure_callins:
+                print("\n  --- BATTLEGROUP CALL-INS ---")
+                by_bg = defaultdict(list)
+                for s in pure_callins:
+                    by_bg[s["battlegroup"]].append(s)
+                for bg_id in sorted(
+                    by_bg.keys(),
+                    key=lambda b: (bgs.get(b, {}).get("display_name") or b or "")
+                ):
+                    bg_name = bgs.get(bg_id, {}).get("display_name") or bg_id
+                    print(f"\n    >> {bg_name}")
+                    seen = set()
+                    for s in sorted(by_bg[bg_id], key=lambda x: -usage.get(x["name"], 0)):
+                        if s["name"] in seen:
+                            continue
+                        seen.add(s["name"])
+                        print(f"      {s['name']} [{s['role']}]{usage_str(s['name'], usage)}")
 
 
 if __name__ == "__main__":

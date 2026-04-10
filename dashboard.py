@@ -103,6 +103,13 @@ if not patches_df.empty:
     patch_options += patches_df["patch"].tolist()
 selected_patch = st.sidebar.selectbox("Patch", patch_options)
 
+# Ragequit filter - exclude super-short matches where someone disconnected
+min_match_minutes = st.sidebar.slider(
+    "Min match length (minutes)",
+    0, 15, 2,
+    help="Excludes ragequits / disconnects. Default 2 min.",
+)
+
 st.sidebar.markdown("---")
 st.sidebar.markdown("Data sources: cohdb.com, Relic API, coh3stats.com")
 
@@ -122,6 +129,14 @@ try:
 except Exception as e:
     st.sidebar.error(f"Failed to load build orders: {e}")
     bo = pd.DataFrame()
+
+# Apply ragequit filter to both DataFrames
+if min_match_minutes > 0:
+    min_seconds = min_match_minutes * 60
+    if not df.empty and "duration_s" in df.columns:
+        df = df[df["duration_s"].fillna(0) >= min_seconds]
+    if not bo.empty and "match_duration_s" in bo.columns:
+        bo = bo[bo["match_duration_s"].fillna(0) >= min_seconds]
 
 # --- Tabs ---
 tab_overview, tab_maps, tab_builds, tab_tech, tab_compare, tab_players, tab_trends, tab_sql = st.tabs([
@@ -318,6 +333,64 @@ with tab_builds, safe_section("Build Orders"):
                 fig.update_layout(height=max(450, len(top_wins) * 30))
                 st.plotly_chart(fig, use_container_width=True)
                 st.dataframe(wr_result, use_container_width=True)
+
+            # =====================================================
+            # BEST OPENER PER MAP (cross-map breakdown)
+            # =====================================================
+            st.subheader("Best Opener Per Map")
+            st.caption("For the selected faction, find the highest-winrate opener on each map")
+            col_e, col_f = st.columns(2)
+            map_first_n = col_e.slider("Opener length", 3, 8, 5, key="map_opener_depth")
+            map_min_games = col_f.slider("Min games per (opener, map)", 2, 20, 3, key="map_min_games")
+
+            if wr_faction == "All":
+                st.info("Select a specific faction above to use the per-map view")
+            else:
+                # Compute per map
+                rows = []
+                for m in sorted(with_winners["map_name"].dropna().unique()):
+                    map_wr = opener_winrates(
+                        with_winners,
+                        first_n=map_first_n,
+                        faction=wr_faction,
+                        map_name=m,
+                        min_games=map_min_games,
+                    )
+                    if map_wr.empty:
+                        continue
+                    # Best opener on this map
+                    best = map_wr.iloc[0]
+                    rows.append({
+                        "map": m,
+                        "best_opener": best.name,  # opener is in index
+                        "winrate_pct": best["winrate_pct"],
+                        "wins": int(best["wins"]),
+                        "games": int(best["games"]),
+                        "total_openers": len(map_wr),
+                    })
+
+                if rows:
+                    import pandas as pd
+                    map_df = pd.DataFrame(rows).sort_values("winrate_pct", ascending=False)
+                    st.dataframe(map_df, use_container_width=True, hide_index=True)
+
+                    # Bar chart: best winrate per map
+                    fig_map = px.bar(
+                        map_df.sort_values("winrate_pct"),
+                        x="winrate_pct", y="map",
+                        orientation="h",
+                        color="winrate_pct",
+                        color_continuous_scale="RdYlGn",
+                        range_color=[30, 80],
+                        text="games",
+                        labels={"winrate_pct": "Best Win Rate %", "map": ""},
+                        hover_data=["best_opener", "wins", "games", "total_openers"],
+                    )
+                    fig_map.update_traces(texttemplate="n=%{text}", textposition="outside")
+                    fig_map.update_layout(height=max(350, len(map_df) * 35))
+                    st.plotly_chart(fig_map, use_container_width=True)
+                else:
+                    st.info(f"No openers meet the criteria for {wr_faction}")
 
         # Battlegroup pickrates
         st.subheader("Battlegroup Pick Rates")

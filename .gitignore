@@ -2,3 +2,12 @@ __pycache__/
 *.pyc
 .env
 *.log
+# Game data raw files - too big for repo, regenerate via build_unit_db.py
+game_data/sbps.json
+game_data/ebps.json
+game_data/ebps_*.json
+game_data/upgrade.json
+game_data/abilities.json
+game_data/locstring.json
+game_data/workarounds.ts
+game_data/buildings.json

@@ -16,22 +16,18 @@ from datetime import datetime, timezone
 
 from config import MIN_ELO, REQUEST_DELAY, MAX_RETRIES
 from db import get_conn, init_db
+from unit_names import is_unit
 
 COHDB_BASE = "https://cohdb.com"
 MATCHES_PER_PAGE = 20  # cohdb returns 20 per page
 
-# Keywords that indicate tech/building actions
+# Keywords that indicate tech/building actions (constructions and tier unlocks)
 TECH_KEYWORDS = [
     "construct ", "unlock ", "upgrade ",
-    "headquarters", "command post", "armory", "barracks",
-    "weapon rack", "field support", "logistik kompanie",
-    "schwerer panzer", "luftwaffe kompanie",
-    "platoon command post", "company command post",
-    "section command post", "battalion command post",
-    "panzer kompanie", "infanterie kompanie",
-    "officer quarters", "support center",
-    "medical station", "medical bunker", "medical truck",
-    "field infirmary",
+    "officer quarters",  # Wehr battle phase upgrades
+    "support elements", "fire support elements", "support armor elements",
+    "combat half-tracks", "advanced logistics",
+    "infantry training", "armored vehicle training",
 ]
 
 # Keywords that indicate battlegroup selection (when lede="Selects ")
@@ -105,27 +101,31 @@ ABILITY_KEYWORDS = [
 
 
 def classify_action(unit: str, lede: str) -> str:
-    """Classify a build order action into a category."""
+    """
+    Classify a build order action into one of: production, tech, battlegroup, ability.
+
+    Uses authoritative game data via is_unit() to identify production units.
+    Anything not a recognized unit, tech, or battlegroup is treated as ability.
+    """
     unit_lower = unit.lower()
 
-    # Tech is always tech regardless of lede
+    # Tech is always tech regardless of lede (constructions, unlocks, upgrades)
     for kw in TECH_KEYWORDS:
         if kw in unit_lower:
             return "tech"
 
     if lede == "Selects ":
-        # "Selects " can be battlegroup pick OR battlegroup ability/upgrade selection
+        # Battlegroup picks have "battlegroup" in the name
         for kw in BATTLEGROUP_KEYWORDS:
             if kw in unit_lower:
                 return "battlegroup"
         return "ability"
 
-    # Empty lede: could be production OR ability usage
-    for kw in ABILITY_KEYWORDS:
-        if kw in unit_lower:
-            return "ability"
+    # Empty lede: real production unit or an ability/call-in usage
+    if is_unit(unit):
+        return "production"
 
-    return "production"
+    return "ability"
 
 
 def fetch_page(url: str) -> str | None:

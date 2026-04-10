@@ -155,7 +155,8 @@ def head_to_head(df: pd.DataFrame, player1_alias: str, player2_alias: str) -> pd
 
 def load_build_orders_df(patch: str | None = None) -> pd.DataFrame:
     """Load build order data from cohdb, optionally filtered by patch.
-    Now joins with cohdb_replay_players to include player faction/side/won info."""
+    Joins with build_orders_player_resolved (which handles name mismatches via faction inference).
+    """
     conn = get_conn()
     query = """
         SELECT
@@ -168,13 +169,13 @@ def load_build_orders_df(patch: str | None = None) -> pd.DataFrame:
             cr.map_name,
             cr.patch,
             cr.winner_side,
-            crp.faction_slug,
-            crp.side,
-            crp.won
+            bopr.faction as faction_short,
+            bopr.side,
+            bopr.won
         FROM build_orders bo
         JOIN cohdb_replays cr ON bo.replay_id = cr.replay_id
-        LEFT JOIN cohdb_replay_players crp
-            ON bo.replay_id = crp.replay_id AND bo.player_name = crp.player_name
+        LEFT JOIN build_orders_player_resolved bopr
+            ON bo.replay_id = bopr.replay_id AND bo.player_name = bopr.player_name
     """
     params = ()
     if patch:
@@ -299,15 +300,7 @@ def opener_winrates(
 
     # Optional filters
     if faction:
-        # Map our faction names to the cohdb faction_slug values
-        slug_map = {
-            "us": ["americans"],
-            "wehr": ["germans"],
-            "uk": ["british", "british_africa"],
-            "dak": ["afrika_korps"],
-        }
-        slugs = slug_map.get(faction, [faction])
-        df = df[df["faction_slug"].isin(slugs)]
+        df = df[df["faction_short"] == faction]
     if map_name:
         df = df[df["map_name"] == map_name]
     if df.empty:

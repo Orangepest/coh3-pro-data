@@ -101,7 +101,7 @@
     },
     {
       "sbps_id": "point_fortification_20mm_aa_ak",
-      "name": "point_fortification_20mm_aa_ak",
+      "name": "Hardpoint",
       "faction": "dak",
       "race_key": "afrika_korps",
       "role": "emplacements",
@@ -945,7 +945,7 @@
     },
     {
       "sbps_id": "panzer_iv_ak",
-      "name": "Panzer IV Sd.Kfz. 161/1",
+      "name": "Panzer IV Medium Tank",
       "faction": "dak",
       "race_key": "afrika_korps",
       "role": "vehicles",
@@ -1290,7 +1290,7 @@
     },
     {
       "sbps_id": "partisan_tunnel_constructed_us",
-      "name": "partisan_tunnel_constructed_us",
+      "name": "Tunnel Hideout",
       "faction": "us",
       "race_key": "american",
       "role": "emplacements",
@@ -1311,7 +1311,7 @@
     },
     {
       "sbps_id": "partisan_tunnel_main_us",
-      "name": "partisan_tunnel_main_us",
+      "name": "Tunnel Network",
       "faction": "us",
       "race_key": "american",
       "role": "emplacements",
@@ -1332,7 +1332,7 @@
     },
     {
       "sbps_id": "partisan_tunnel_us",
-      "name": "partisan_tunnel_us",
+      "name": "Tunnel Hideout",
       "faction": "us",
       "race_key": "american",
       "role": "emplacements",
@@ -2514,6 +2514,28 @@
       "unlocking_ability": "manual_override"
     },
     {
+      "sbps_id": "guards_uk",
+      "name": "Foot Guards Section",
+      "faction": "uk",
+      "race_key": "british",
+      "role": "infantry",
+      "squad_types": [
+        "elite_infantry",
+        "tier4",
+        "infantry_anti_tank",
+        "infantry_assault",
+        "infantry_anti_infantry"
+      ],
+      "is_canonical_base": true,
+      "tier": "t4",
+      "tier_upgrade_locked": false,
+      "is_callin": false,
+      "battlegroup": null,
+      "dual_availability": false,
+      "bg_unlocks_production": false,
+      "unlocking_ability": null
+    },
+    {
       "sbps_id": "indian_uk",
       "name": "indian_uk",
       "faction": "uk",
@@ -3145,7 +3167,7 @@
     },
     {
       "sbps_id": "sherman_firefly_uk",
-      "name": "sherman_firefly_uk",
+      "name": "M4A4 Sherman Firefly Medium Tank",
       "faction": "uk",
       "race_key": "british",
       "role": "vehicles",
@@ -3451,6 +3473,28 @@
       "unlocking_ability": "canadian_shock_canadian_shock_troops_uk"
     },
     {
+      "sbps_id": "guards_africa_uk",
+      "name": "Foot Guards Section",
+      "faction": "uk",
+      "race_key": "british_africa",
+      "role": "infantry",
+      "squad_types": [
+        "elite_infantry",
+        "tier4",
+        "infantry_anti_tank",
+        "infantry_assault",
+        "infantry_anti_infantry"
+      ],
+      "is_canonical_base": false,
+      "tier": null,
+      "tier_upgrade_locked": false,
+      "is_callin": false,
+      "battlegroup": null,
+      "dual_availability": false,
+      "bg_unlocks_production": false,
+      "unlocking_ability": null
+    },
+    {
       "sbps_id": "gurkhas_africa_uk",
       "name": "Gurkha Rifles Section",
       "faction": "uk",
@@ -3510,7 +3554,7 @@
     },
     {
       "sbps_id": "polish_lancer_africa_uk",
-      "name": "polish_lancer_africa_uk",
+      "name": "Polish Lancer Section",
       "faction": "uk",
       "race_key": "british_africa",
       "role": "infantry",
@@ -3707,7 +3751,7 @@
     },
     {
       "sbps_id": "land_mattress_africa_uk",
-      "name": "land_mattress_africa_uk",
+      "name": "Land Mattress Team",
       "faction": "uk",
       "race_key": "british_africa",
       "role": "team_weapons",
@@ -4139,7 +4183,7 @@
     },
     {
       "sbps_id": "sherman_firefly_africa_uk",
-      "name": "sherman_firefly_africa_uk",
+      "name": "Sherman VC Firefly Tank Destroyer",
       "faction": "uk",
       "race_key": "british_africa",
       "role": "vehicles",
@@ -4650,7 +4694,7 @@
     },
     {
       "sbps_id": "pantherturm_emplacement_ger",
-      "name": "pantherturm_emplacement_ger",
+      "name": "Pantherturm Emplacement",
       "faction": "wehr",
       "race_key": "german",
       "role": "emplacements",
@@ -4878,7 +4922,7 @@
     },
     {
       "sbps_id": "sturmpioneer_ger",
-      "name": "Sturmpioneers",
+      "name": "Sturmpioneer Squad",
       "faction": "wehr",
       "race_key": "german",
       "role": "infantry",
@@ -5889,7 +5933,7 @@
         "kriegsmarine_improved_hardpoints_ak",
         "kriegsmarine_hardpoints_ak"
       ],
-      "display_name": "kriegsmarine"
+      "display_name": "Kriegsmarine Battlegroup"
     },
     "panzerjager_kommand": {
       "faction": "dak",
@@ -5991,7 +6035,7 @@
         "partisans_false_orders_us",
         "partisans_spy_network_us"
       ],
-      "display_name": "partisans"
+      "display_name": "Italian Partisan Battlegroup"
     },
     "special_operations": {
       "faction": "us",
@@ -6127,7 +6171,7 @@
         "polish_cavalry_decapitation_strike_uk",
         "polish_cavalry_sherman_firefly_uk"
       ],
-      "display_name": "polish_cavalry"
+      "display_name": "Polish Cavalry Battlegroup"
     },
     "breakthrough": {
       "faction": "wehr",
@@ -6195,7 +6239,7 @@
         "last_stand_recovery_efforts_ger",
         "last_stand_immobilize_and_fortify_ger"
       ],
-      "display_name": "last_stand"
+      "display_name": "Last Stand Battlegroup"
     },
     "luftwaffe": {
       "faction": "wehr",

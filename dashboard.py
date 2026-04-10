@@ -270,8 +270,7 @@ with tab_builds, safe_section("Build Orders"):
         coverage = (player_games_with_won / max(1, player_games_total)) * 100
         st.caption(
             f"Win/loss data for {coverage:.0f}% of player-games "
-            f"({player_games_with_won} of {player_games_total}). "
-            f"Missing 12% are mostly games where one player ragequit before building anything."
+            f"({player_games_with_won} of {player_games_total})."
         )
 
         if with_winners.empty:

@@ -160,12 +160,12 @@ SKIP_SBPS = {
     # Use the FORCE_DOCTRINAL_SBPS mechanism for those.
 
     # === UK doctrinal infantry (all commandos/elite are BG-only) ===
+    # NOTE: Foot Guards (guards_uk) is UK T4 BASE - do NOT skip it
     "commando_uk", "commando_africa_uk",
     "commando_lmg_uk", "commando_lmg_africa_uk",
     "hmg_commando_uk", "hmg_commando_africa_uk",
     "sas_squad_uk", "sas_africa_uk",
     "ssb_commando",
-    "guards_uk", "guards_africa_uk",
     "australian_light_infantry_uk",
     "canadian_heavy_infantry_uk",
     "gurkhas_uk",

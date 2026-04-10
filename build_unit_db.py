@@ -427,18 +427,23 @@ def build_unit_db():
         if link:
             sq["is_callin"] = True
             sq["battlegroup"] = link["bg_id"]
-            # If unit is BOTH canonical base AND a BG callin, it's dual
-            sq["dual_availability"] = link["dual_availability"] or sq["is_canonical_base"]
+            # True dual = canonical base AND has a BG callin (e.g. Stoßtruppen, 251)
+            # NOT dual = BG production unlock for a non-base unit (e.g. Easy Eight, Whizbang)
+            sq["dual_availability"] = sq["is_canonical_base"] and link is not None
+            # Track BG-unlocks-base-production separately
+            sq["bg_unlocks_production"] = link["dual_availability"] and not sq["is_canonical_base"]
             sq["unlocking_ability"] = link["ability_id"]
         elif sq["sbps_id"] in FORCE_DOCTRINAL_SBPS:
             sq["is_callin"] = True
             sq["battlegroup"] = FORCE_DOCTRINAL_SBPS[sq["sbps_id"]]
             sq["dual_availability"] = False
+            sq["bg_unlocks_production"] = False
             sq["unlocking_ability"] = "manual_override"
         else:
             sq["is_callin"] = False
             sq["battlegroup"] = None
             sq["dual_availability"] = False
+            sq["bg_unlocks_production"] = False
             sq["unlocking_ability"] = None
 
     # Resolve battlegroup display names

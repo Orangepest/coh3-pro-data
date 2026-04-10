@@ -95,12 +95,14 @@ def main():
         ]
 
         if fac_callins:
-            # Mark dual ones separately
-            pure_callins = [s for s in fac_callins if not s.get("dual_availability")]
             duals = [s for s in fac_callins if s.get("dual_availability")]
+            bg_unlocks = [s for s in fac_callins if s.get("bg_unlocks_production") and not s.get("dual_availability")]
+            pure_callins = [s for s in fac_callins
+                           if not s.get("dual_availability")
+                           and not s.get("bg_unlocks_production")]
 
             if duals:
-                print("\n  --- DUAL (BASE + BG UNLOCK) ---")
+                print("\n  --- DUAL (base AND BG callin, both available independently) ---")
                 seen = set()
                 for s in sorted(duals, key=lambda x: -usage.get(x["name"], 0)):
                     key = (s["name"], s.get("battlegroup"))
@@ -112,8 +114,19 @@ def main():
                     tier_str = f" [base {tier.upper()}]" if tier else ""
                     print(f"      {s['name']}{tier_str} - also via {bg_name}{usage_str(s['name'], usage)}")
 
+            if bg_unlocks:
+                print("\n  --- BG UNLOCKS BASE PRODUCTION (BG-only, but produced from base after pick) ---")
+                seen = set()
+                for s in sorted(bg_unlocks, key=lambda x: -usage.get(x["name"], 0)):
+                    key = (s["name"], s.get("battlegroup"))
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    bg_name = bgs.get(s["battlegroup"], {}).get("display_name") or s.get("battlegroup", "?")
+                    print(f"      {s['name']} - unlocked by {bg_name}{usage_str(s['name'], usage)}")
+
             if pure_callins:
-                print("\n  --- BATTLEGROUP CALL-INS ---")
+                print("\n  --- BATTLEGROUP CALL-INS (one-shot ability spawns) ---")
                 by_bg = defaultdict(list)
                 for s in pure_callins:
                     by_bg[s["battlegroup"]].append(s)

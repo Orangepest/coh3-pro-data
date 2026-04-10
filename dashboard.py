@@ -261,11 +261,18 @@ with tab_builds, safe_section("Build Orders"):
         # =====================================================
         # OPENER WINRATES (NEW)
         # =====================================================
-        st.subheader("🏆 Opener Winrates")
+        st.subheader("Opener Winrates")
         with_winners = bo.dropna(subset=["won"])
-        coverage = (with_winners["replay_id"].nunique() / max(1, bo["replay_id"].nunique())) * 100
-        st.caption(f"Win/loss data available for {coverage:.0f}% of games "
-                   f"({with_winners['replay_id'].nunique()} of {bo['replay_id'].nunique()})")
+        # Count player-games (one player in one match) - this is what we actually
+        # aggregate over in opener winrates
+        player_games_total = bo.groupby(["replay_id", "player_name"]).ngroups
+        player_games_with_won = with_winners.groupby(["replay_id", "player_name"]).ngroups
+        coverage = (player_games_with_won / max(1, player_games_total)) * 100
+        st.caption(
+            f"Win/loss data for {coverage:.0f}% of player-games "
+            f"({player_games_with_won} of {player_games_total}). "
+            f"Missing 12% are mostly games where one player ragequit before building anything."
+        )
 
         if with_winners.empty:
             st.warning("No winner data yet. Run: `python3 backfill_winners.py`")

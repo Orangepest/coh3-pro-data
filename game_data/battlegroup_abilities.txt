@@ -1,0 +1,441 @@
+
+===========================================================================
+  DAK BATTLEGROUPS
+===========================================================================
+
+  >> Armored Support
+     (id: armored_support)
+
+     [LEFT] Support and Airpower
+       - Vehicle Awareness
+       - Salvage Kits
+       - Panzer Storm
+       - Stuka Dive Bomb
+       - Stuka Anti-tank Loiter
+
+     [RIGHT] Armored Warfare
+       - Veteran Gunners
+       - Superior Fire Drills
+       - Flammpanzer III Medium Tank
+       - Command Panzer IV F Medium Tank
+       - Battlefield Salvage
+
+  >> Italian Combined Arms
+     (id: italian_combined_arms)
+
+     [LEFT] Combined Arms
+       - Bersaglieri Squad
+       - Bersaglieri Bolster
+       - Vehicle Support - Secure Location
+       - Breda Model 30 Light Machine Guns
+       - Vehicle Support - Force Recon
+
+     [RIGHT] Italian Armor
+       - italian_combined_arms_semovente_ak
+       - Carro Armato M13/40 Light Tank
+       - Strafing Run
+       - Artillery Cover
+       - Pact of Steel
+
+  >> Italian Infantry
+     (id: italian_infantry)
+
+     [LEFT] Field Engineering
+       - Guastatori Squad
+       - Registered Artillery
+       - Towed Cannone da 105/28 Field Howitzer
+       - Defensive Operations
+
+     [RIGHT] Defensive Warfare
+       - Territory Booby Traps
+       - Sound the Alarm
+       - Propaganda War
+       - Prepared Positions
+       - Obice 305mm Barrage
+       - L6/40 Light Tank
+
+  >> kriegsmarine
+     (id: kriegsmarine)
+
+     [LEFT] LEFT
+       - kriegsmarine_sld_starburst_flares_ak
+       - kriegsmarine_naval_intervention_ak
+       - kriegsmarine_kriegsmariner_squad_ak
+       - kriegsmarine_stuka_tri_bomb_ak
+       - kriegsmarine_fritz_x_ak
+
+     [RIGHT] RIGHT
+       - kriegsmarine_supply_reserves_ak
+       - kriegsmarine_strategic_mobility_ak
+       - kriegsmarine_supply_interdiction_ak
+       - kriegsmarine_improved_hardpoints_ak
+       - kriegsmarine_hardpoints_ak
+
+  >> Panzerjäger Kommand Battlegroup
+     (id: panzerjager_kommand)
+
+     [LEFT] Stalling Tactics
+       - Mine Fields
+       - Blockade Equipment
+       - Defensive Positions
+       - Early Warning
+       - Butterfly Bomb Drop
+
+     [RIGHT] Tank Hunting
+       - Tank Busters
+       - GrB 39 Grenade Launcher Requisition
+       - Crew Shock Tactics
+       - Elefant Tank Destroyer
+       - Anti-tank Overwatch
+
+  >> Battlefield Espionage Battlegroup
+     (id: subterfuge)
+
+     [LEFT] Infiltration
+       - 250/3 Funkpanzerwagen
+       - Anti-Tank Incendiary Munitions
+       - Advanced Ambush Training
+       - Operation Skorpion
+
+     [RIGHT] Disruption
+       - Intel Disruption Beacon
+       - Plunder
+       - Transfer Depots
+       - Sector Subterfuge Beacon
+       - Firestorm
+       - Disruption Operation
+
+===========================================================================
+  USF BATTLEGROUPS
+===========================================================================
+
+  >> Airborne Battlegroup
+     (id: airborne)
+
+     [LEFT] Aerial Support
+       - Recon Loiter
+       - Smoke Bombing Run
+       - Supply Drop
+       - Paradrop Reinforcements
+       - Dual P-47 Rocket Strike
+       - Carpet Bombing Run
+
+     [RIGHT] Paradropped Infantry
+       - Pathfinders
+       - Heavy Machine Gun Paradrop
+       - Paratrooper Squad Paradrop
+       - Anti-tank Gun Team Paradrop
+
+  >> Armored Battlegroup
+     (id: armored)
+
+     [LEFT] Engineering Corp
+       - Assault Engineers
+       - Field Repairs
+       - M31 Recovery Vehicle
+       - Veteran Crews
+       - M8 Scott SPG
+
+     [RIGHT] Armored Doctrine
+       - Fast Deploy
+       - Strength in Steel
+       - Seek and Destroy
+       - armored_right_3_sherman_easy_8_production_unlock_us
+       - War Machine
+
+  >> Advanced Infantry Battlegroup
+     (id: infantry)
+
+     [LEFT] Infantry Operations
+       - Convert to Ranger Squad
+       - Frontline Medical Station
+       - Designate Assault Position
+       - Ranger Weapon Training
+       - Infantry Assault
+
+     [RIGHT] Field Ordnance
+       - Artillery Observers
+       - Ammunition Storage
+       - M2A1 105mm Howitzer Emplacement
+       - 155mm Rapid Artillery Barrage
+       - Free Fire Drills
+
+  >> partisans
+     (id: partisans)
+
+     [LEFT] LEFT
+       - partisans_tunnel_network_us
+       - partisans_smuggling_routes_us
+       - partisans_medical_caches_us
+       - partisans_underground_detonation_us
+       - partisans_oss_coordination_us
+
+     [RIGHT] RIGHT
+       - partisans_resistance_fighters_us
+       - partisans_saboteur_infiltration_us
+       - partisans_forward_headquarters_us
+       - partisans_false_orders_us
+       - partisans_spy_network_us
+
+  >> Special Operations Battlegroup
+     (id: special_operations)
+
+     [LEFT] Combat Support
+       - M29 Weasel Recon Vehicle
+       - M29 Weasel with M1 Pack Howitzer
+       - Mark Vehicle
+       - P-47 Anti-Infantry Loiter
+       - special_operations_sherman_whizbang_production_unlock_us
+
+     [RIGHT] Combat Operations
+       - Raiding Flares
+       - Smoke Screen
+       - SSF Commando Squad
+       - Assault Operation
+       - Air Re-supply Operation
+
+  >> Heavy Weapons
+     (id: special_weapons)
+
+     [LEFT] Weapons Teams
+       - Gallant Stand
+       - M2HB .50cal Heavy Machine Gun
+       - Bolstered Team Weapons
+       - Black Dragon Artillery Barrage
+       - Rapid Reposition
+
+     [RIGHT] Cavalry Support
+       - Assault Carriers
+       - Exchangeable Parts
+       - Halftrack Strongpoints
+       - M26 Pershing Heavy Tank
+       - Towed M5 3-inch Anti-tank Gun
+
+===========================================================================
+  BRITISH BATTLEGROUPS
+===========================================================================
+
+  >> Australian Defense Battlegroup
+     (id: australian_defense)
+
+     [LEFT] Logistical Supremacy
+       - CMP 15cwt Supply Run
+       - Reinforced Resource Caches
+       - Artillery Trip Wire Flares
+       - Charged Creeping Barrage
+       - Archer Tank Destroyer
+
+     [RIGHT] Frontline Defenders
+       - Australian Light Infantry Section
+       - 2-pounder Anti-tank Gun Team
+       - Defensive Tactics
+       - Vehicle Over Repair
+       - Hold the Line!
+
+  >> Air and Sea Battlegroup
+     (id: british_air_and_sea)
+
+     [LEFT] Royal Navy Support
+       - Naval Blockade
+       - Supply Surplus
+       - british_air_and_sea_left_2a_centaur_cs_uk
+       - Assault Flares
+       - Naval Bombardment
+
+     [RIGHT] Royal Air Force
+       - Commando Section Paradrop
+       - M1 Pack Howitzer Paradrop
+       - Commando Support Section Paradrop
+       - Incendiary Bombing Run
+       - Anti-tank Rocket Loiter
+
+  >> Heavy Armor Battlegroup
+     (id: british_armored)
+
+     [LEFT] Heavy Armor Support
+       - british_armored_churchill_production_unlock_uk
+       - Churchill Black Prince Heavy Tank
+       - Rigorous Vehicle Training
+       - Forward Repair Assembly
+       - Engineer Detachments
+
+     [RIGHT] Field Support and Logistics
+       - Light Vehicle Withdraw and Refit
+       - british_armored_right_2_crusader_aa_uk
+       - Recon Artillery
+       - Designate Targets
+       - Radio Net
+
+  >> Canadian Shock Battlegroup
+     (id: canadian_shock)
+
+     [LEFT] Shock Assault
+       - Canadian Shock Section
+       - Point Assault
+       - Attacking Spirit
+       - Offensive Resupply
+       - Smoke Operation
+
+     [RIGHT] Incendiary Weapons
+       - Pyrotechnics
+       - Churchill Crocodile Heavy Tank
+       - Demolition Engineering
+       - Incendiary Munitions
+       - Burnout
+
+  >> Indian Artillery Battlegroup
+     (id: indian_artillery)
+
+     [LEFT] Infantry Assault
+       - Gurkha Rifles Section
+       - Pillage
+       - War Cry
+       - Valour
+       - Volunteer Infantry
+
+     [RIGHT] Artillery Support
+       - Off-map Airburst Barrage
+       - BL5.5 Artillery Emplacement
+       - Perimeter Monitor
+       - Artillery Saturation
+       - Towed ML 4.2-inch Heavy Mortar
+
+  >> polish_cavalry
+     (id: polish_cavalry)
+
+     [LEFT] LEFT
+       - polish_cavalry_recon_mission_uk
+       - polish_cavalry_strategic_targets_uk
+       - polish_cavalry_vengeance_uk
+       - polish_cavalry_lancers_uk
+       - polish_cavalry_no_man_left_behind_uk
+
+     [RIGHT] RIGHT
+       - polish_cavalry_tulip_rockets_uk
+       - polish_cavalry_land_mattress_uk
+       - polish_cavalry_panzerbane_uk
+       - polish_cavalry_decapitation_strike_uk
+       - polish_cavalry_sherman_firefly_uk
+
+===========================================================================
+  WEHRMACHT BATTLEGROUPS
+===========================================================================
+
+  >> Breakthrough Battlegroup
+     (id: breakthrough)
+
+     [LEFT] Assault Forces
+       - Assault Grenadiers
+       - Smoke Bombing Run
+       - Mechanized Assault Group
+       - Incendiary Bombing Run
+       - Breakthrough
+
+     [RIGHT] Armored Offensive
+       - Rapid Production
+       - 2.5-tonne Cargo Truck
+       - Tiger Heavy Tank
+       - Panzer IV Command Tank Sd.Kfz. 161/1
+       - Blitzkrieg
+
+  >> Italian Coastal Battlegroup
+     (id: coastal)
+
+     [LEFT] Heavy Fortifications
+       - Call the Reserves!
+       - Bulwark
+       - Rapid Fortifications
+       - Designate Defensive Line
+       - Support Bunkers
+       - Designated Artillery Overwatch
+
+     [RIGHT] Coastal Forces
+       - Artillery Officer
+       - Obice da 210/22 Artillery Emplacement
+       - Coastal Reserves
+       - Coastal Wall
+
+  >> Defense Battlegroup
+     (id: defense)
+
+     [LEFT] Mechanized Support
+       - Mechanized Forward Observers
+       - Medical Half-track
+       - Sd.Kfz 9 Recovery Vehicle
+       - Sd.Kfz 251 Flak Half-track
+       - Nashorn Tank Destroyer
+
+     [RIGHT] Fortification Tactics
+       - Fortress Pioneers
+       - Support Bunkers
+       - Early Warning
+       - Heavy Artillery Barrage
+       - Pre-Registered Artillery
+
+  >> last_stand
+     (id: last_stand)
+
+     [LEFT] LEFT
+       - last_stand_borgward_iv_ger
+       - last_stand_final_battle_ger
+       - last_stand_scavenge_ger
+       - last_stand_nebelwerfer_overwatch_ger
+       - last_stand_panzerfaust_rollout_ger
+
+     [RIGHT] RIGHT
+       - Sturmpioneers
+       - last_stand_last_ditch_defenses_ger
+       - last_stand_improvised_barrage_ger
+       - last_stand_recovery_efforts_ger
+       - last_stand_immobilize_and_fortify_ger
+
+  >> Luftwaffe Battlegroup
+     (id: luftwaffe)
+
+     [LEFT] Air-to-Ground Support
+       - Reconnaissance Run
+       - Stuka Strafing Run
+       - Fallschirmjäger Squad Paradrop
+       - Fragmentation Bombs
+       - Stuka Loiter
+
+     [RIGHT] Field Support
+       - LG40 Recoilless Gun Paradrop
+       - Luftwaffe Pioneer Support
+       - Infantry Reserves
+       - Flak 38 Anti-Air Emplacement
+       - Flak 36 Anti-tank Gun Emplacement
+
+  >> Mechanized Battlegroup
+     (id: mechanized)
+
+     [LEFT] Mechanized Armor
+       - Raid Package
+       - StuG Assault Group
+       - 8 Rad Armored Car
+       - mechanized_left_panther_production_unlock_ger
+
+     [RIGHT] Mechanized Support
+       - Mobile Repair Stations
+       - Spotting Scopes
+       - Mechanized Assault
+       - Zeroing Artillery Barrage
+       - Stoßtruppen Assault Package
+       - Wespe Self-propelled Artillery
+
+  >> Terror Battlegroup
+     (id: terror)
+
+     [LEFT] Terror Tactics
+       - Interrogate
+       - Contempt for the Weak
+       - Jericho Trumpet
+       - Propaganda Leaflet Drop
+       - V1 Rocket Strike
+
+     [RIGHT] Weapon Superiority
+       - Machine Gun Camouflage
+       - Heavy Gunnery
+       - Defend the Fatherland
+       - No Quarter
+       - King Tiger Heavy Tank

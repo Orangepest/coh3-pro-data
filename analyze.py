@@ -307,8 +307,11 @@ def category_timing_comparison(bo: pd.DataFrame, category: str) -> pd.DataFrame:
 
 def category_arrival_at_minute(bo: pd.DataFrame, category: str, target_minute: float) -> pd.DataFrame:
     """
-    For each unit in a category, what % of games does it arrive by target_minute?
-    Answers questions like "which medium tank arrives by 15:00 most consistently?"
+    For each unit in a category, how often does it arrive by target_minute?
+    Returns BOTH:
+      - pct_when_built: % of games this unit was built that it arrived by target (conditional)
+      - pct_per_faction_game: % of all faction-games where it arrived by target (unconditional)
+    Use pct_per_faction_game to fairly compare units across factions.
     """
     from unit_categories import UNIT_CATEGORIES
 
@@ -318,27 +321,46 @@ def category_arrival_at_minute(bo: pd.DataFrame, category: str, target_minute: f
 
     target_s = target_minute * 60
 
-    # Get all games and find first arrival of each unit per player
+    # First arrival of any unit-in-category per player-game
     cat_bo = bo[
         (bo["action_type"] == "production")
         & (bo["unit"].isin(units_in_cat))
     ].copy()
 
-    # First arrival per player-game
     first = cat_bo.groupby(["replay_id", "player_name", "unit"])["seconds"].min().reset_index()
 
-    # Total games where this unit was built at all
-    total_games = first.groupby("unit").size()
-    # Games where it arrived by target time
+    # Compute per-faction game totals (denominator for unconditional %)
+    # We need to know how many games each faction played - we infer it from build_orders
+    # by looking at how many distinct (replay_id, player_name) pairs have ANY production
+    # of a unit known to belong to that faction.
+    all_prod = bo[bo["action_type"] == "production"].copy()
+    all_prod["faction"] = all_prod["unit"].map(lambda u: UNIT_CATEGORIES.get(u, (None, None))[1])
+    faction_games = (
+        all_prod.dropna(subset=["faction"])
+        .groupby("faction")[["replay_id", "player_name"]]
+        .apply(lambda x: x.drop_duplicates().shape[0])
+    )
+
+    # Per-unit stats
+    total_built = first.groupby("unit").size()
     in_time = first[first["seconds"] <= target_s].groupby("unit").size()
 
     result = pd.DataFrame({
-        "games_built": total_games,
-        "by_target": in_time.reindex(total_games.index, fill_value=0),
+        "games_built": total_built,
+        "by_target": in_time.reindex(total_built.index, fill_value=0),
     })
-    result["pct_in_time"] = (result["by_target"] / result["games_built"] * 100).round(1)
     result["faction"] = result.index.map(lambda u: UNIT_CATEGORIES.get(u, (None, None))[1])
-    return result.sort_values("pct_in_time", ascending=False)
+
+    # Conditional %: of games where unit was built, how many by target
+    result["pct_when_built"] = (result["by_target"] / result["games_built"] * 100).round(1)
+
+    # Unconditional %: of all games for that faction, how many had this unit by target
+    result["faction_total_games"] = result["faction"].map(faction_games).fillna(0).astype(int)
+    result["pct_of_faction_games"] = (
+        result["by_target"] / result["faction_total_games"].replace(0, pd.NA) * 100
+    ).round(1).fillna(0)
+
+    return result.sort_values("pct_of_faction_games", ascending=False)
 
 
 def player_build_tendencies(bo: pd.DataFrame, player_name: str) -> dict:

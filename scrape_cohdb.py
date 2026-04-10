@@ -25,31 +25,106 @@ TECH_KEYWORDS = [
     "construct ", "unlock ", "upgrade ",
     "headquarters", "command post", "armory", "barracks",
     "weapon rack", "field support", "logistik kompanie",
-    "schwerer panzer", "luftwaffe",
+    "schwerer panzer", "luftwaffe kompanie",
     "platoon command post", "company command post",
     "section command post", "battalion command post",
+    "panzer kompanie", "infanterie kompanie",
+    "officer quarters", "support center",
+    "medical station", "medical bunker", "medical truck",
+    "field infirmary",
 ]
 
-# Keywords that indicate battlegroup selection
+# Keywords that indicate battlegroup selection (when lede="Selects ")
 BATTLEGROUP_KEYWORDS = [
-    "battlegroup", "airborne", "armored", "infantry",
-    "mechanized", "special operations", "breakthrough",
-    "italian", "canadian", "indian", "gurkha",
+    "battlegroup", "airborne", "armored", "infantry reserves",
+    "mechanized battlegroup", "special operations", "breakthrough",
+    "italian infantry", "canadian shock", "indian artillery", "gurkha",
+]
+
+# Keywords that indicate ability/upgrade actions (NOT production units)
+ABILITY_KEYWORDS = [
+    " run", " loiter", " strike", " bomb", " bombing",
+    " barrage", " drop", " dive", " strafing",
+    " paradrop", "paradrop", "smoke screen",
+    "raid package", "burnout", "pyrotechnics",
+    "veteran", "training", "package",
+    "transfer orders", "convert to",
+    "ai takeover",
+    "decapitation", "munitions surplus",
+    "designate", "rapid", "advanced",
+    "improved", "improvised", "fortifications",
+    "support elements", "fire support",
+    "advanced logistics", "field repairs", "emergency repair",
+    "armored vehicle training", "infantry training",
+    "side skirts", "panzerfaust rollout", "bolstered",
+    "assault grenadier", "stoßtruppen", "kriegsmariner",
+    "guastatori", "captain retinue", "polish lancer",
+    "foot guards", "australian light", "ssf commando",
+    "canadian shock section", "bersaglieri",
+    "gurkha rifles", "ranger squad",
+    "spy network", "resource caching", "munitions",
+    "registered artillery", "zeroing artillery",
+    "off-map", "incendiary", "vengeance", "strategic targets",
+    "infantry assault", "breakthrough", "seek and destroy",
+    "defend the fatherland", "propaganda war",
+    "smoke bombing", "supply drop",
+    "team weapon training", "heavy barrels",
+    "pathfinder squad", "fallschirmpioneer",
+    "improved m9 bazooka", "starburst flares",
+    "raiding flares", "armored reserves",
+    "coastal reserve", "survival",
+    "transfer orders", "designate forward",
+    "designate assault", "designate defensive",
+    "rapid fortifications", "rapid repairs",
+    "light vehicle withdraw", "advanced field",
+    "incendiary bombing", "butterfly bomb",
+    "air support center", "armored support center",
+    "mechanized support center", "support armor elements",
+    "combat half-tracks", "stug assault group",
+    "mechanized group", "tank destroyer reserves",
+    "panzerjäger mechanized", "assault mechanized",
+    "pak 38 mechanized", "pak 38 reserves",
+    "le.ig 18 mechanized", "le.ig 18 support",
+    "assault grenadier squad", "panzerpioneer",
+    "fallschirmjäger", "jäger squad",
+    "captain retinue", "convert", "transfer",
+    "veteran squad", "heavy machine gun paradrop",
+    "anti-tank gun team paradrop", "lg40 recoilless gun paradrop",
+    "fallschirmjäger squad paradrop", "paratrooper squad paradrop",
+    "fallschirmpioneer squad paradrop",
+    "registered", "zeroing", "infiltration",
+    "resistance fighter", "munitions surplus",
+    "decapitation strike", "spy network",
+    "panzerfaust", "improvised armor",
+    "grenade package", "browning automatic rifles",
+    "bazooka squad",  # Bazooka Squad is an upgrade, not a base unit
+    "grasshopper recon", "recon loiter",
+    "smoke screen",
+    "munitions", "rapid", "advanced",
 ]
 
 
 def classify_action(unit: str, lede: str) -> str:
     """Classify a build order action into a category."""
     unit_lower = unit.lower()
+
+    # Tech is always tech regardless of lede
+    for kw in TECH_KEYWORDS:
+        if kw in unit_lower:
+            return "tech"
+
     if lede == "Selects ":
-        # Check if it's a battlegroup selection
+        # "Selects " can be battlegroup pick OR battlegroup ability/upgrade selection
         for kw in BATTLEGROUP_KEYWORDS:
             if kw in unit_lower:
                 return "battlegroup"
         return "ability"
-    for kw in TECH_KEYWORDS:
+
+    # Empty lede: could be production OR ability usage
+    for kw in ABILITY_KEYWORDS:
         if kw in unit_lower:
-            return "tech"
+            return "ability"
+
     return "production"
 
 

@@ -59,16 +59,12 @@ def parse_and_store_matches(data: dict, conn):
         if not match_id:
             continue
 
-        # Check match type - we want 1v1 automatch (type 20) and custom 1v1 (2 players)
-        match_type_id = match.get("matchtype_id", 0)
-        num_players = len(match.get("matchhistoryreportresults", []))
-        description = match.get("description", "")
-
-        # Type 20 = 1v1 automatch, or type 0 with 2 players (custom 1v1)
-        is_1v1 = (match_type_id == 20) or (match_type_id == 0 and num_players == 2)
-        if not is_1v1:
+        # Only accept 1v1 automatch (type 20) - custom games skew faction winrates
+        # because they often lack ELO data and aren't representative of the meta
+        match_type_id = match.get("matchtype_id", -1)
+        if match_type_id != 20:
             continue
-        match_type = "automatch_1v1" if match_type_id == 20 else "custom_1v1"
+        match_type = "automatch_1v1"
 
         # Check if match already exists
         existing = conn.execute(

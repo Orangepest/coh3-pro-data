@@ -91,7 +91,11 @@ def get_patches():
 st.sidebar.title("CoH3 Pro 1v1 Analyzer")
 st.sidebar.caption(f"ELO >= {MIN_ELO}")
 
-patches_df = get_patches()
+try:
+    patches_df = get_patches()
+except Exception as e:
+    st.sidebar.error(f"Failed to load patches: {e}")
+    patches_df = pd.DataFrame()
 patch_options = ["All patches"]
 if not patches_df.empty:
     patch_options += patches_df["patch"].tolist()
@@ -444,15 +448,23 @@ with tab_compare, safe_section("Unit Compare"):
                 arrival_display = arrival.reset_index().rename(columns={"index": "unit"})
                 arrival_display["faction"] = arrival_display["faction"].map(FACTION_LABEL)
 
+                # Two views: per-faction-game (fair cross-faction) vs when-built (popularity-adjusted)
+                metric_choice = st.radio(
+                    "Metric",
+                    ["% of all faction games", "% of games where this unit was built"],
+                    horizontal=True,
+                )
+                metric_col = "pct_of_faction_games" if "all" in metric_choice else "pct_when_built"
+
                 fig = px.bar(
-                    arrival_display.sort_values("pct_in_time"),
-                    x="pct_in_time", y="unit",
+                    arrival_display.sort_values(metric_col),
+                    x=metric_col, y="unit",
                     orientation="h",
                     color="faction",
                     color_discrete_map={FACTION_LABEL[k]: v for k, v in FACTION_COLOR.items()},
-                    text="pct_in_time",
-                    labels={"pct_in_time": f"% Built by {target_min}:00", "unit": ""},
-                    hover_data=["games_built", "by_target"],
+                    text=metric_col,
+                    labels={metric_col: f"% with unit by {target_min}:00", "unit": ""},
+                    hover_data=["games_built", "by_target", "faction_total_games"],
                 )
                 fig.update_traces(texttemplate="%{text}%", textposition="outside")
                 fig.update_layout(height=max(350, len(arrival_display) * 40))

@@ -36,6 +36,8 @@ UNIT_CATEGORIES = {
     "6-pounder Anti-tank Gun Team": ("at_gun", "uk"),
     "2-pounder Anti-tank Gun Team": ("at_gun", "uk"),
     "Pak 38 Anti-tank Gun Team":    ("at_gun", "dak"),
+    "Flak 36 Anti-tank Gun Team":   ("at_gun", "dak"),
+    "17-pounder Anti-tank Gun Team": ("at_gun", "uk"),
 
     # ===== SCOUT / RECON INFANTRY =====
     "Scout Squad":              ("recon_infantry", "us"),
@@ -66,22 +68,33 @@ UNIT_CATEGORIES = {
     "M3 Stuart Light Tank":     ("light_tank", "us"),
     "M24 Chaffee Light Tank":   ("light_tank", "us"),
     "Carro Armato M13/40 Light Tank": ("light_tank", "dak"),
+    "L6/40 Light Tank":         ("light_tank", "dak"),
 
     # ===== MEDIUM TANKS =====
     "M4A1 Sherman Medium Tank": ("medium_tank", "us"),
-    "M4(105) Sherman Bulldozer": ("medium_tank", "us"),
+    "M4(105) Sherman Bulldozer": ("assault_tank", "us"),
     "M4A1(76) Sherman Medium Tank": ("medium_tank", "us"),
     "M4A1 Sherman Whizbang":    ("medium_tank", "us"),
+    "M4A3E8 Sherman Easy Eight": ("medium_tank", "us"),
     "Panzer IV Medium Tank":    ("medium_tank", "wehr"),
+    "Command Panzer IV F Medium Tank": ("medium_tank", "wehr"),
+    "Panzer IV Command Tank":   ("medium_tank", "wehr"),
     "Panzer III L Medium Tank": ("medium_tank", "dak"),
     "Flammpanzer III Medium Tank": ("medium_tank", "dak"),
     "Crusader II Medium Tank":  ("medium_tank", "uk"),
+    "Crusader AA Medium Tank":  ("medium_tank", "uk"),
     "M3 Grant Medium Tank":     ("medium_tank", "uk"),
+    "Valentine II Medium Tank": ("medium_tank", "uk"),
 
     # ===== HEAVY TANKS =====
     "Tiger Heavy Tank":         ("heavy_tank", "wehr"),
     "Panther Heavy Tank":       ("heavy_tank", "wehr"),
+    "King Tiger Heavy Tank":    ("heavy_tank", "wehr"),
+    "M26 Pershing Heavy Tank":  ("heavy_tank", "us"),
     "Matilda II Heavy Tank":    ("heavy_tank", "uk"),
+    "Churchill IV Heavy Tank":  ("heavy_tank", "uk"),
+    "Churchill Black Prince Heavy Tank": ("heavy_tank", "uk"),
+    "Churchill Crocodile Heavy Tank": ("heavy_tank", "uk"),
 
     # ===== TANK DESTROYERS / ASSAULT GUNS =====
     "M18 Hellcat Tank Destroyer": ("tank_destroyer", "us"),
@@ -89,13 +102,17 @@ UNIT_CATEGORIES = {
     "Marder III M Tank Destroyer": ("tank_destroyer", "dak"),
     "StuG III D Assault Gun":   ("tank_destroyer", "dak"),
     "StuG III G Assault Gun":   ("tank_destroyer", "wehr"),
-    "Sturmpanzer IV Brummbär":  ("tank_destroyer", "wehr"),
+    "Sturmpanzer IV Brummbär":  ("assault_tank", "wehr"),
     "Panzerjäger Squad":        ("tank_destroyer", "wehr"),
+    "Archer Tank Destroyer":    ("tank_destroyer", "uk"),
+    "Sherman VC Firefly Tank Destroyer": ("tank_destroyer", "uk"),
+    "Semovente da 75/18 Assault Gun": ("tank_destroyer", "dak"),
 
     # ===== AA / FLAK =====
     "Wirbelwind Flakpanzer":    ("aa", "wehr"),
     "Flak 30 Anti-aircraft Gun Team": ("aa", "wehr"),
     "Flakvierling Half-track":  ("aa", "dak"),
+    "M16 Multiple Gun Motor Carriage": ("aa", "us"),
 
     # ===== ARTILLERY / ROCKETS =====
     "M8 Scott SPG":             ("artillery", "us"),
@@ -154,6 +171,7 @@ CATEGORY_LABELS = {
     "medium_tank": "Medium Tanks",
     "heavy_tank": "Heavy Tanks",
     "tank_destroyer": "Tank Destroyers",
+    "assault_tank": "Assault Tanks (Brummbär, Croc)",
     "aa": "AA / Flak",
     "artillery": "Artillery / Rockets",
     "at_infantry": "AT Infantry",

@@ -148,6 +148,52 @@ def parse_sbps(locstring):
     return squads
 
 
+# Patterns in ability ids that indicate "this ability unlocks base production"
+# rather than (or in addition to) spawning a one-time call-in.
+DUAL_AVAILABILITY_PATTERNS = [
+    "production_unlock",   # explicit production unlock
+    "passive",             # passive unlock (e.g. .50cal hmg)
+    "assault_group",       # spawn + unlock production (Stoßtruppen, StuG III D)
+    "convert",             # convert existing unit (Rangers, Sturmpioneers)
+    "_package",            # mechanized_right_3a_stosstruppen_package etc
+]
+
+# Specific ability ids that are dual-availability but don't match the patterns above
+DUAL_AVAILABILITY_EXPLICIT = {
+    "last_stand_sturmpioneers_ger",
+    "polish_cavalry_sherman_firefly_uk",
+}
+
+
+def is_dual_availability_ability(ability_id: str) -> bool:
+    aid = ability_id.lower()
+    if ability_id in DUAL_AVAILABILITY_EXPLICIT:
+        return True
+    return any(p in aid for p in DUAL_AVAILABILITY_PATTERNS)
+
+
+# Hand-curated dual-availability mappings.
+# These are units where the BG ability unlocks base production rather than
+# (or in addition to) spawning a one-time call-in. The workarounds.ts file
+# from coh3-stats is stale relative to the live game data, so we maintain
+# these manually based on the BG upgrade ids in battlegroup.json.
+EXTRA_BG_LINKAGES = {
+    # ability_id -> list of sbps_ids it unlocks/spawns
+    "armored_right_3_sherman_easy_8_production_unlock_us": ["sherman_easy_8_us"],
+    "infantry_left_1_convert_rifleman_to_ranger_us": ["ranger_us"],
+    "special_operations_sherman_whizbang_production_unlock_us": ["sherman_whizbang_us"],
+    "british_armored_churchill_production_unlock_uk": ["churchill_uk", "churchill_africa_uk"],
+    "mechanized_left_panther_production_unlock_ger": ["panther_ger"],
+    "mechanized_left_2a_stug_assault_group": ["stug_iii_d_ger"],
+    "mechanized_right_3a_stosstruppen_package": ["stormtrooper_ger"],
+    "special_weapons_50cal_hmg_passive_us": ["hmg_50cal_us"],
+    # Sturmpioneers via Last Stand BG conversion
+    "last_stand_sturmpioneers_ger": ["sturmpioneer_ger"],
+    # Sherman Firefly via UK Polish Cavalry
+    "polish_cavalry_sherman_firefly_uk": ["sherman_firefly_africa_uk", "sherman_firefly_uk"],
+}
+
+
 def build_unit_db():
     print("Loading locstring...")
     locstring = load_locstring()
@@ -158,14 +204,26 @@ def build_unit_db():
 
     print("Parsing SpawnItemMappings...")
     spawn = parse_spawn_mappings()
-    print(f"  Found {len(spawn)} call-in mappings")
+    print(f"  Found {len(spawn)} call-in mappings from workarounds.ts")
 
-    # Build sbps_id -> battlegroup_id reverse map
+    # Merge in our hand-curated extras (workarounds.ts is often stale)
+    for ability_id, sbps_ids in EXTRA_BG_LINKAGES.items():
+        if ability_id not in spawn:
+            spawn[ability_id] = sbps_ids
+    print(f"  After extras: {len(spawn)} mappings")
+
+    # Build sbps_id -> (bg_id, faction, ability_id, is_dual)
     sbps_to_bg = {}
     for bg_id, bg_info in bgs.items():
         for upg_id in bg_info["upgrade_ids"]:
             for sbps_id in spawn.get(upg_id, []):
-                sbps_to_bg[sbps_id] = (bg_id, bg_info["faction"])
+                dual = is_dual_availability_ability(upg_id)
+                sbps_to_bg[sbps_id] = {
+                    "bg_id": bg_id,
+                    "bg_faction": bg_info["faction"],
+                    "ability_id": upg_id,
+                    "dual_availability": dual,
+                }
 
     print("Parsing sbps (squads)...")
     squads = parse_sbps(locstring)
@@ -173,13 +231,17 @@ def build_unit_db():
 
     # Annotate with BG info
     for sq in squads:
-        bg_info = sbps_to_bg.get(sq["sbps_id"])
-        if bg_info:
+        link = sbps_to_bg.get(sq["sbps_id"])
+        if link:
             sq["is_callin"] = True
-            sq["battlegroup"] = bg_info[0]
+            sq["battlegroup"] = link["bg_id"]
+            sq["dual_availability"] = link["dual_availability"]
+            sq["unlocking_ability"] = link["ability_id"]
         else:
             sq["is_callin"] = False
             sq["battlegroup"] = None
+            sq["dual_availability"] = False
+            sq["unlocking_ability"] = None
 
     # Resolve battlegroup display names
     for bg_id, bg_info in bgs.items():

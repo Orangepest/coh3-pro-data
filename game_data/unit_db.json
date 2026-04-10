@@ -11,7 +11,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_dive_bomber_ak",
@@ -24,7 +26,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_kriegs_bomber_ak",
@@ -37,7 +41,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "base_defense_ak",
@@ -52,7 +58,9 @@
         "teamweapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_bunker_ak",
@@ -67,7 +75,9 @@
         "teamweapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "point_fortification_20mm_aa_ak",
@@ -84,7 +94,9 @@
         "anti_air"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "assault_panzergrenadier_ak",
@@ -100,7 +112,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bersaglieri_ak",
@@ -115,7 +129,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "italian_combined_arms"
+      "battlegroup": "italian_combined_arms",
+      "dual_availability": false,
+      "unlocking_ability": "italian_combined_arms_bersaglieri_ak"
     },
     {
       "sbps_id": "coastal_reserve_ak",
@@ -128,7 +144,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "guastatori_ak",
@@ -145,7 +163,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "italian_infantry"
+      "battlegroup": "italian_infantry",
+      "dual_availability": false,
+      "unlocking_ability": "italian_infantry_guastatori_ak"
     },
     {
       "sbps_id": "kriegsmarine_infantry_ak",
@@ -159,7 +179,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "medic_ak",
@@ -172,7 +194,9 @@
         "standard_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzergrenadier_ak",
@@ -187,7 +211,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzerjaeger_inf_ak",
@@ -201,7 +227,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzerpioneer_ak",
@@ -217,7 +245,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_50mm_pak_38_ak",
@@ -230,7 +260,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_88mm_mobile_ak",
@@ -243,7 +275,9 @@
         "stationary_anti_tank_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_mg34_ak",
@@ -257,7 +291,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_cannone_da_105_ak",
@@ -271,7 +307,9 @@
         "stationary_anti_tank_weapon"
       ],
       "is_callin": true,
-      "battlegroup": "italian_infantry"
+      "battlegroup": "italian_infantry",
+      "dual_availability": false,
+      "unlocking_ability": "italian_infantry_cannone_da_105_ak"
     },
     {
       "sbps_id": "leig_75mm_ak",
@@ -285,7 +323,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_team_ak",
@@ -298,7 +338,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "armored_car_222_ak",
@@ -313,7 +355,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "armored_car_8_rad_ak",
@@ -329,7 +373,9 @@
         "8_rad"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "armored_car_8_rad_command_ak",
@@ -344,7 +390,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "armored_car_8_rad_stummel_ak",
@@ -359,7 +407,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "armored_tractor_254_ak",
@@ -374,7 +424,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "armored_tractor_254_ak_signals_sp",
@@ -389,7 +441,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bison_ak",
@@ -404,7 +458,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "elefant_tank_destroyer_ak",
@@ -420,7 +476,9 @@
         "tier4"
       ],
       "is_callin": true,
-      "battlegroup": "panzerjager_kommand"
+      "battlegroup": "panzerjager_kommand",
+      "dual_availability": false,
+      "unlocking_ability": "panzerjager_kommand_elefant_ak"
     },
     {
       "sbps_id": "goliath_ak",
@@ -435,7 +493,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_250_20mm_ak",
@@ -450,7 +510,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_250_ak",
@@ -466,7 +528,9 @@
         "vehicle_support"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_250_deployment_1_ak",
@@ -482,7 +546,9 @@
         "vehicle_support"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_250_deployment_2_ak",
@@ -498,7 +564,9 @@
         "vehicle_support"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_250_medical_ak",
@@ -513,7 +581,9 @@
         "reinforce_healing_platform"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_250_mortar_ak",
@@ -528,7 +598,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_250_vampire_ak",
@@ -545,7 +617,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_251_stuka_ak",
@@ -560,7 +634,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_251_weapon_supply_ak",
@@ -575,7 +651,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_7_flak_ak",
@@ -591,7 +669,9 @@
         "vehicle_burst_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_medical_ak",
@@ -606,7 +686,9 @@
         "reinforce_healing_platform"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_recovery_ak",
@@ -622,7 +704,9 @@
         "light_armor"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_support_250_ak",
@@ -637,7 +721,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_towed_88mm_ak",
@@ -652,7 +738,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "kradschutzen_motorcycle_ak",
@@ -668,7 +756,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "l6_40_ak",
@@ -683,7 +773,9 @@
         "italian"
       ],
       "is_callin": true,
-      "battlegroup": "italian_infantry"
+      "battlegroup": "italian_infantry",
+      "dual_availability": false,
+      "unlocking_ability": "italian_infantry_double_l640_ak"
     },
     {
       "sbps_id": "l6_40_flame_ak",
@@ -698,7 +790,9 @@
         "dak_light_vehicle"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "m13_40_ak",
@@ -713,7 +807,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "italian_combined_arms"
+      "battlegroup": "italian_combined_arms",
+      "dual_availability": false,
+      "unlocking_ability": "italian_combined_arms_m13_40_ak"
     },
     {
       "sbps_id": "m13_40_ak_sp_gela",
@@ -728,7 +824,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "m13_40_command_ak",
@@ -743,7 +841,9 @@
         "italian"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "marder_iii_ak",
@@ -758,7 +858,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzerjager_i_ak",
@@ -773,7 +875,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iii_37mm_ak",
@@ -788,7 +892,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iii_50mm_long_ak",
@@ -803,7 +909,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iii_50mm_short_ak",
@@ -818,7 +926,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iii_75mm_ak",
@@ -833,7 +943,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iii_ak",
@@ -848,7 +960,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iii_command_ak",
@@ -863,7 +977,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iii_flame_ak",
@@ -878,7 +994,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "armored_support"
+      "battlegroup": "armored_support",
+      "dual_availability": false,
+      "unlocking_ability": "armored_support_flame_p3_ak"
     },
     {
       "sbps_id": "panzer_ii_command_ak",
@@ -893,7 +1011,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iv_ak",
@@ -908,7 +1028,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_iv_command_ak",
@@ -923,7 +1045,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "armored_support"
+      "battlegroup": "armored_support",
+      "dual_availability": false,
+      "unlocking_ability": "armored_support_command_p4_ak"
     },
     {
       "sbps_id": "panzer_iv_stubby_ak",
@@ -938,7 +1062,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzer_i_command_ak",
@@ -953,7 +1079,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "semovente_75_18_ak",
@@ -968,7 +1096,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "italian_combined_arms"
+      "battlegroup": "italian_combined_arms",
+      "dual_availability": false,
+      "unlocking_ability": "italian_combined_arms_semovente_ak"
     },
     {
       "sbps_id": "stug_iii_ak",
@@ -982,7 +1112,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stug_iii_d_ak",
@@ -997,7 +1129,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "tiger_ak",
@@ -1013,7 +1147,9 @@
         "shock_round_capable"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "truck_2_5_ak",
@@ -1028,7 +1164,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "truck_2_5_medical_ak",
@@ -1044,7 +1182,9 @@
         "vehicle_support"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "truck_2_5_towed_cannone_da_105_ak",
@@ -1059,7 +1199,9 @@
         "reinforce_healing_platform"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "b25j_bomber_us",
@@ -1072,7 +1214,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "c47_douglas_loiter_us",
@@ -1085,7 +1229,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "c47_douglas_us",
@@ -1098,7 +1244,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "l2_grasshopper_recon_loiter_airborne_us",
@@ -1111,7 +1259,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "l2_grasshopper_recon_mark_target_us",
@@ -1124,7 +1274,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "l2_grasshopper_recon_reveal_fow_us",
@@ -1137,7 +1289,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "l2_grasshopper_recon_reveal_los_high_altitude_us",
@@ -1150,7 +1304,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "l2_grasshopper_recon_reveal_los_us",
@@ -1163,7 +1319,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "p47_thunderbolt_air_support_us",
@@ -1176,7 +1334,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "p47_thunderbolt_dive_bomber_us",
@@ -1189,7 +1349,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "p47_thunderbolt_loiter_us",
@@ -1202,7 +1364,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "p47_thunderbolt_us",
@@ -1215,7 +1379,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "base_defense_us",
@@ -1230,7 +1396,9 @@
         "teamweapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_fighting_position_us",
@@ -1245,7 +1413,9 @@
         "invisible_to_scar"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_105mm_us",
@@ -1259,7 +1429,9 @@
         "105mm_howitzer_auto_fire"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_pit_81mm_us",
@@ -1273,7 +1445,9 @@
         "invisible_to_scar"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "partisan_tunnel_constructed_us",
@@ -1288,7 +1462,9 @@
         "squad_shared_hold"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "partisan_tunnel_main_us",
@@ -1303,7 +1479,9 @@
         "squad_shared_hold"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "partisan_tunnel_us",
@@ -1318,7 +1496,9 @@
         "squad_shared_hold"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "artillery_observers_us",
@@ -1332,7 +1512,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": true,
-      "battlegroup": "infantry"
+      "battlegroup": "infantry",
+      "dual_availability": false,
+      "unlocking_ability": "infantry_right_1a_artillery_observers_us"
     },
     {
       "sbps_id": "assault_engineer_us",
@@ -1347,7 +1529,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bazooka_team_us",
@@ -1362,7 +1546,9 @@
         "infantry_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "captain_us",
@@ -1376,7 +1562,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "engineer_us",
@@ -1391,7 +1579,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "marksman_team_partisan",
@@ -1404,7 +1594,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "medic_partisan",
@@ -1416,7 +1608,9 @@
         "infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "medic_us",
@@ -1428,7 +1622,9 @@
         "infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "paratrooper_us",
@@ -1444,7 +1640,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "airborne"
+      "battlegroup": "airborne",
+      "dual_availability": false,
+      "unlocking_ability": "airborne_right_2_paratrooper_us"
     },
     {
       "sbps_id": "pathfinder_us",
@@ -1458,7 +1656,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": true,
-      "battlegroup": "airborne"
+      "battlegroup": "airborne",
+      "dual_availability": false,
+      "unlocking_ability": "airborne_right_1a_pathfinders_us"
     },
     {
       "sbps_id": "ranger_us",
@@ -1473,8 +1673,10 @@
         "ranger",
         "infantry_anti_infantry"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "infantry",
+      "dual_availability": true,
+      "unlocking_ability": "infantry_left_1_convert_rifleman_to_ranger_us"
     },
     {
       "sbps_id": "resistance_fighters_battlegroup_partisans",
@@ -1487,7 +1689,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "resistance_fighters_partisan",
@@ -1500,7 +1704,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "riflemen_us",
@@ -1515,7 +1721,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "saboteurs_battlegroup_partisan",
@@ -1529,7 +1737,9 @@
         "tunnel_teleport_neutral_hold"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "saboteurs_partisan",
@@ -1542,7 +1752,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "scout_us",
@@ -1556,7 +1768,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sniper_us",
@@ -1570,7 +1784,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "ssf_commandos_us",
@@ -1584,7 +1800,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "special_operations"
+      "battlegroup": "special_operations",
+      "dual_availability": false,
+      "unlocking_ability": "special_operations_right_2_devils_brigade_us"
     },
     {
       "sbps_id": "infantry_assault",
@@ -1594,7 +1812,9 @@
       "role": "infantry",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "specialist",
@@ -1604,7 +1824,9 @@
       "role": "infantry",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "anzioannie_us",
@@ -1617,7 +1839,9 @@
         "artillery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_3in_m5_us",
@@ -1630,7 +1854,9 @@
         "stationary_anti_tank_weapon"
       ],
       "is_callin": true,
-      "battlegroup": "special_weapons"
+      "battlegroup": "special_weapons",
+      "dual_availability": false,
+      "unlocking_ability": "special_weapons_at_gun_3in_m5_us"
     },
     {
       "sbps_id": "at_gun_57mm_paradrop_us",
@@ -1643,7 +1869,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "airborne"
+      "battlegroup": "airborne",
+      "dual_availability": false,
+      "unlocking_ability": "airborne_right_3_paradrop_at_gun_us"
     },
     {
       "sbps_id": "at_gun_57mm_us",
@@ -1656,7 +1884,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_30cal_paradrop_us",
@@ -1670,7 +1900,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "airborne"
+      "battlegroup": "airborne",
+      "dual_availability": false,
+      "unlocking_ability": "airborne_right_1b_paradrop_hmg_us"
     },
     {
       "sbps_id": "hmg_30cal_us",
@@ -1684,7 +1916,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_50cal_us",
@@ -1698,7 +1932,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_81mm_us",
@@ -1711,7 +1947,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "pack_howitzer_75mm_us",
@@ -1724,7 +1962,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "special_operations"
+      "battlegroup": "special_operations",
+      "dual_availability": false,
+      "unlocking_ability": "special_operations_left_1b_m29_weasal_with_pack_howitzer"
     },
     {
       "sbps_id": "specialist",
@@ -1734,7 +1974,9 @@
       "role": "team_weapons",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "ambulance_us",
@@ -1749,7 +1991,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "chaffee_us",
@@ -1764,7 +2008,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "greyhound_recrewable_us",
@@ -1779,7 +2025,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "greyhound_us",
@@ -1794,7 +2042,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_75mm_us",
@@ -1809,7 +2059,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_assault_us",
@@ -1824,7 +2076,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_command_us",
@@ -1839,7 +2093,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_medical_us",
@@ -1854,7 +2110,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_quad_us",
@@ -1869,7 +2127,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_us",
@@ -1884,7 +2144,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hellcat_us",
@@ -1899,7 +2161,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "logistics_truck_us",
@@ -1914,7 +2178,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "m29_weasal_us",
@@ -1929,7 +2195,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "special_operations"
+      "battlegroup": "special_operations",
+      "dual_availability": false,
+      "unlocking_ability": "special_operations_left_1b_m29_weasal_with_pack_howitzer"
     },
     {
       "sbps_id": "pershing_us",
@@ -1946,7 +2214,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "special_weapons"
+      "battlegroup": "special_weapons",
+      "dual_availability": false,
+      "unlocking_ability": "special_weapons_pershing_us"
     },
     {
       "sbps_id": "recovery_vehicle_us",
@@ -1961,7 +2231,9 @@
         "vehicle_repair_recovery"
       ],
       "is_callin": true,
-      "battlegroup": "armored"
+      "battlegroup": "armored",
+      "dual_availability": false,
+      "unlocking_ability": "armored_left_2b_recovery_vehicle_us"
     },
     {
       "sbps_id": "scott_us",
@@ -1976,7 +2248,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "armored"
+      "battlegroup": "armored",
+      "dual_availability": false,
+      "unlocking_ability": "armored_right_2a_scott_us"
     },
     {
       "sbps_id": "sherman_76mm_us",
@@ -1991,7 +2265,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sherman_bulldozer_us",
@@ -2006,7 +2282,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sherman_easy_8_us",
@@ -2020,8 +2298,10 @@
         "tier4",
         "vehicle_anti_tank"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "armored",
+      "dual_availability": true,
+      "unlocking_ability": "armored_right_3_sherman_easy_8_production_unlock_us"
     },
     {
       "sbps_id": "sherman_recrewable_us",
@@ -2036,7 +2316,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sherman_us",
@@ -2051,7 +2333,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sherman_whizbang_us",
@@ -2065,8 +2349,10 @@
         "tier4",
         "vehicle_anti_tank"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "special_operations",
+      "dual_availability": true,
+      "unlocking_ability": "special_operations_sherman_whizbang_production_unlock_us"
     },
     {
       "sbps_id": "stuart_us",
@@ -2081,7 +2367,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "truck_4x4_medical_us",
@@ -2096,7 +2384,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "truck_4x4_us",
@@ -2111,7 +2401,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "truck_6x6_us",
@@ -2126,7 +2418,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "underground_detonation_spark_us",
@@ -2141,7 +2435,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mass_production",
@@ -2151,7 +2447,9 @@
       "role": "vehicles",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "specialists",
@@ -2161,7 +2459,9 @@
       "role": "vehicles",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "avro_lancaster_uk",
@@ -2174,7 +2474,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hawker_typhoon_recon_no_vision_uk",
@@ -2187,7 +2489,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hawker_typhoon_recon_uk",
@@ -2200,7 +2504,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hawker_typhoon_strafing_run_uk",
@@ -2213,7 +2519,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hawker_typhoon_uk",
@@ -2226,7 +2534,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "polish_cavalry_hawker_typhoon_recon_mission_uk",
@@ -2239,7 +2549,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "polish_hawker_typhoon_strafing_run_uk",
@@ -2252,7 +2564,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "base_defense_uk",
@@ -2267,7 +2581,9 @@
         "base_defense"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bofors_emplacement_uk",
@@ -2283,7 +2599,9 @@
         "emplacement"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_25pdr_uk",
@@ -2297,7 +2615,9 @@
         "invisible_to_scar"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_base_25pdr_uk",
@@ -2312,7 +2632,9 @@
         "invisible_to_scar"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_bl_5_5_uk",
@@ -2326,7 +2648,9 @@
         "emplacement"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "australian_light_infantry_uk",
@@ -2340,7 +2664,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "canadian_heavy_infantry_uk",
@@ -2356,7 +2682,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "commando_lmg_uk",
@@ -2370,7 +2698,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "commando_uk",
@@ -2385,7 +2715,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "guards_uk",
@@ -2401,7 +2733,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "gurkhas_uk",
@@ -2415,7 +2749,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "indian_uk",
@@ -2428,7 +2764,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "medic_uk",
@@ -2440,7 +2778,9 @@
         "infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sapper_uk",
@@ -2456,7 +2796,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sas_squad_uk",
@@ -2469,7 +2811,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sniper_uk",
@@ -2482,7 +2826,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "ssb_commando",
@@ -2497,7 +2843,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "tommy_uk",
@@ -2511,7 +2859,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "anzioannie_uk",
@@ -2524,7 +2874,9 @@
         "artillery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_17pdr_mobile_uk",
@@ -2537,7 +2889,9 @@
         "stationary_anti_tank_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_17pdr_pheasant_uk",
@@ -2550,7 +2904,9 @@
         "stationary_anti_tank_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_2pdr_uk",
@@ -2563,7 +2919,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_6pdr_uk",
@@ -2576,7 +2934,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_6_pdr_recrew_uk",
@@ -2589,7 +2949,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bofors_towed_uk",
@@ -2604,7 +2966,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_commando_uk",
@@ -2618,7 +2982,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_vickers_recrew_uk",
@@ -2634,7 +3000,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_vickers_uk",
@@ -2648,7 +3016,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_81mm_recrew_uk",
@@ -2661,7 +3031,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_81mm_uk",
@@ -2674,7 +3046,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_heavy_4_2_uk",
@@ -2687,7 +3061,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "pack_howitzer_75mm_uk",
@@ -2700,7 +3076,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "archer_uk",
@@ -2715,7 +3093,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bishop_uk",
@@ -2730,7 +3110,9 @@
         "light_armor"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "centaur_uk",
@@ -2745,7 +3127,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "churchill_75mm_uk",
@@ -2760,7 +3144,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "churchill_black_prince_uk",
@@ -2775,7 +3161,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "churchill_crocodile_uk",
@@ -2791,7 +3179,9 @@
         "vehicle_turret"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "churchill_uk",
@@ -2805,8 +3195,10 @@
         "tier4",
         "vehicle_anti_tank"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "british_armored",
+      "dual_availability": true,
+      "unlocking_ability": "british_armored_churchill_production_unlock_uk"
     },
     {
       "sbps_id": "command_churchill_uk",
@@ -2821,7 +3213,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "crusader_57mm_uk",
@@ -2836,7 +3230,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "crusader_aa_uk",
@@ -2851,7 +3247,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "crusader_uk",
@@ -2866,7 +3264,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_flatbed_uk",
@@ -2881,7 +3281,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_quad_mount_uk",
@@ -2896,7 +3298,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_truck_medical_uk",
@@ -2911,7 +3315,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_truck_repair_resupply_uk",
@@ -2926,7 +3332,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_truck_uk",
@@ -2941,7 +3349,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "dingo_uk",
@@ -2956,7 +3366,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "grant_uk",
@@ -2971,7 +3383,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_m3_uk",
@@ -2986,7 +3400,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "humber_recrewable_uk",
@@ -3001,7 +3417,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "humber_uk",
@@ -3016,7 +3434,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "marmon_herrington_uk",
@@ -3031,7 +3451,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "matilda_command_uk",
@@ -3046,7 +3468,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "matilda_uk",
@@ -3061,7 +3485,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "pheasant_halftrack_uk",
@@ -3076,7 +3502,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sherman_firefly_uk",
@@ -3090,8 +3518,10 @@
         "tier4",
         "vehicle_anti_tank"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "polish_cavalry",
+      "dual_availability": true,
+      "unlocking_ability": "polish_cavalry_sherman_firefly_uk"
     },
     {
       "sbps_id": "sherman_uk",
@@ -3106,7 +3536,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuart_ace_recrewable_sp_uk",
@@ -3121,7 +3553,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuart_ace_sp_uk",
@@ -3136,7 +3570,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuart_uk",
@@ -3151,7 +3587,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "valentine_command_uk",
@@ -3166,7 +3604,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "valentine_uk",
@@ -3181,7 +3621,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_17pdr_pheasant_emplacement_uk",
@@ -3195,7 +3637,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "base_defense_africa_uk",
@@ -3209,7 +3653,9 @@
         "base_defense"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bofors_emplacement_afrika_uk",
@@ -3225,7 +3671,9 @@
         "anti_air"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_nest_africa_uk",
@@ -3239,7 +3687,9 @@
         "base_defense"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_25pdr_africa_uk",
@@ -3252,7 +3702,9 @@
         "artillery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_base_25pdr_africa_uk",
@@ -3266,7 +3718,9 @@
         "base_defense"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_bl_5_5_africa_uk",
@@ -3279,7 +3733,9 @@
         "artillery"
       ],
       "is_callin": true,
-      "battlegroup": "indian_artillery"
+      "battlegroup": "indian_artillery",
+      "dual_availability": false,
+      "unlocking_ability": "artillery_bl_5_5_heavy_artillery_uk"
     },
     {
       "sbps_id": "australian_light_infantry_africa_uk",
@@ -3293,7 +3749,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "australian_defense"
+      "battlegroup": "australian_defense",
+      "dual_availability": false,
+      "unlocking_ability": "australian_defense_australian_light_infantry_uk"
     },
     {
       "sbps_id": "canadian_heavy_infantry_africa_uk",
@@ -3308,7 +3766,9 @@
         "tier2"
       ],
       "is_callin": true,
-      "battlegroup": "canadian_shock"
+      "battlegroup": "canadian_shock",
+      "dual_availability": false,
+      "unlocking_ability": "canadian_shock_canadian_shock_troops_uk"
     },
     {
       "sbps_id": "commando_africa_uk",
@@ -3322,7 +3782,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "british_air_and_sea"
+      "battlegroup": "british_air_and_sea",
+      "dual_availability": false,
+      "unlocking_ability": "british_air_and_sea_right_1_commandos_uk"
     },
     {
       "sbps_id": "commando_lmg_africa_uk",
@@ -3336,7 +3798,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "british_air_and_sea"
+      "battlegroup": "british_air_and_sea",
+      "dual_availability": false,
+      "unlocking_ability": "british_air_and_sea_right_2b_commando_lmg_team_uk"
     },
     {
       "sbps_id": "guards_africa_uk",
@@ -3352,7 +3816,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "gurkhas_africa_uk",
@@ -3366,7 +3832,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "indian_artillery"
+      "battlegroup": "indian_artillery",
+      "dual_availability": false,
+      "unlocking_ability": "artillery_gurkhas_uk"
     },
     {
       "sbps_id": "indian_africa_uk",
@@ -3379,7 +3847,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "medic_africa_uk",
@@ -3391,7 +3861,9 @@
         "infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "officer_africa_uk",
@@ -3404,7 +3876,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "polish_lancer_africa_uk",
@@ -3417,7 +3891,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sapper_africa_uk",
@@ -3433,7 +3909,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sas_africa_uk",
@@ -3446,7 +3924,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sniper_africa_uk",
@@ -3459,7 +3939,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "tommy_africa_uk",
@@ -3473,7 +3955,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_17pdr_mobile_africa_uk",
@@ -3486,7 +3970,9 @@
         "stationary_anti_tank_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_2pdr_africa_uk",
@@ -3499,7 +3985,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "australian_defense"
+      "battlegroup": "australian_defense",
+      "dual_availability": false,
+      "unlocking_ability": "australian_defense_2pdr_at_gun_uk"
     },
     {
       "sbps_id": "at_gun_6pdr_africa_recrew_uk",
@@ -3512,7 +4000,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_6pdr_africa_uk",
@@ -3525,7 +4015,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bofors_towed_africa_uk",
@@ -3539,7 +4031,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_commando_africa_uk",
@@ -3553,7 +4047,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_vickers_africa_recrew_uk",
@@ -3567,7 +4063,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_vickers_africa_uk",
@@ -3581,7 +4079,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "land_mattress_africa_uk",
@@ -3593,7 +4093,9 @@
         "artillery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_81mm_africa_recrew_uk",
@@ -3606,7 +4108,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_81mm_africa_uk",
@@ -3619,7 +4123,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_heavy_4_2_africa_uk",
@@ -3633,7 +4139,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "indian_artillery"
+      "battlegroup": "indian_artillery",
+      "dual_availability": false,
+      "unlocking_ability": "artillery_4_2_inch_heavy_mortar_uk"
     },
     {
       "sbps_id": "pack_howitzer_75mm_africa_uk",
@@ -3646,7 +4154,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "british_air_and_sea"
+      "battlegroup": "british_air_and_sea",
+      "dual_availability": false,
+      "unlocking_ability": "british_air_and_sea_right_2a_pack_howitzer_team_uk"
     },
     {
       "sbps_id": "archer_africa_uk",
@@ -3661,7 +4171,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "australian_defense"
+      "battlegroup": "australian_defense",
+      "dual_availability": false,
+      "unlocking_ability": "australian_defense_archer_tank_destroyer_call_in_uk"
     },
     {
       "sbps_id": "australian_supplytruck_africa_uk",
@@ -3676,7 +4188,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bishop_africa_uk",
@@ -3691,7 +4205,9 @@
         "vehicle_artillery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "centaur_africa_uk",
@@ -3706,7 +4222,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "british_air_and_sea"
+      "battlegroup": "british_air_and_sea",
+      "dual_availability": false,
+      "unlocking_ability": "british_air_and_sea_left_2a_centaur_cs_uk"
     },
     {
       "sbps_id": "churchill_75mm_africa_uk",
@@ -3721,7 +4239,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "churchill_africa_uk",
@@ -3735,8 +4255,10 @@
         "tier4",
         "vehicle_anti_tank"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "british_armored",
+      "dual_availability": true,
+      "unlocking_ability": "british_armored_churchill_production_unlock_uk"
     },
     {
       "sbps_id": "churchill_black_prince_africa_uk",
@@ -3751,7 +4273,9 @@
         "shock_round_capable"
       ],
       "is_callin": true,
-      "battlegroup": "british_armored"
+      "battlegroup": "british_armored",
+      "dual_availability": false,
+      "unlocking_ability": "british_armored_left_3b_churchill_black_prince_uk"
     },
     {
       "sbps_id": "churchill_crocodile_africa_uk",
@@ -3767,7 +4291,9 @@
         "vehicle_turret"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "command_churchill_africa_uk",
@@ -3782,7 +4308,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "crusader_57mm_africa_uk",
@@ -3797,7 +4325,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "crusader_aa_africa_uk",
@@ -3812,7 +4342,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "british_armored"
+      "battlegroup": "british_armored",
+      "dual_availability": false,
+      "unlocking_ability": "british_armored_right_2_crusader_aa_uk"
     },
     {
       "sbps_id": "crusader_africa_uk",
@@ -3827,7 +4359,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_flatbed_africa_uk",
@@ -3842,7 +4376,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_quad_mount_africa_uk",
@@ -3857,7 +4393,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_truck_africa_uk",
@@ -3872,7 +4410,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_truck_medical_africa_uk",
@@ -3887,7 +4427,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_truck_recrewable_africa_uk",
@@ -3902,7 +4444,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_15_truck_repair_resupply_africa_uk",
@@ -3917,7 +4461,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_lrdg_truck_2pdr_africa_uk",
@@ -3932,7 +4478,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "cwt_lrdg_truck_africa_uk_uk",
@@ -3947,7 +4495,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "dingo_africa_uk",
@@ -3962,7 +4512,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "grant_africa_recrewable_uk",
@@ -3977,7 +4529,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "grant_africa_uk",
@@ -3992,7 +4546,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "humber_africa_uk",
@@ -4007,7 +4563,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "marmon_herrington_africa_uk",
@@ -4022,7 +4580,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "matilda_africa_recrewable_uk",
@@ -4037,7 +4597,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "matilda_africa_uk",
@@ -4052,7 +4614,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "pheasant_halftrack_africa_uk",
@@ -4067,7 +4631,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sherman_africa_uk",
@@ -4082,7 +4648,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sherman_firefly_africa_uk",
@@ -4096,8 +4664,10 @@
         "tier4",
         "vehicle_anti_tank"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "polish_cavalry",
+      "dual_availability": true,
+      "unlocking_ability": "polish_cavalry_sherman_firefly_uk"
     },
     {
       "sbps_id": "stuart_africa_recrewable_uk",
@@ -4112,7 +4682,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuart_africa_uk",
@@ -4127,7 +4699,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "parent_pbg",
@@ -4137,7 +4711,9 @@
       "role": "mortar_bunker_autobuild_ger",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "heinkel_bomber_ger",
@@ -4150,7 +4726,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "junkers_ju52_ger",
@@ -4163,7 +4741,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_anti_vehicle_loiter_ger",
@@ -4176,7 +4756,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_anti_vehicle_strafe",
@@ -4189,7 +4771,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_combined_arms_strafe",
@@ -4202,7 +4786,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_dive_bomber",
@@ -4215,7 +4801,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_loiter",
@@ -4228,7 +4816,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_loiter_jericho_trumpet_ger",
@@ -4241,7 +4831,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_recon_ger",
@@ -4254,7 +4846,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_recon_loiter_ger",
@@ -4267,7 +4861,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_rocket_loiter_ger",
@@ -4280,7 +4876,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_rocket_strafe_ger",
@@ -4293,7 +4891,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_strafe",
@@ -4306,7 +4906,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stuka_ju87_strafe_foggia_ger",
@@ -4319,7 +4921,9 @@
         "airplane"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "aa_gun_20mm_emplacement_ger",
@@ -4335,7 +4939,9 @@
         "wehrmacht_advanced_unit"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "anti_tank_bunker_ger",
@@ -4351,7 +4957,9 @@
         "emplacement"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_88mm_emplacement_ger",
@@ -4366,7 +4974,9 @@
         "wehrmacht_advanced_unit"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "base_defense_ger",
@@ -4381,7 +4991,9 @@
         "teamweapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_mg42_bunker_ger",
@@ -4396,7 +5008,9 @@
         "invisible_to_scar"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_105mm_ger",
@@ -4409,7 +5023,9 @@
         "artillery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_obice_210_ger",
@@ -4423,7 +5039,9 @@
         "panzer_kompanie"
       ],
       "is_callin": true,
-      "battlegroup": "coastal"
+      "battlegroup": "coastal",
+      "dual_availability": false,
+      "unlocking_ability": "coastal_obice_ger"
     },
     {
       "sbps_id": "mortar_bunker_ger",
@@ -4437,7 +5055,9 @@
         "invisible_to_scar"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "pantherturm_emplacement_ger",
@@ -4453,7 +5073,9 @@
         "emplacement"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sp",
@@ -4463,7 +5085,9 @@
       "role": "emplacements",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "bersaglieri_ger",
@@ -4479,7 +5103,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "coastal_officer_ger",
@@ -4493,7 +5119,9 @@
         "infanterie_kompanie"
       ],
       "is_callin": true,
-      "battlegroup": "coastal"
+      "battlegroup": "coastal",
+      "dual_availability": false,
+      "unlocking_ability": "coastal_artillery_officer_ger"
     },
     {
       "sbps_id": "coastal_reserves_at_ger",
@@ -4505,7 +5133,9 @@
         "standard_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "coastal_reserves_ger",
@@ -4519,7 +5149,9 @@
         "infanterie_kompanie"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "fallschirmjagers_ger",
@@ -4534,7 +5166,9 @@
         "wehrmacht_advanced_unit"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "fallschirmpioneers_ger",
@@ -4550,7 +5184,9 @@
         "infanterie_kompanie"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "fallschirmsniper_ger",
@@ -4564,7 +5200,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "grenadier_ger",
@@ -4580,7 +5218,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "guastatori_ger",
@@ -4597,7 +5237,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "jaeger_ger",
@@ -4613,7 +5255,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "medic_ger",
@@ -4625,7 +5269,9 @@
         "infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "officer_ger_sp",
@@ -4637,7 +5283,9 @@
         "infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "officer_ger_sp_seaside_airfield",
@@ -4649,7 +5297,9 @@
         "infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzergrenadier_ger",
@@ -4666,7 +5316,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "pioneer_ger",
@@ -4683,7 +5335,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "pioneer_ger_mc_spotter",
@@ -4697,7 +5351,9 @@
         "infantry_burst_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sniper_ger",
@@ -4712,7 +5368,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stormtrooper_ger",
@@ -4727,7 +5385,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": true,
-      "battlegroup": "breakthrough"
+      "battlegroup": "mechanized",
+      "dual_availability": true,
+      "unlocking_ability": "mechanized_right_3a_stosstruppen_package"
     },
     {
       "sbps_id": "sturmpioneer_ger",
@@ -4743,8 +5403,10 @@
         "infantry_support",
         "infantry_anti_infantry"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "last_stand",
+      "dual_availability": true,
+      "unlocking_ability": "last_stand_sturmpioneers_ger"
     },
     {
       "sbps_id": "specialist",
@@ -4754,7 +5416,9 @@
       "role": "infantry",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "grenadier_3man_ger",
@@ -4770,7 +5434,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "guastatori_2_man_ger_sp",
@@ -4787,7 +5453,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "guastatori_3_man_ger_sp",
@@ -4804,7 +5472,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_mg42_1man_ger_sp",
@@ -4821,7 +5491,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "jaeger_3man_ger",
@@ -4837,7 +5509,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panzergrenadier_3man_ger",
@@ -4854,7 +5528,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "aa_gun_20mm_ger",
@@ -4870,7 +5546,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "anzioannie_ger",
@@ -4883,7 +5561,9 @@
         "artillery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_75mm_ger",
@@ -4899,7 +5579,9 @@
         "teamweapon_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_88mm_pak43_ger",
@@ -4912,7 +5594,9 @@
         "elite_teamweapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "at_gun_lg40_ger",
@@ -4925,7 +5609,9 @@
         "wehrmacht_advanced_unit"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_mg42_ger",
@@ -4942,7 +5628,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_mg42_ger_sp",
@@ -4956,7 +5644,9 @@
         "teamweapon_burst"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "hmg_mg42_ger_sp_gela",
@@ -4970,7 +5660,9 @@
         "teamweapon_burst"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_cannone_da_105_ger",
@@ -4983,7 +5675,9 @@
         "stationary_anti_tank_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "howitzer_obice_da_210_no_sandbags_ger",
@@ -4995,7 +5689,9 @@
         "artillery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "leig_75mm_ger",
@@ -5008,7 +5704,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "mortar_81mm_ger",
@@ -5024,7 +5722,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "nebelwerfer_150mm_ger",
@@ -5039,7 +5739,9 @@
         "infantry_anti_infantry"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "team_weapon_parent_ger",
@@ -5051,7 +5753,9 @@
         "teamweapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "armored_car_8_rad_ger",
@@ -5067,7 +5771,9 @@
         "wehrmacht_advanced_unit"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "armored_car_ger",
@@ -5082,7 +5788,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "borgward_iv_ger",
@@ -5097,7 +5805,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "brummbar_ger",
@@ -5112,7 +5822,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_251_flak_ger",
@@ -5127,7 +5839,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_251_mortar_ger",
@@ -5142,7 +5856,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_ger",
@@ -5157,7 +5873,9 @@
         "reinforce_healing_platform"
       ],
       "is_callin": true,
-      "battlegroup": "breakthrough"
+      "battlegroup": "breakthrough",
+      "dual_availability": true,
+      "unlocking_ability": "breakthrough_right_3a_assault_group_ger"
     },
     {
       "sbps_id": "halftrack_medical_ger",
@@ -5173,7 +5891,9 @@
         "panzergrenadier_kompanie"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_recrewable_ger",
@@ -5188,7 +5908,9 @@
         "reinforce_healing_platform"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_stummel_ger",
@@ -5203,7 +5925,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "halftrack_stummel_recrewable_ger",
@@ -5218,7 +5942,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "jagdpanzer_iv_sdkfz_162_ger",
@@ -5233,7 +5959,9 @@
         "shock_round_capable"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "kettenkrad_ger",
@@ -5248,7 +5976,9 @@
         "veterancy_on_capture"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "king_tiger_sdkfz_182_ger",
@@ -5265,7 +5995,9 @@
         "tier4"
       ],
       "is_callin": true,
-      "battlegroup": "terror"
+      "battlegroup": "terror",
+      "dual_availability": false,
+      "unlocking_ability": "terror_king_tiger_ger"
     },
     {
       "sbps_id": "l6_40_flame_ger",
@@ -5280,7 +6012,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "l6_40_ger",
@@ -5295,7 +6029,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "l6_40_recrewable_ger",
@@ -5310,7 +6046,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "m13_40_ger",
@@ -5325,7 +6063,9 @@
         "italian"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "marder_iii_ger",
@@ -5341,7 +6081,9 @@
         "shock_round_capable"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "nashorn_ger",
@@ -5356,7 +6098,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "panther_ger",
@@ -5370,8 +6114,10 @@
         "panzer_kompanie",
         "vehicle_anti_tank"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "mechanized",
+      "dual_availability": true,
+      "unlocking_ability": "mechanized_left_panther_production_unlock_ger"
     },
     {
       "sbps_id": "panzer_iv_cmd_ger",
@@ -5386,7 +6132,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "breakthrough"
+      "battlegroup": "breakthrough",
+      "dual_availability": false,
+      "unlocking_ability": "breakthrough_left_2b_panzer_iv_cmd_ger"
     },
     {
       "sbps_id": "panzer_iv_ger",
@@ -5401,7 +6149,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "recovery_vehicle_ger",
@@ -5416,7 +6166,9 @@
         "vehicle_repair_recovery"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "semovente_75_18_ger",
@@ -5431,7 +6183,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "stug_iii_d_ger",
@@ -5446,8 +6200,10 @@
         "vehicle_casemate",
         "wehrmacht_advanced_unit"
       ],
-      "is_callin": false,
-      "battlegroup": null
+      "is_callin": true,
+      "battlegroup": "mechanized",
+      "dual_availability": true,
+      "unlocking_ability": "mechanized_left_2a_stug_assault_group"
     },
     {
       "sbps_id": "stug_iii_ger",
@@ -5462,7 +6218,9 @@
         "shock_round_capable"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "sturmtiger_ger",
@@ -5477,7 +6235,9 @@
         "tier4"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "tiger_ger",
@@ -5494,7 +6254,9 @@
         "tier4"
       ],
       "is_callin": true,
-      "battlegroup": "breakthrough"
+      "battlegroup": "breakthrough",
+      "dual_availability": false,
+      "unlocking_ability": "breakthrough_left_3_tiger_ger"
     },
     {
       "sbps_id": "truck_2_5_cargo_ger",
@@ -5509,7 +6271,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": true,
-      "battlegroup": "breakthrough"
+      "battlegroup": "breakthrough",
+      "dual_availability": false,
+      "unlocking_ability": "breakthrough_left_1b_truck_2_5_ger"
     },
     {
       "sbps_id": "truck_2_5_fuel_ger",
@@ -5524,7 +6288,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "truck_2_5_ger",
@@ -5539,7 +6305,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "truck_2_5_medical_ger",
@@ -5554,7 +6322,9 @@
         "reinforce_healing_platform"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "wespe_ger",
@@ -5569,7 +6339,9 @@
         "vehicle_anti_tank"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "wirbelwind_ger",
@@ -5584,7 +6356,9 @@
         "vehicle_burst_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "wirbelwind_recrewable_ger",
@@ -5599,7 +6373,9 @@
         "vehicle_burst_weapon"
       ],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     },
     {
       "sbps_id": "specialist",
@@ -5609,7 +6385,9 @@
       "role": "vehicles",
       "squad_types": [],
       "is_callin": false,
-      "battlegroup": null
+      "battlegroup": null,
+      "dual_availability": false,
+      "unlocking_ability": null
     }
   ],
   "battlegroups": {

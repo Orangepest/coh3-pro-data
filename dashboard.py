@@ -41,7 +41,10 @@ from analyze import (
     unit_popularity,
     first_unit_timing,
     player_build_tendencies,
+    category_timing_comparison,
+    category_arrival_at_minute,
 )
+from unit_categories import all_categories, CATEGORY_LABELS
 from db import get_conn
 from config import MIN_ELO, DB_PATH
 
@@ -115,8 +118,8 @@ except Exception as e:
     bo = pd.DataFrame()
 
 # --- Tabs ---
-tab_overview, tab_maps, tab_builds, tab_tech, tab_players, tab_trends, tab_sql = st.tabs([
-    "Overview", "Map Stats", "Build Orders", "Tech Timings", "Players", "Meta Trends", "SQL Query"
+tab_overview, tab_maps, tab_builds, tab_tech, tab_compare, tab_players, tab_trends, tab_sql = st.tabs([
+    "Overview", "Map Stats", "Build Orders", "Tech Timings", "Unit Compare", "Players", "Meta Trends", "SQL Query"
 ])
 
 
@@ -400,7 +403,91 @@ with tab_tech, safe_section("Tech Timings"):
 
 
 # =========================================================================
-# TAB 5: Players
+# TAB 5: Unit Compare
+# =========================================================================
+with tab_compare, safe_section("Unit Compare"):
+    st.header("Cross-Faction Unit Comparison")
+    st.caption("Compare equivalent units across factions (e.g. medium tanks)")
+
+    if not bo.empty:
+        def secs_to_mss(s):
+            m, sec = divmod(int(s), 60)
+            return f"{m}:{sec:02d}"
+
+        FACTION_LABEL = {"us": "USF", "wehr": "Wehrmacht", "uk": "British", "dak": "DAK"}
+        FACTION_COLOR = {"us": "#4CAF50", "wehr": "#9E9E9E", "uk": "#2196F3", "dak": "#FFC107"}
+
+        cats = all_categories()
+        cat_options = [(c, CATEGORY_LABELS.get(c, c)) for c in cats]
+        cat_labels = [label for _, label in cat_options]
+        chosen_label = st.selectbox("Unit category", cat_labels, index=cat_labels.index("Medium Tanks") if "Medium Tanks" in cat_labels else 0)
+        chosen_cat = next(c for c, label in cat_options if label == chosen_label)
+
+        # Timing comparison table
+        st.subheader(f"{chosen_label} - Arrival Timings")
+        ct = category_timing_comparison(bo, chosen_cat)
+
+        if not ct.empty:
+            ct_display = ct.copy().reset_index()
+            ct_display["faction"] = ct_display["faction"].map(FACTION_LABEL)
+            for col in ["median_s", "mean_s", "earliest_s", "p25_s", "p75_s"]:
+                ct_display[col] = ct_display[col].apply(secs_to_mss)
+            ct_display.columns = ["Faction", "Unit", "Games", "Median", "Mean", "Earliest", "25%ile", "75%ile"]
+            st.dataframe(ct_display, use_container_width=True, hide_index=True)
+
+            # "By minute X" filter
+            st.subheader("Arrival by Target Time")
+            target_min = st.slider("Target minute", 5, 30, 15, 1)
+            arrival = category_arrival_at_minute(bo, chosen_cat, target_min)
+
+            if not arrival.empty:
+                arrival_display = arrival.reset_index().rename(columns={"index": "unit"})
+                arrival_display["faction"] = arrival_display["faction"].map(FACTION_LABEL)
+
+                fig = px.bar(
+                    arrival_display.sort_values("pct_in_time"),
+                    x="pct_in_time", y="unit",
+                    orientation="h",
+                    color="faction",
+                    color_discrete_map={FACTION_LABEL[k]: v for k, v in FACTION_COLOR.items()},
+                    text="pct_in_time",
+                    labels={"pct_in_time": f"% Built by {target_min}:00", "unit": ""},
+                    hover_data=["games_built", "by_target"],
+                )
+                fig.update_traces(texttemplate="%{text}%", textposition="outside")
+                fig.update_layout(height=max(350, len(arrival_display) * 40))
+                st.plotly_chart(fig, use_container_width=True)
+                st.dataframe(arrival_display, use_container_width=True, hide_index=True)
+
+            # Distribution boxplot
+            st.subheader("Timing Distribution")
+            from unit_categories import UNIT_CATEGORIES
+            units_in_cat = [u for u, (cat, _) in UNIT_CATEGORIES.items() if cat == chosen_cat]
+            cat_data = bo[
+                (bo["action_type"] == "production")
+                & (bo["unit"].isin(units_in_cat))
+            ].copy()
+            if not cat_data.empty:
+                first_arr = cat_data.groupby(["replay_id", "player_name", "unit"])["seconds"].min().reset_index()
+                first_arr["minutes"] = first_arr["seconds"] / 60
+                first_arr["faction"] = first_arr["unit"].map(lambda u: FACTION_LABEL[UNIT_CATEGORIES[u][1]])
+
+                fig2 = px.box(
+                    first_arr, x="unit", y="minutes",
+                    color="faction",
+                    color_discrete_map={FACTION_LABEL[k]: v for k, v in FACTION_COLOR.items()},
+                    labels={"minutes": "First Built (min)", "unit": ""},
+                )
+                fig2.update_layout(xaxis_tickangle=-30, height=500)
+                st.plotly_chart(fig2, use_container_width=True)
+        else:
+            st.info(f"No data for {chosen_label} in current patch selection")
+    else:
+        st.warning("No build order data. Run: `python3 run.py scrape-cohdb`")
+
+
+# =========================================================================
+# TAB 6: Players
 # =========================================================================
 with tab_players, safe_section("Players"):
     st.header("Players")

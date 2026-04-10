@@ -269,6 +269,78 @@ def first_unit_timing(bo: pd.DataFrame, unit_name: str) -> pd.DataFrame:
     return first
 
 
+def category_timing_comparison(bo: pd.DataFrame, category: str) -> pd.DataFrame:
+    """
+    Compare arrival timings for all units in a given category across factions.
+    Returns one row per unit with timing distribution stats.
+    """
+    from unit_categories import UNIT_CATEGORIES
+
+    units_in_cat = [u for u, (cat, _) in UNIT_CATEGORIES.items() if cat == category]
+    if not units_in_cat:
+        return pd.DataFrame()
+
+    cat_bo = bo[
+        (bo["action_type"] == "production")
+        & (bo["unit"].isin(units_in_cat))
+    ].copy()
+    if cat_bo.empty:
+        return pd.DataFrame()
+
+    cat_bo["faction"] = cat_bo["unit"].map(lambda u: UNIT_CATEGORIES.get(u, (None, None))[1])
+
+    # First arrival per (replay, player, unit)
+    first = cat_bo.groupby(["replay_id", "player_name", "unit", "faction"])["seconds"].min().reset_index()
+    first["minutes"] = first["seconds"] / 60
+
+    # Aggregate per unit
+    stats = first.groupby(["faction", "unit"]).agg(
+        games=("seconds", "count"),
+        median_s=("seconds", "median"),
+        mean_s=("seconds", "mean"),
+        earliest_s=("seconds", "min"),
+        p25_s=("seconds", lambda x: x.quantile(0.25)),
+        p75_s=("seconds", lambda x: x.quantile(0.75)),
+    ).round(0)
+    return stats.sort_values("median_s")
+
+
+def category_arrival_at_minute(bo: pd.DataFrame, category: str, target_minute: float) -> pd.DataFrame:
+    """
+    For each unit in a category, what % of games does it arrive by target_minute?
+    Answers questions like "which medium tank arrives by 15:00 most consistently?"
+    """
+    from unit_categories import UNIT_CATEGORIES
+
+    units_in_cat = [u for u, (cat, _) in UNIT_CATEGORIES.items() if cat == category]
+    if not units_in_cat:
+        return pd.DataFrame()
+
+    target_s = target_minute * 60
+
+    # Get all games and find first arrival of each unit per player
+    cat_bo = bo[
+        (bo["action_type"] == "production")
+        & (bo["unit"].isin(units_in_cat))
+    ].copy()
+
+    # First arrival per player-game
+    first = cat_bo.groupby(["replay_id", "player_name", "unit"])["seconds"].min().reset_index()
+
+    # Total games where this unit was built at all
+    total_games = first.groupby("unit").size()
+    # Games where it arrived by target time
+    in_time = first[first["seconds"] <= target_s].groupby("unit").size()
+
+    result = pd.DataFrame({
+        "games_built": total_games,
+        "by_target": in_time.reindex(total_games.index, fill_value=0),
+    })
+    result["pct_in_time"] = (result["by_target"] / result["games_built"] * 100).round(1)
+    result["faction"] = result.index.map(lambda u: UNIT_CATEGORIES.get(u, (None, None))[1])
+    return result.sort_values("pct_in_time", ascending=False)
+
+
 def player_build_tendencies(bo: pd.DataFrame, player_name: str) -> dict:
     """Analyze a specific player's build tendencies."""
     player = bo[bo["player_name"] == player_name]

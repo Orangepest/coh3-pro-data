@@ -45,6 +45,7 @@ from analyze import (
     category_arrival_at_minute,
     opener_winrates,
     opener_winrates_by_map,
+    opener_matchup_winrates,
     battlegroup_matchup_winrates,
     battlegroup_overall_winrates,
 )
@@ -393,6 +394,88 @@ with tab_builds, safe_section("Build Orders"):
                     st.plotly_chart(fig_map, use_container_width=True)
                 else:
                     st.info(f"No openers meet the criteria for {wr_faction}")
+
+            # =====================================================
+            # OPENER vs OPENER MATCHUPS
+            # =====================================================
+            st.subheader("Opener vs Opener Matchups")
+            st.caption("For each opener pair, what's the winrate? Adjust min games "
+                       "since most opener combinations are rare.")
+            col_g, col_h, col_i = st.columns(3)
+            mu_first_n = col_g.slider("Opener length", 3, 8, 4, key="mu_opener_depth")
+            mu_min_games = col_h.slider("Min games", 2, 20, 3, key="mu_min_games")
+            sort_options = ["Highest winrate", "Lowest winrate", "Most games"]
+            mu_sort = col_i.selectbox("Sort by", sort_options, key="mu_sort")
+
+            col_j, col_k = st.columns(2)
+            faction_options = ["All", "us", "wehr", "uk", "dak"]
+            mu_faction_a = col_j.selectbox("Your faction", faction_options, key="mu_fac_a")
+            mu_faction_b = col_k.selectbox("Opponent faction", faction_options, key="mu_fac_b")
+
+            mu_result = opener_matchup_winrates(
+                with_winners,
+                first_n=mu_first_n,
+                faction_a=mu_faction_a if mu_faction_a != "All" else None,
+                faction_b=mu_faction_b if mu_faction_b != "All" else None,
+                min_games=mu_min_games,
+            )
+
+            if mu_result.empty:
+                st.info("No opener matchups meet the criteria. Try lowering min games "
+                        "or shortening the opener length.")
+            else:
+                # Apply sort
+                if mu_sort == "Highest winrate":
+                    mu_display = mu_result.sort_values(["winrate_pct", "games"], ascending=[False, False])
+                elif mu_sort == "Lowest winrate":
+                    mu_display = mu_result.sort_values(["winrate_pct", "games"], ascending=[True, False])
+                else:
+                    mu_display = mu_result.sort_values("games", ascending=False)
+
+                st.markdown(f"**{len(mu_result)} opener matchups** "
+                           f"({int(mu_result['games'].sum())} total games)")
+
+                # Show top 30
+                top = mu_display.head(30).reset_index()
+                # Truncate long opener names for display
+                top["opener_a_short"] = top["opener_a"].apply(
+                    lambda s: s[:60] + "..." if len(s) > 60 else s)
+                top["opener_b_short"] = top["opener_b"].apply(
+                    lambda s: s[:60] + "..." if len(s) > 60 else s)
+
+                # Render as a clean table
+                display_df = top[["opener_a", "opener_b", "games", "a_wins", "winrate_pct"]]
+                display_df.columns = ["Your Opener", "Opponent Opener", "Games", "Wins", "Win %"]
+                st.dataframe(display_df, use_container_width=True, hide_index=True)
+
+                # Lookup view: pick a specific opener and see all its matchups
+                st.markdown("---")
+                st.markdown("**Lookup: pick an opener to see all its matchups**")
+                all_openers = sorted(mu_result.index.get_level_values("opener_a").unique())
+                if all_openers:
+                    selected_op = st.selectbox(
+                        "Your opener", all_openers, key="mu_lookup",
+                    )
+                    lookup = mu_result.loc[selected_op] if selected_op in mu_result.index.get_level_values("opener_a") else None
+                    if lookup is not None and not lookup.empty:
+                        lookup_display = lookup.reset_index().sort_values(
+                            "winrate_pct", ascending=False)
+                        lookup_display.columns = ["Opponent Opener", "Games", "Wins", "Win %"]
+                        # Bar chart
+                        fig_lookup = px.bar(
+                            lookup_display.sort_values("Win %"),
+                            x="Win %", y="Opponent Opener",
+                            orientation="h",
+                            color="Win %",
+                            color_continuous_scale="RdYlGn",
+                            range_color=[0, 100],
+                            text="Games",
+                            labels={"Win %": f"Your win % vs this opener", "Opponent Opener": ""},
+                        )
+                        fig_lookup.update_traces(texttemplate="n=%{text}", textposition="outside")
+                        fig_lookup.update_layout(height=max(300, len(lookup_display) * 35))
+                        st.plotly_chart(fig_lookup, use_container_width=True)
+                        st.dataframe(lookup_display, use_container_width=True, hide_index=True)
 
         # Battlegroup pickrates
         st.subheader("Battlegroup Pick Rates")

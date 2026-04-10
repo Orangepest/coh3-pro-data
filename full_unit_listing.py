@@ -143,7 +143,7 @@ def main():
             for s in callins:
                 by_bg[s["battlegroup"]].append(s)
             for bg_id in sorted(by_bg.keys(),
-                                key=lambda b: bgs.get(b, {}).get("display_name", b)):
+                                key=lambda b: bgs.get(b, {}).get("display_name", b) or ""):
                 bg_name = bgs.get(bg_id, {}).get("display_name", bg_id)
                 print(f"\n    >> {bg_name}")
                 for s in sorted(by_bg[bg_id], key=lambda x: -usage.get(x["name"], 0)):

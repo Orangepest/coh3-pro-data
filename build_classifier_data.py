@@ -25,9 +25,49 @@ ALIASES = {
 INTERNAL_NAMES = {"sp", "specialist", "specialists", "parent_pbg",
                   "mass_production", "infantry_assault"}
 
+# sbps_ids that LOOK like units in the game data but are actually:
+# - Upgrade variants of existing units (M2HB .50cal is M1919 upgrade)
+# - Not in multiplayer (WC54 Ambulance, Marksmen Team, Medic squads, UK Sniper)
+# - Doctrine ability conversions (Assault Carriers upgrades M3 APC)
+SKIP_SBPS = {
+    # USF
+    "hmg_50cal_us",            # M2HB .50cal - upgrade for M1919 via Heavy Weapons BG
+    "ambulance_us",            # WC54 Ambulance - not in multiplayer
+    "halftrack_assault_us",    # M3 Assault Carrier - upgrade for M3 APC via Heavy Weapons BG
+    "marksman_team_partisan",  # Marksmen Team - not in multiplayer
+    "medic_us",                # Medic - tied to healing structure, not a buildable squad
+    "medic_partisan",          # Medic - same
+    # Wehr
+    "medic_ger",               # Medic - tied to medical bunker
+    # DAK
+    "medic_ak",                # Medic
+    # UK - sniper does not exist for British forces, plus medic
+    "sniper_uk",               # No British sniper in game
+    "sniper_africa_uk",        # No British sniper
+    "medic_uk",                # Medic
+    "medic_africa_uk",         # Medic
+    # Commandos and variants are NOT UK base roster - all doctrinal
+    "commando_uk", "commando_africa_uk",
+    "commando_lmg_uk", "commando_lmg_africa_uk",
+    "hmg_commando_uk", "hmg_commando_africa_uk",
+    "sas_squad_uk", "sas_africa_uk",
+    "ssb_commando",
+    # Other doctrinal-only UK units that the parser may show in base
+    "guards_uk", "guards_africa_uk",                       # Foot Guards
+    "australian_light_infantry_uk",                        # Aus Light Inf - DLC/dual
+    "canadian_heavy_infantry_uk",                          # Canadian Shock - dual
+    "gurkhas_uk",                                          # Gurkhas - dual
+    # Stummel halftrack is an UPGRADE for 251 carrier, not a separate unit
+    "halftrack_stummel_ger",
+    "halftrack_stummel_recrewable_ger",
+    "armored_car_8_rad_stummel_ak",  # DAK 8 Rad stummel - also an upgrade variant
+}
+
 
 def is_internal(name: str, sbps_id: str) -> bool:
     """Filter out internal/non-playable entries."""
+    if sbps_id in SKIP_SBPS:
+        return True
     if name in INTERNAL_NAMES:
         return True
     if name.islower() and "_" in name:

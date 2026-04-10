@@ -168,37 +168,6 @@
       "unlocking_ability": "italian_infantry_guastatori_ak"
     },
     {
-      "sbps_id": "kriegsmarine_infantry_ak",
-      "name": "kriegsmarine_infantry_ak",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "infantry",
-      "squad_types": [
-        "combat_engineer",
-        "infantry_support",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "medic_ak",
-      "name": "medic_ak",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "infantry",
-      "squad_types": [
-        "combat_engineer",
-        "standard_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "panzergrenadier_ak",
       "name": "Panzergrenadier Squad",
       "faction": "dak",
@@ -343,23 +312,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "armored_car_222_ak",
-      "name": "222 Armored Car",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "dak_light_vehicle",
-        "light_armor",
-        "vehicle_burst_weapon",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "armored_car_8_rad_ak",
       "name": "8 Rad Armored Car",
       "faction": "dak",
@@ -371,40 +323,6 @@
         "light_armor",
         "vehicle_burst_weapon",
         "8_rad"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "armored_car_8_rad_command_ak",
-      "name": "Command 8 Rad Armored Car",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "dak_light_vehicle",
-        "light_armor",
-        "vehicle_burst_weapon",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "armored_car_8_rad_stummel_ak",
-      "name": "8 Rad Armored Car",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "dak_light_vehicle",
-        "light_armor",
-        "vehicle_artillery",
-        "vehicle_anti_tank"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -439,23 +357,6 @@
         "tier3",
         "vehicle_support",
         "veterancy_on_capture"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "bison_ak",
-      "name": "Bison Sturmpanzer",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "artillery",
-        "light_armor",
-        "vehicle_artillery",
-        "vehicle_anti_tank"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -569,40 +470,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "halftrack_250_medical_ak",
-      "name": "Medical Half-track",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "dak_light_vehicle",
-        "healer",
-        "reinforce_healing_platform"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "halftrack_250_mortar_ak",
-      "name": "Mortar Half-track",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_artillery",
-        "dak_light_vehicle",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "halftrack_250_vampire_ak",
       "name": "250/3 Funkpanzerwagen",
       "faction": "dak",
@@ -639,23 +506,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "halftrack_251_weapon_supply_ak",
-      "name": "Supply Half-track",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "dak_light_vehicle",
-        "vehicle_burst_weapon",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "halftrack_7_flak_ak",
       "name": "Flakvierling Half-track",
       "faction": "dak",
@@ -667,23 +517,6 @@
         "tier2",
         "anti_air",
         "vehicle_burst_weapon"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "halftrack_medical_ak",
-      "name": "Medical Half-track",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "dak_light_vehicle",
-        "healer",
-        "reinforce_healing_platform"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -778,23 +611,6 @@
       "unlocking_ability": "italian_infantry_double_l640_ak"
     },
     {
-      "sbps_id": "l6_40_flame_ak",
-      "name": "L6/40 Light Flame Tank",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_burst_weapon",
-        "italian",
-        "dak_light_vehicle"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "m13_40_ak",
       "name": "Carro Armato M13/40 Light Tank",
       "faction": "dak",
@@ -829,23 +645,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "m13_40_command_ak",
-      "name": "Command M13/40 Light Tank",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle",
-        "light_armor",
-        "vehicle_turret",
-        "italian"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "marder_iii_ak",
       "name": "Marder III Tank Destroyer",
       "faction": "dak",
@@ -855,40 +654,6 @@
         "light_armor",
         "vehicle_casemate_anti_tank",
         "tier3",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "panzerjager_i_ak",
-      "name": "Panzerjäger I Tank Destroyer",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "medium_armor",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "panzer_iii_37mm_ak",
-      "name": "Panzer III Medium Tank",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_turret",
-        "vehicle_anti_tank",
-        "tier4",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -957,23 +722,6 @@
         "vehicle_turret",
         "panzer_iii",
         "vehicle_anti_tank",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "panzer_iii_command_ak",
-      "name": "Panzer III Medium Tank",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_turret",
-        "panzer_iii",
-        "tier4",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -1067,23 +815,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "panzer_i_command_ak",
-      "name": "Command Panzer I Light Tank",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_casemate_anti_tank",
-        "light_armor",
-        "dak_light_vehicle",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "semovente_75_18_ak",
       "name": "Semovente da 75/18 Assault Gun",
       "faction": "dak",
@@ -1169,73 +900,8 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "truck_2_5_medical_ak",
-      "name": "2.5-tonne Medical Truck",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "healer",
-        "reinforce_healing_platform",
-        "dak_light_vehicle",
-        "vehicle_support"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "truck_2_5_towed_cannone_da_105_ak",
-      "name": "2.5-tonne Utility Truck",
-      "faction": "dak",
-      "race_key": "afrika_korps",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "dak_light_vehicle",
-        "vehicle_support",
-        "reinforce_healing_platform"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "b25j_bomber_us",
-      "name": "B25 Bomber",
-      "faction": "us",
-      "race_key": "american",
-      "role": "aircraft",
-      "squad_types": [
-        "vehicle",
-        "airplane"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "c47_douglas_loiter_us",
       "name": "c47_douglas_loiter_us",
-      "faction": "us",
-      "race_key": "american",
-      "role": "aircraft",
-      "squad_types": [
-        "vehicle",
-        "airplane"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "c47_douglas_us",
-      "name": "C47 Douglas",
       "faction": "us",
       "race_key": "american",
       "role": "aircraft",
@@ -1279,51 +945,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "l2_grasshopper_recon_reveal_fow_us",
-      "name": "L2 Grasshopper",
-      "faction": "us",
-      "race_key": "american",
-      "role": "aircraft",
-      "squad_types": [
-        "vehicle",
-        "airplane"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "l2_grasshopper_recon_reveal_los_high_altitude_us",
-      "name": "L2 Grasshopper",
-      "faction": "us",
-      "race_key": "american",
-      "role": "aircraft",
-      "squad_types": [
-        "vehicle",
-        "airplane"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "l2_grasshopper_recon_reveal_los_us",
-      "name": "L2 Grasshopper",
-      "faction": "us",
-      "race_key": "american",
-      "role": "aircraft",
-      "squad_types": [
-        "vehicle",
-        "airplane"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "p47_thunderbolt_air_support_us",
       "name": "p47_thunderbolt_air_support_us",
       "faction": "us",
@@ -1339,38 +960,8 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "p47_thunderbolt_dive_bomber_us",
-      "name": "P47 thunderbolt",
-      "faction": "us",
-      "race_key": "american",
-      "role": "aircraft",
-      "squad_types": [
-        "vehicle",
-        "airplane"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "p47_thunderbolt_loiter_us",
       "name": "p47_thunderbolt_loiter_us",
-      "faction": "us",
-      "race_key": "american",
-      "role": "aircraft",
-      "squad_types": [
-        "vehicle",
-        "airplane"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "p47_thunderbolt_us",
-      "name": "P47 thunderbolt",
       "faction": "us",
       "race_key": "american",
       "role": "aircraft",
@@ -1428,10 +1019,10 @@
         "emplacement",
         "105mm_howitzer_auto_fire"
       ],
-      "is_callin": false,
-      "battlegroup": null,
+      "is_callin": true,
+      "battlegroup": "infantry",
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "infantry_right_2_howitzer_105mm_us"
     },
     {
       "sbps_id": "mortar_pit_81mm_us",
@@ -1584,49 +1175,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "marksman_team_partisan",
-      "name": "Marksmen Team",
-      "faction": "us",
-      "race_key": "american",
-      "role": "infantry",
-      "squad_types": [
-        "sniper",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "medic_partisan",
-      "name": "Medic",
-      "faction": "us",
-      "race_key": "american",
-      "role": "infantry",
-      "squad_types": [
-        "infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "medic_us",
-      "name": "Medic",
-      "faction": "us",
-      "race_key": "american",
-      "role": "infantry",
-      "squad_types": [
-        "infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "paratrooper_us",
       "name": "Paratrooper Squad",
       "faction": "us",
@@ -1679,36 +1227,6 @@
       "unlocking_ability": "infantry_left_1_convert_rifleman_to_ranger_us"
     },
     {
-      "sbps_id": "resistance_fighters_battlegroup_partisans",
-      "name": "Resistance Fighter Squad",
-      "faction": "us",
-      "race_key": "american",
-      "role": "infantry",
-      "squad_types": [
-        "tunnel_teleport_neutral_hold",
-        "veterancy_on_capture"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "resistance_fighters_partisan",
-      "name": "Resistance Fighter Squad",
-      "faction": "us",
-      "race_key": "american",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "riflemen_us",
       "name": "Riflemen Squad",
       "faction": "us",
@@ -1718,37 +1236,6 @@
         "standard_infantry",
         "rifleman",
         "tier1",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "saboteurs_battlegroup_partisan",
-      "name": "Saboteur Squad",
-      "faction": "us",
-      "race_key": "american",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry",
-        "infantry_anti_infantry",
-        "tunnel_teleport_neutral_hold"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "saboteurs_partisan",
-      "name": "Saboteur Squad",
-      "faction": "us",
-      "race_key": "american",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry",
         "infantry_anti_infantry"
       ],
       "is_callin": false,
@@ -1921,22 +1408,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "hmg_50cal_us",
-      "name": "M2HB .50cal Machine Gun Team",
-      "faction": "us",
-      "race_key": "american",
-      "role": "team_weapons",
-      "squad_types": [
-        "suppression",
-        "teamweapon_burst",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "mortar_81mm_us",
       "name": "M1 Mortar Team",
       "faction": "us",
@@ -1973,23 +1444,6 @@
       "race_key": "american",
       "role": "team_weapons",
       "squad_types": [],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "ambulance_us",
-      "name": "WC54 Ambulance",
-      "faction": "us",
-      "race_key": "american",
-      "role": "vehicles",
-      "squad_types": [
-        "healer",
-        "reinforce_healing_platform",
-        "light_armor",
-        "vehicle_anti_tank"
-      ],
       "is_callin": false,
       "battlegroup": null,
       "dual_availability": false,
@@ -2064,57 +1518,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "halftrack_assault_us",
-      "name": "M3 Assault Carrier",
-      "faction": "us",
-      "race_key": "american",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "halftrack_command_us",
-      "name": "halftrack_command_us",
-      "faction": "us",
-      "race_key": "american",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_support",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "halftrack_medical_us",
-      "name": "M3 Armored Medical Half-track",
-      "faction": "us",
-      "race_key": "american",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "healer",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "halftrack_quad_us",
       "name": "M16 Multiple Gun Motor Carriage",
       "faction": "us",
@@ -2158,23 +1561,6 @@
         "vehicle_turret_anti_tank",
         "vehicle_anti_tank",
         "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "logistics_truck_us",
-      "name": "Logistics Truck",
-      "faction": "us",
-      "race_key": "american",
-      "role": "vehicles",
-      "squad_types": [
-        "healer",
-        "light_armor",
-        "reinforce_healing_platform",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -2364,23 +1750,6 @@
         "vehicle_turret",
         "light_armor",
         "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "truck_4x4_medical_us",
-      "name": "1⁄4-ton 4x4 Medical Truck",
-      "faction": "us",
-      "race_key": "american",
-      "role": "vehicles",
-      "squad_types": [
-        "healer",
-        "ultra_light",
-        "vehicle_support",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -2614,10 +1983,10 @@
         "artillery",
         "invisible_to_scar"
       ],
-      "is_callin": false,
+      "is_callin": true,
       "battlegroup": null,
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "howitzer_base_25pdr_uk",
@@ -2631,10 +2000,10 @@
         "base_defense",
         "invisible_to_scar"
       ],
-      "is_callin": false,
+      "is_callin": true,
       "battlegroup": null,
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "howitzer_bl_5_5_uk",
@@ -2647,111 +2016,10 @@
         "invisible_to_scar",
         "emplacement"
       ],
-      "is_callin": false,
-      "battlegroup": null,
+      "is_callin": true,
+      "battlegroup": "indian_artillery",
       "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "australian_light_infantry_uk",
-      "name": "Australian Light Infantry Section",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry",
-        "elite_infantry",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "canadian_heavy_infantry_uk",
-      "name": "Canadian Shock Troops Section",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry",
-        "elite_infantry",
-        "infantry_burst_weapon",
-        "infantry_assault",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "commando_lmg_uk",
-      "name": "Commando LMG Section",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "infantry_long_range",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "commando_uk",
-      "name": "Commando Section",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "commandos",
-        "infantry_assault",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "guards_uk",
-      "name": "Foot Guards Section",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "tier4",
-        "infantry_anti_tank",
-        "infantry_assault",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "gurkhas_uk",
-      "name": "Gurkha Rifles Section",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "infantry_long_range",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "indian_uk",
@@ -2769,20 +2037,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "medic_uk",
-      "name": "Medic",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "sapper_uk",
       "name": "Royal Engineer Section",
       "faction": "uk",
@@ -2793,53 +2047,6 @@
         "standard_infantry",
         "tier1",
         "infantry_support",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "sas_squad_uk",
-      "name": "SAS Commando Squad",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "sniper_uk",
-      "name": "Sniper",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "sniper",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "ssb_commando",
-      "name": "ssb_commando",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "commandos",
-        "infantry_assault",
         "infantry_anti_infantry"
       ],
       "is_callin": false,
@@ -2971,22 +2178,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "hmg_commando_uk",
-      "name": "Vickers Machine Gun Team",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "team_weapons",
-      "squad_types": [
-        "tier2",
-        "teamweapon_burst",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "hmg_vickers_recrew_uk",
       "name": "Vickers Machine Gun Team",
       "faction": "uk",
@@ -3060,10 +2251,10 @@
         "mortar",
         "infantry_anti_infantry"
       ],
-      "is_callin": false,
-      "battlegroup": null,
+      "is_callin": true,
+      "battlegroup": "indian_artillery",
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "pack_howitzer_75mm_uk",
@@ -3075,10 +2266,10 @@
         "artillery",
         "infantry_anti_infantry"
       ],
-      "is_callin": false,
-      "battlegroup": null,
+      "is_callin": true,
+      "battlegroup": "british_air_and_sea",
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "archer_uk",
@@ -3123,23 +2314,6 @@
       "squad_types": [
         "vehicle_turret",
         "medium_armor",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "churchill_75mm_uk",
-      "name": "Churchill NA 75 Heavy Tank",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_turret",
-        "heavy_armor",
         "tier4",
         "vehicle_anti_tank"
       ],
@@ -3201,40 +2375,6 @@
       "unlocking_ability": "british_armored_churchill_production_unlock_uk"
     },
     {
-      "sbps_id": "command_churchill_uk",
-      "name": "Command Churchill IV Heavy Tank",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_turret",
-        "heavy_armor",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "crusader_57mm_uk",
-      "name": "Crusader III Medium Tank",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_turret",
-        "medium_armor",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "crusader_aa_uk",
       "name": "Crusader AA Medium Tank",
       "faction": "uk",
@@ -3261,91 +2401,6 @@
         "vehicle_turret",
         "medium_armor",
         "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_flatbed_uk",
-      "name": "CMP 15cwt Anti-air Truck",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_quad_mount_uk",
-      "name": "CMP 15cwt Anti-air Truck",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "anti_air",
-        "vehicle_burst_weapon",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_truck_medical_uk",
-      "name": "CMP 15cwt Medical Truck",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "healer",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_truck_repair_resupply_uk",
-      "name": "CMP 15cwt Repair and Resupply Truck",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "reinforce_healing_platform",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_truck_uk",
-      "name": "CMP 15cwt Truck",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -3431,40 +2486,6 @@
         "light_armor",
         "tier3",
         "vehicle_burst_weapon",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "marmon_herrington_uk",
-      "name": "marmon_herrington_uk",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_burst_weapon",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "matilda_command_uk",
-      "name": "Matilda II Heavy Command Tank",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "heavy_armor",
-        "medium_armor",
-        "tier4",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -3592,23 +2613,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "valentine_command_uk",
-      "name": "Valentine II Medium Command Tank",
-      "faction": "uk",
-      "race_key": "british",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_turret",
-        "medium_armor",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "valentine_uk",
       "name": "Valentine II Medium Tank",
       "faction": "uk",
@@ -3701,10 +2705,10 @@
         "emplacement",
         "artillery"
       ],
-      "is_callin": false,
+      "is_callin": true,
       "battlegroup": null,
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "howitzer_base_25pdr_africa_uk",
@@ -3717,10 +2721,10 @@
         "artillery",
         "base_defense"
       ],
-      "is_callin": false,
+      "is_callin": true,
       "battlegroup": null,
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "howitzer_bl_5_5_africa_uk",
@@ -3771,56 +2775,6 @@
       "unlocking_ability": "canadian_shock_canadian_shock_troops_uk"
     },
     {
-      "sbps_id": "commando_africa_uk",
-      "name": "Commando Section",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "infantry_burst_weapon",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": true,
-      "battlegroup": "british_air_and_sea",
-      "dual_availability": false,
-      "unlocking_ability": "british_air_and_sea_right_1_commandos_uk"
-    },
-    {
-      "sbps_id": "commando_lmg_africa_uk",
-      "name": "Commando Support Section",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "infantry_burst_weapon",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": true,
-      "battlegroup": "british_air_and_sea",
-      "dual_availability": false,
-      "unlocking_ability": "british_air_and_sea_right_2b_commando_lmg_team_uk"
-    },
-    {
-      "sbps_id": "guards_africa_uk",
-      "name": "Foot Guards Section",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "tier4",
-        "infantry_anti_tank",
-        "infantry_assault",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "gurkhas_africa_uk",
       "name": "Gurkha Rifles Section",
       "faction": "uk",
@@ -3845,20 +2799,6 @@
       "squad_types": [
         "standard_infantry",
         "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "medic_africa_uk",
-      "name": "Medic",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "infantry",
-      "squad_types": [
-        "infantry"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -3906,36 +2846,6 @@
         "standard_infantry",
         "tier1",
         "infantry_support",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "sas_africa_uk",
-      "name": "SAS Section",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "sniper_africa_uk",
-      "name": "Sniper",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "infantry",
-      "squad_types": [
-        "sniper",
         "infantry_anti_infantry"
       ],
       "is_callin": false,
@@ -4027,22 +2937,6 @@
       "role": "team_weapons",
       "squad_types": [
         "anti_tank",
-        "teamweapon_burst",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "hmg_commando_africa_uk",
-      "name": "Vickers Machine Gun Team",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "team_weapons",
-      "squad_types": [
-        "tier2",
         "teamweapon_burst",
         "infantry_anti_infantry"
       ],
@@ -4176,23 +3070,6 @@
       "unlocking_ability": "australian_defense_archer_tank_destroyer_call_in_uk"
     },
     {
-      "sbps_id": "australian_supplytruck_africa_uk",
-      "name": "CMP 15cwt Truck",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "bishop_africa_uk",
       "name": "Bishop Self-propelled Artillery",
       "faction": "uk",
@@ -4225,23 +3102,6 @@
       "battlegroup": "british_air_and_sea",
       "dual_availability": false,
       "unlocking_ability": "british_air_and_sea_left_2a_centaur_cs_uk"
-    },
-    {
-      "sbps_id": "churchill_75mm_africa_uk",
-      "name": "Churchill NA 75 Heavy Tank",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_turret",
-        "heavy_armor",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
     },
     {
       "sbps_id": "churchill_africa_uk",
@@ -4296,40 +3156,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "command_churchill_africa_uk",
-      "name": "Command Churchill IV Heavy Tank",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "heavy_armor",
-        "medium_armor",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "crusader_57mm_africa_uk",
-      "name": "Crusader III Medium Tank",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_turret",
-        "medium_armor",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "crusader_aa_africa_uk",
       "name": "Crusader AA Medium Tank",
       "faction": "uk",
@@ -4356,142 +3182,6 @@
         "vehicle_turret",
         "medium_armor",
         "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_flatbed_africa_uk",
-      "name": "CMP 15cwt Truck",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_quad_mount_africa_uk",
-      "name": "CMP 15cwt Anti-air Truck",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_burst_weapon",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_truck_africa_uk",
-      "name": "CMP 15cwt Truck",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_truck_medical_africa_uk",
-      "name": "CMP 15cwt Medical Truck",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "healer",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_truck_recrewable_africa_uk",
-      "name": "CMP 15cwt Truck",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_15_truck_repair_resupply_africa_uk",
-      "name": "CMP 15cwt Repair and Resupply Truck",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_support",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_lrdg_truck_2pdr_africa_uk",
-      "name": "cwt_lrdg_truck_2pdr_africa_uk",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "cwt_lrdg_truck_africa_uk_uk",
-      "name": "cwt_lrdg_truck_africa_uk_uk",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier2",
-        "reinforce_healing_platform",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -4560,23 +3250,6 @@
         "light_armor",
         "tier3",
         "vehicle_burst_weapon",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "marmon_herrington_africa_uk",
-      "name": "marmon_herrington_africa_uk",
-      "faction": "uk",
-      "race_key": "british_africa",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_burst_weapon",
-        "tier4",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -5022,10 +3695,10 @@
         "teamweapon",
         "artillery"
       ],
-      "is_callin": false,
-      "battlegroup": null,
+      "is_callin": true,
+      "battlegroup": "italian_coastal",
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "howitzer_obice_210_ger",
@@ -5090,24 +3763,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "bersaglieri_ger",
-      "name": "Bersaglieri Squad",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry",
-        "elite_infantry",
-        "bersaglieri",
-        "italian",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "coastal_officer_ger",
       "name": "Artillery Officer",
       "faction": "wehr",
@@ -5122,87 +3777,6 @@
       "battlegroup": "coastal",
       "dual_availability": false,
       "unlocking_ability": "coastal_artillery_officer_ger"
-    },
-    {
-      "sbps_id": "coastal_reserves_at_ger",
-      "name": "coastal_reserves_at_ger",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "coastal_reserves_ger",
-      "name": "Coastal Reserves Squad",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry",
-        "infantry_anti_infantry",
-        "infanterie_kompanie"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "fallschirmjagers_ger",
-      "name": "Fallschirmjäger Squad",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "elite_infantry",
-        "infantry_burst_weapon",
-        "infantry_anti_infantry",
-        "wehrmacht_advanced_unit"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "fallschirmpioneers_ger",
-      "name": "Fallschirmpioneer Squad",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "standard_infantry",
-        "combat_engineer",
-        "infantry_support",
-        "infantry_anti_infantry",
-        "infanterie_kompanie"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "fallschirmsniper_ger",
-      "name": "Fallschirm-sniper",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "sniper",
-        "elite_infantry",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
     },
     {
       "sbps_id": "grenadier_ger",
@@ -5223,25 +3797,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "guastatori_ger",
-      "name": "Guastatori Squad",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "combat_engineer",
-        "standard_infantry",
-        "elite_infantry",
-        "infantry_burst_weapon",
-        "infantry_assault",
-        "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "jaeger_ger",
       "name": "Jäger Squad",
       "faction": "wehr",
@@ -5253,34 +3808,6 @@
         "luftwaffe_kompanie",
         "jaeger_infantry",
         "infantry_anti_infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "medic_ger",
-      "name": "Medic",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "infantry"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "officer_ger_sp",
-      "name": "Logistics Officer Retinue",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "infantry",
-      "squad_types": [
-        "infantry"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -5551,21 +4078,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "anzioannie_ger",
-      "name": "Anzio Annie",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "team_weapons",
-      "squad_types": [
-        "anti_tank",
-        "artillery"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "at_gun_75mm_ger",
       "name": "Pak 40 Anti-tank Gun Team",
       "faction": "wehr",
@@ -5577,21 +4089,6 @@
         "tier2",
         "panzergrenadier_kompanie",
         "teamweapon_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "at_gun_88mm_pak43_ger",
-      "name": "Pak 43 Anti-tank Gun Team",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "team_weapons",
-      "squad_types": [
-        "mortar",
-        "elite_teamweapon"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -5674,10 +4171,10 @@
         "artillery",
         "stationary_anti_tank_weapon"
       ],
-      "is_callin": false,
-      "battlegroup": null,
+      "is_callin": true,
+      "battlegroup": "italian_coastal",
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "howitzer_obice_da_210_no_sandbags_ger",
@@ -5770,44 +4267,10 @@
         "8_rad",
         "wehrmacht_advanced_unit"
       ],
-      "is_callin": false,
-      "battlegroup": null,
+      "is_callin": true,
+      "battlegroup": "mechanized",
       "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "armored_car_ger",
-      "name": "221 Scout Car",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "luftwaffe_kompanie",
-        "vehicle_support",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "borgward_iv_ger",
-      "name": "borgward_iv_ger",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "wehrmacht_advanced_unit",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "mechanized_left_2b_8_rad"
     },
     {
       "sbps_id": "brummbar_ger",
@@ -5819,23 +4282,6 @@
         "heavy_armor",
         "panzer_kompanie",
         "vehicle_casemate",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "halftrack_251_flak_ger",
-      "name": "Flak Half-track",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "anti_air",
-        "vehicle_burst_weapon",
         "vehicle_anti_tank"
       ],
       "is_callin": false,
@@ -5878,75 +4324,6 @@
       "unlocking_ability": "breakthrough_right_3a_assault_group_ger"
     },
     {
-      "sbps_id": "halftrack_medical_ger",
-      "name": "Medical Half-track",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "healer",
-        "vehicle_support",
-        "reinforce_healing_platform",
-        "panzergrenadier_kompanie"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "halftrack_recrewable_ger",
-      "name": "251 Medium Carrier",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "panzergrenadier_kompanie",
-        "vehicle_burst_weapon",
-        "reinforce_healing_platform"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "halftrack_stummel_ger",
-      "name": "Stummel Half-track",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_direct_fire_barrage",
-        "panzergrenadier_kompanie",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "halftrack_stummel_recrewable_ger",
-      "name": "Stummel Half-track",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_direct_fire_barrage",
-        "vehicle_direct_fire_barrage",
-        "panzergrenadier_kompanie",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "jagdpanzer_iv_sdkfz_162_ger",
       "name": "StuG III G Assault Gun",
       "faction": "wehr",
@@ -5957,23 +4334,6 @@
         "tier3",
         "panzergrenadier_kompanie",
         "shock_round_capable"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "kettenkrad_ger",
-      "name": "Kettenkrad Recon Vehicle",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "infanterie_kompanie",
-        "vehicle_support",
-        "ultra_light",
-        "veterancy_on_capture"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -6017,57 +4377,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "l6_40_ger",
-      "name": "L6/40 Light Tank",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_burst_weapon",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "l6_40_recrewable_ger",
-      "name": "L6/40 Light Tank",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "vehicle_burst_weapon",
-        "tier4",
-        "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "m13_40_ger",
-      "name": "Carro Armato M13/40 Light Tank",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle",
-        "light_armor",
-        "vehicle_turret",
-        "italian"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "marder_iii_ger",
       "name": "Marder III M Tank Destroyer",
       "faction": "wehr",
@@ -6079,23 +4388,6 @@
         "tier3",
         "luftwaffe_kompanie",
         "shock_round_capable"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "nashorn_ger",
-      "name": "Nashorn Heavy Tank Destroyer",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "vehicle_casemate_anti_tank",
-        "heavy_armor",
-        "tier4",
-        "vehicle_anti_tank"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -6147,23 +4439,6 @@
         "panzer_kompanie",
         "vehicle_anti_tank",
         "vehicle_anti_tank"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
-      "sbps_id": "recovery_vehicle_ger",
-      "name": "18-tonne Recovery Vehicle",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "healer",
-        "recovery_vehicle",
-        "light_armor",
-        "vehicle_repair_recovery"
       ],
       "is_callin": false,
       "battlegroup": null,
@@ -6310,23 +4585,6 @@
       "unlocking_ability": null
     },
     {
-      "sbps_id": "truck_2_5_medical_ger",
-      "name": "2.5-tonne Medical Truck",
-      "faction": "wehr",
-      "race_key": "german",
-      "role": "vehicles",
-      "squad_types": [
-        "light_armor",
-        "tier1",
-        "healer",
-        "reinforce_healing_platform"
-      ],
-      "is_callin": false,
-      "battlegroup": null,
-      "dual_availability": false,
-      "unlocking_ability": null
-    },
-    {
       "sbps_id": "wespe_ger",
       "name": "Wespe Self-propelled Artillery",
       "faction": "wehr",
@@ -6338,10 +4596,10 @@
         "tier4",
         "vehicle_anti_tank"
       ],
-      "is_callin": false,
-      "battlegroup": null,
+      "is_callin": true,
+      "battlegroup": "mechanized",
       "dual_availability": false,
-      "unlocking_ability": null
+      "unlocking_ability": "manual_override"
     },
     {
       "sbps_id": "wirbelwind_ger",

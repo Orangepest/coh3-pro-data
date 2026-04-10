@@ -334,6 +334,78 @@ def opener_winrates(
     return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
 
 
+def battlegroup_matchup_winrates(
+    bo: pd.DataFrame,
+    min_games: int = 3,
+) -> pd.DataFrame:
+    """
+    Compute BG vs BG winrates from build orders.
+    Returns DataFrame with: bg_a, bg_b, games, a_wins, winrate_pct (winrate of bg_a vs bg_b).
+
+    Only includes replays where BOTH players picked a battlegroup.
+    """
+    bg = bo[bo["action_type"] == "battlegroup"].copy()
+    bg = bg.dropna(subset=["won"])
+    if bg.empty:
+        return pd.DataFrame()
+
+    # Take only the FIRST BG pick per player per game
+    bg = bg.sort_values("seconds")
+    first_bg = bg.groupby(["replay_id", "player_name"]).agg(
+        bg=("unit", "first"),
+        won=("won", "first"),
+    ).reset_index()
+
+    # Need both players' BGs for each replay
+    counts = first_bg.groupby("replay_id").size()
+    valid_replays = counts[counts == 2].index
+    first_bg = first_bg[first_bg["replay_id"].isin(valid_replays)]
+
+    # Build matchups: for each replay, pair the two players
+    rows = []
+    for rid, group in first_bg.groupby("replay_id"):
+        if len(group) != 2:
+            continue
+        p1, p2 = group.iloc[0], group.iloc[1]
+        # Each side reported once - we'll compute symmetric A vs B and B vs A
+        rows.append({"bg_a": p1["bg"], "bg_b": p2["bg"], "a_won": int(p1["won"])})
+        rows.append({"bg_a": p2["bg"], "bg_b": p1["bg"], "a_won": int(p2["won"])})
+
+    if not rows:
+        return pd.DataFrame()
+
+    df = pd.DataFrame(rows)
+    stats = df.groupby(["bg_a", "bg_b"]).agg(
+        games=("a_won", "count"),
+        a_wins=("a_won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["a_wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+    return stats.sort_values(["winrate_pct"], ascending=False)
+
+
+def battlegroup_overall_winrates(bo: pd.DataFrame, min_games: int = 5) -> pd.DataFrame:
+    """Overall winrate per battlegroup (regardless of opponent)."""
+    bg = bo[bo["action_type"] == "battlegroup"].copy()
+    bg = bg.dropna(subset=["won"])
+    if bg.empty:
+        return pd.DataFrame()
+
+    bg = bg.sort_values("seconds")
+    first_bg = bg.groupby(["replay_id", "player_name"]).agg(
+        bg=("unit", "first"),
+        won=("won", "first"),
+    ).reset_index()
+
+    stats = first_bg.groupby("bg").agg(
+        games=("won", "count"),
+        wins=("won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+    return stats.sort_values("winrate_pct", ascending=False)
+
+
 def opener_winrates_by_map(
     bo: pd.DataFrame,
     first_n: int = 5,

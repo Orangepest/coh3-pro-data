@@ -45,6 +45,8 @@ from analyze import (
     category_arrival_at_minute,
     opener_winrates,
     opener_winrates_by_map,
+    battlegroup_matchup_winrates,
+    battlegroup_overall_winrates,
 )
 from unit_categories import all_categories, CATEGORY_LABELS
 from db import get_conn
@@ -406,6 +408,69 @@ with tab_builds, safe_section("Build Orders"):
             fig.update_traces(texttemplate="%{text}%", textposition="outside")
             fig.update_layout(height=max(400, len(bg) * 35))
             st.plotly_chart(fig, use_container_width=True)
+
+        # =====================================================
+        # BG OVERALL WINRATES
+        # =====================================================
+        st.subheader("Battlegroup Overall Winrates")
+        bg_overall = battlegroup_overall_winrates(bo, min_games=10)
+        if not bg_overall.empty:
+            bg_overall_chart = bg_overall.reset_index().sort_values("winrate_pct")
+            fig_bgwr = px.bar(
+                bg_overall_chart,
+                x="winrate_pct", y="bg",
+                orientation="h",
+                color="winrate_pct",
+                color_continuous_scale="RdYlGn",
+                range_color=[35, 65],
+                text="games",
+                labels={"winrate_pct": "Win Rate %", "bg": ""},
+                hover_data=["wins", "games"],
+            )
+            fig_bgwr.update_traces(texttemplate="n=%{text}", textposition="outside")
+            fig_bgwr.update_layout(height=max(400, len(bg_overall) * 30))
+            st.plotly_chart(fig_bgwr, use_container_width=True)
+            st.dataframe(bg_overall, use_container_width=True)
+
+        # =====================================================
+        # BG vs BG MATCHUP MATRIX
+        # =====================================================
+        st.subheader("Battlegroup Matchup Matrix")
+        st.caption("Row picks vs column picks. Cell = row's winrate %. "
+                   "Only shows matchups with at least min_games occurrences.")
+        bg_min_games = st.slider("Min games per matchup", 2, 20, 3, key="bg_matchup_min")
+        bg_mu = battlegroup_matchup_winrates(bo, min_games=bg_min_games)
+        if not bg_mu.empty:
+            # Pivot into matrix form
+            matrix = bg_mu.reset_index().pivot(index="bg_a", columns="bg_b", values="winrate_pct")
+            games_matrix = bg_mu.reset_index().pivot(index="bg_a", columns="bg_b", values="games")
+
+            # Sort by overall winrate from bg_overall
+            if not bg_overall.empty:
+                order = bg_overall.index.tolist()
+                matrix = matrix.reindex(index=[b for b in order if b in matrix.index],
+                                       columns=[b for b in order if b in matrix.columns])
+                games_matrix = games_matrix.reindex(index=matrix.index, columns=matrix.columns)
+
+            fig_matrix = px.imshow(
+                matrix,
+                text_auto=".0f",
+                color_continuous_scale="RdYlGn",
+                zmin=20, zmax=80,
+                labels=dict(x="Opponent picked", y="Player picked", color="Win %"),
+                aspect="auto",
+            )
+            fig_matrix.update_layout(height=600, xaxis_tickangle=-45)
+            st.plotly_chart(fig_matrix, use_container_width=True)
+
+            with st.expander("View matchup table"):
+                # Flat table view
+                bg_mu_display = bg_mu.reset_index()
+                bg_mu_display = bg_mu_display[bg_mu_display["games"] >= bg_min_games]
+                bg_mu_display = bg_mu_display.sort_values("winrate_pct", ascending=False)
+                st.dataframe(bg_mu_display, use_container_width=True, hide_index=True)
+        else:
+            st.info("No BG matchups meet the criteria yet (need both players to pick BGs)")
 
         # Unit popularity
         st.subheader("Most Produced Units")

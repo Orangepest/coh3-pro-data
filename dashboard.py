@@ -43,6 +43,8 @@ from analyze import (
     player_build_tendencies,
     category_timing_comparison,
     category_arrival_at_minute,
+    opener_winrates,
+    opener_winrates_by_map,
 )
 from unit_categories import all_categories, CATEGORY_LABELS
 from db import get_conn
@@ -255,6 +257,61 @@ with tab_builds, safe_section("Build Orders"):
         op = opener_analysis(bo, opener_depth)
         if not op.empty:
             st.dataframe(op, use_container_width=True)
+
+        # =====================================================
+        # OPENER WINRATES (NEW)
+        # =====================================================
+        st.subheader("🏆 Opener Winrates")
+        with_winners = bo.dropna(subset=["won"])
+        coverage = (with_winners["replay_id"].nunique() / max(1, bo["replay_id"].nunique())) * 100
+        st.caption(f"Win/loss data available for {coverage:.0f}% of games "
+                   f"({with_winners['replay_id'].nunique()} of {bo['replay_id'].nunique()})")
+
+        if with_winners.empty:
+            st.warning("No winner data yet. Run: `python3 backfill_winners.py`")
+        else:
+            col_a, col_b, col_c, col_d = st.columns(4)
+            wr_depth = col_a.slider("Opener length", 3, 8, 5, key="wr_opener_depth")
+            wr_min_games = col_b.slider("Min games", 3, 50, 5, key="wr_min_games")
+            wr_faction = col_c.selectbox(
+                "Faction",
+                ["All", "us", "wehr", "uk", "dak"],
+                key="wr_faction",
+            )
+            map_options = ["All maps"] + sorted(with_winners["map_name"].dropna().unique().tolist())
+            wr_map = col_d.selectbox("Map", map_options, key="wr_map")
+
+            wr_result = opener_winrates(
+                with_winners,
+                first_n=wr_depth,
+                faction=wr_faction if wr_faction != "All" else None,
+                map_name=wr_map if wr_map != "All maps" else None,
+                min_games=wr_min_games,
+            )
+
+            if wr_result.empty:
+                st.info("No openers meet the filter criteria")
+            else:
+                st.markdown(f"**{len(wr_result)} unique openers** "
+                           f"({int(wr_result['games'].sum())} total games)")
+
+                # Top 25 winning openers
+                top_wins = wr_result.head(25).reset_index()
+                fig = px.bar(
+                    top_wins.sort_values("winrate_pct"),
+                    x="winrate_pct", y="opener",
+                    orientation="h",
+                    color="winrate_pct",
+                    color_continuous_scale="RdYlGn",
+                    range_color=[30, 70],
+                    text="games",
+                    labels={"winrate_pct": "Win Rate %", "opener": ""},
+                    hover_data=["wins", "games"],
+                )
+                fig.update_traces(texttemplate="n=%{text}", textposition="outside")
+                fig.update_layout(height=max(450, len(top_wins) * 30))
+                st.plotly_chart(fig, use_container_width=True)
+                st.dataframe(wr_result, use_container_width=True)
 
         # Battlegroup pickrates
         st.subheader("Battlegroup Pick Rates")

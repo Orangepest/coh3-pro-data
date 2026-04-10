@@ -91,6 +91,26 @@ def init_db():
     except sqlite3.OperationalError:
         pass  # column already exists
 
+    # Add winner_side column ('allies' or 'axis') for opener winrate analysis
+    try:
+        c.execute("ALTER TABLE cohdb_replays ADD COLUMN winner_side TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+    # Per-player faction/side/result mapping for cohdb replays
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS cohdb_replay_players (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            replay_id       INTEGER NOT NULL,
+            player_name     TEXT NOT NULL,
+            faction_slug    TEXT,
+            side            TEXT,  -- 'allies' or 'axis'
+            won             INTEGER,  -- 1 or 0
+            FOREIGN KEY (replay_id) REFERENCES cohdb_replays(replay_id),
+            UNIQUE(replay_id, player_name)
+        )
+    """)
+
     c.execute("""
         CREATE TABLE IF NOT EXISTS build_orders (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -113,6 +133,8 @@ def init_db():
     c.execute("CREATE INDEX IF NOT EXISTS idx_bo_replay ON build_orders(replay_id)")
     c.execute("CREATE INDEX IF NOT EXISTS idx_bo_player ON build_orders(player_name)")
     c.execute("CREATE INDEX IF NOT EXISTS idx_bo_unit ON build_orders(unit)")
+    c.execute("CREATE INDEX IF NOT EXISTS idx_crp_replay ON cohdb_replay_players(replay_id)")
+    c.execute("CREATE INDEX IF NOT EXISTS idx_crp_player ON cohdb_replay_players(player_name)")
     conn.commit()
     conn.close()
     print(f"Database initialized at {DB_PATH}")

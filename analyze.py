@@ -154,7 +154,8 @@ def head_to_head(df: pd.DataFrame, player1_alias: str, player2_alias: str) -> pd
 
 
 def load_build_orders_df(patch: str | None = None) -> pd.DataFrame:
-    """Load build order data from cohdb, optionally filtered by patch."""
+    """Load build order data from cohdb, optionally filtered by patch.
+    Now joins with cohdb_replay_players to include player faction/side/won info."""
     conn = get_conn()
     query = """
         SELECT
@@ -165,9 +166,15 @@ def load_build_orders_df(patch: str | None = None) -> pd.DataFrame:
             bo.action_type,
             cr.duration_s as match_duration_s,
             cr.map_name,
-            cr.patch
+            cr.patch,
+            cr.winner_side,
+            crp.faction_slug,
+            crp.side,
+            crp.won
         FROM build_orders bo
         JOIN cohdb_replays cr ON bo.replay_id = cr.replay_id
+        LEFT JOIN cohdb_replay_players crp
+            ON bo.replay_id = crp.replay_id AND bo.player_name = crp.player_name
     """
     params = ()
     if patch:
@@ -267,6 +274,97 @@ def first_unit_timing(bo: pd.DataFrame, unit_name: str) -> pd.DataFrame:
     first.columns = ["replay_id", "player_name", "first_built_s"]
     first["first_built_min"] = (first["first_built_s"] / 60).round(1)
     return first
+
+
+def opener_winrates(
+    bo: pd.DataFrame,
+    first_n: int = 5,
+    faction: str | None = None,
+    map_name: str | None = None,
+    min_games: int = 5,
+) -> pd.DataFrame:
+    """
+    Compute winrates for each unique opening sequence (first N production units).
+
+    Returns DataFrame with columns: opener, games, wins, winrate_pct.
+    Filters out openers with fewer than min_games occurrences.
+    Optionally filter by faction (us/wehr/uk/dak) and/or map_name.
+    """
+    df = bo[bo["action_type"] == "production"].copy()
+
+    # Need won info to compute winrates
+    df = df.dropna(subset=["won"])
+    if df.empty:
+        return pd.DataFrame()
+
+    # Optional filters
+    if faction:
+        # Map our faction names to the cohdb faction_slug values
+        slug_map = {
+            "us": ["americans"],
+            "wehr": ["germans"],
+            "uk": ["british", "british_africa"],
+            "dak": ["afrika_korps"],
+        }
+        slugs = slug_map.get(faction, [faction])
+        df = df[df["faction_slug"].isin(slugs)]
+    if map_name:
+        df = df[df["map_name"] == map_name]
+    if df.empty:
+        return pd.DataFrame()
+
+    df = df.sort_values("seconds")
+    df["order"] = df.groupby(["replay_id", "player_name"]).cumcount() + 1
+    first = df[df["order"] <= first_n]
+
+    # Build opener sequence per (replay, player)
+    openers = (
+        first.groupby(["replay_id", "player_name"])
+        .agg(
+            opener=("unit", lambda x: " -> ".join(x)),
+            won=("won", "first"),
+        )
+        .reset_index()
+    )
+
+    # Need exactly first_n units in each opener (drop short games)
+    openers["unit_count"] = openers["opener"].apply(lambda s: s.count(" -> ") + 1)
+    openers = openers[openers["unit_count"] == first_n]
+
+    # Aggregate winrates
+    stats = openers.groupby("opener").agg(
+        games=("won", "count"),
+        wins=("won", "sum"),
+    )
+    stats = stats[stats["games"] >= min_games]
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
+
+
+def opener_winrates_by_map(
+    bo: pd.DataFrame,
+    first_n: int = 5,
+    faction: str | None = None,
+    min_games: int = 3,
+) -> pd.DataFrame:
+    """
+    Compute opener winrates broken down by map.
+    Returns multi-index (map, opener) with games/wins/winrate_pct.
+    """
+    maps = bo["map_name"].dropna().unique()
+    results = []
+    for m in maps:
+        wr = opener_winrates(bo, first_n=first_n, faction=faction,
+                              map_name=m, min_games=min_games)
+        if not wr.empty:
+            wr = wr.copy()
+            wr["map_name"] = m
+            results.append(wr)
+    if not results:
+        return pd.DataFrame()
+    combined = pd.concat(results)
+    combined = combined.set_index("map_name", append=True).reorder_levels(["map_name", "opener"])
+    return combined.sort_values(["winrate_pct"], ascending=False)
 
 
 def category_timing_comparison(bo: pd.DataFrame, category: str) -> pd.DataFrame:

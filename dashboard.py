@@ -1017,6 +1017,98 @@ with tab_tech, safe_section("Tech Timings"):
             m, sec = divmod(int(s), 60)
             return f"{m}:{sec:02d}"
 
+        # =====================================================
+        # KEY MILESTONE TIMINGS PER FACTION
+        # =====================================================
+        st.subheader("Key Milestone Timings (per faction)")
+        st.caption(
+            "Average time to reach key build order milestones - first medium tank, "
+            "first AT gun, first BG pick, etc. Per-faction averages from all pro games."
+        )
+        ms_faction = st.selectbox(
+            "Faction",
+            ["us", "wehr", "uk", "dak"],
+            key="ms_faction",
+        )
+        try:
+            ms_data = analyze.key_milestone_timings(bo, faction=ms_faction)
+            if not ms_data.empty:
+                ms_chart = ms_data.reset_index()
+                fig_ms = px.bar(
+                    ms_chart.sort_values("avg_min"),
+                    x="avg_min", y="milestone",
+                    orientation="h",
+                    text="games",
+                    labels={"avg_min": "Average minutes", "milestone": ""},
+                    hover_data=["median_min", "earliest_min", "p25_min", "p75_min"],
+                )
+                fig_ms.update_traces(texttemplate="n=%{text}", textposition="outside")
+                fig_ms.update_layout(height=max(400, len(ms_chart) * 35))
+                st.plotly_chart(fig_ms, use_container_width=True)
+                st.dataframe(ms_data, use_container_width=True)
+        except Exception as e:
+            st.error(f"Milestones failed: {e}")
+
+        # =====================================================
+        # MILESTONE TIMING vs WINRATE
+        # =====================================================
+        st.subheader("Does Milestone Timing Correlate with Winrate?")
+        st.caption(
+            "Bucket games by when a player first achieved a milestone, then compute "
+            "winrate per bucket. e.g. 'players who got Panzer IV by 12 min won 84%'."
+        )
+        from unit_categories import UNIT_CATEGORIES, CATEGORY_LABELS as _CL
+        col_mt_a, col_mt_b = st.columns(2)
+        mt_faction = col_mt_a.selectbox(
+            "Faction", ["us", "wehr", "uk", "dak"], key="mt_faction")
+        # Find available categories for this faction
+        fac_cats = sorted(set(
+            cat for unit, (cat, fac) in UNIT_CATEGORIES.items() if fac == mt_faction
+        ))
+        cat_labels_for_fac = [(_CL.get(c, c), c) for c in fac_cats]
+        chosen_label = col_mt_b.selectbox(
+            "Unit category",
+            [label for label, _ in cat_labels_for_fac],
+            index=min(len(cat_labels_for_fac) - 1,
+                      next((i for i, (l, c) in enumerate(cat_labels_for_fac)
+                            if c == "medium_tank"), 0)),
+            key="mt_cat",
+        )
+        chosen_cat = next(c for label, c in cat_labels_for_fac if label == chosen_label)
+        units_in_cat = [
+            u for u, (cat, fac) in UNIT_CATEGORIES.items()
+            if cat == chosen_cat and fac == mt_faction
+        ]
+        try:
+            corr = analyze.milestone_timing_winrate_correlation(
+                bo, units_in_cat, faction=mt_faction, bucket_minutes=2)
+            if not corr.empty:
+                # Filter to buckets with reasonable sample size
+                corr_filtered = corr[corr["games"] >= 3]
+                if not corr_filtered.empty:
+                    chart = corr_filtered.reset_index()
+                    fig_corr = px.bar(
+                        chart, x="bucket_min", y="winrate_pct",
+                        text="games",
+                        color="winrate_pct",
+                        color_continuous_scale="RdYlGn",
+                        range_color=[20, 80],
+                        labels={
+                            "bucket_min": f"Minutes to first {chosen_label} ({mt_faction})",
+                            "winrate_pct": "Win %",
+                        },
+                    )
+                    fig_corr.update_traces(texttemplate="n=%{text}", textposition="outside")
+                    fig_corr.update_layout(yaxis=dict(range=[0, 110]))
+                    st.plotly_chart(fig_corr, use_container_width=True)
+                    st.dataframe(chart, use_container_width=True, hide_index=True)
+                else:
+                    st.info("Not enough data for buckets >= 3 games")
+        except Exception as e:
+            st.error(f"Milestone correlation failed: {e}")
+
+        st.markdown("---")
+
         # Category filter
         categories = ["All", "production", "tech", "battlegroup", "ability"]
         selected_cat = st.selectbox("Category", categories, key="tech_cat")

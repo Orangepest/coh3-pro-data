@@ -461,6 +461,126 @@ def opener_winrates(
     return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
 
 
+def key_milestone_timings(
+    bo: pd.DataFrame,
+    faction: str | None = None,
+) -> pd.DataFrame:
+    """
+    Compute average timings for key build order milestones per game.
+    Milestones: first infantry, first MG/HMG, first AT, first armored car,
+    first medium tank, first BG pick.
+
+    If faction is given, only games where the player played that faction.
+    Returns DataFrame indexed by milestone with columns: avg_minutes,
+    median_minutes, p25_minutes, p75_minutes, games.
+    """
+    from unit_categories import UNIT_CATEGORIES
+
+    # Build category sets
+    by_cat: dict[str, set[str]] = {}
+    for unit, (cat, _) in UNIT_CATEGORIES.items():
+        by_cat.setdefault(cat, set()).add(unit)
+
+    # Filter by faction
+    df = bo[bo["action_type"] == "production"].copy()
+    if faction:
+        df = df[df["faction_short"] == faction]
+    if df.empty:
+        return pd.DataFrame()
+
+    # For each (replay, player), find first time each category was built
+    milestones = {
+        "First mainline infantry": "mainline_infantry",
+        "First engineer": "engineers",
+        "First HMG": "hmg",
+        "First mortar": "mortar",
+        "First AT gun": "at_gun",
+        "First armored car": "armored_car",
+        "First halftrack": "halftrack",
+        "First light tank": "light_tank",
+        "First medium tank": "medium_tank",
+        "First heavy tank": "heavy_tank",
+        "First tank destroyer": "tank_destroyer",
+        "First artillery": "artillery",
+    }
+
+    rows = []
+    for label, cat in milestones.items():
+        units_in_cat = by_cat.get(cat, set())
+        if not units_in_cat:
+            continue
+        cat_df = df[df["unit"].isin(units_in_cat)]
+        if cat_df.empty:
+            continue
+        # First occurrence per player-game
+        first_occ = cat_df.groupby(["replay_id", "player_name"])["seconds"].min()
+        if first_occ.empty:
+            continue
+        first_min = first_occ / 60
+        rows.append({
+            "milestone": label,
+            "games": len(first_occ),
+            "avg_min": round(first_min.mean(), 2),
+            "median_min": round(first_min.median(), 2),
+            "earliest_min": round(first_min.min(), 2),
+            "p25_min": round(first_min.quantile(0.25), 2),
+            "p75_min": round(first_min.quantile(0.75), 2),
+        })
+
+    # Add BG pick timing as a separate milestone
+    bg_df = bo[bo["action_type"] == "battlegroup"]
+    if faction:
+        bg_df = bg_df[bg_df["faction_short"] == faction]
+    if not bg_df.empty:
+        first_bg = bg_df.groupby(["replay_id", "player_name"])["seconds"].min()
+        first_min = first_bg / 60
+        rows.append({
+            "milestone": "First BG pick",
+            "games": len(first_bg),
+            "avg_min": round(first_min.mean(), 2),
+            "median_min": round(first_min.median(), 2),
+            "earliest_min": round(first_min.min(), 2),
+            "p25_min": round(first_min.quantile(0.25), 2),
+            "p75_min": round(first_min.quantile(0.75), 2),
+        })
+
+    if not rows:
+        return pd.DataFrame()
+    return pd.DataFrame(rows).set_index("milestone").sort_values("avg_min")
+
+
+def milestone_timing_winrate_correlation(
+    bo: pd.DataFrame,
+    milestone_units: list[str],
+    faction: str | None = None,
+    bucket_minutes: int = 2,
+) -> pd.DataFrame:
+    """
+    For a given milestone (set of units), bucket player-games by when they
+    first achieved it and compute winrate per bucket.
+    Tests hypotheses like 'players who get a medium tank by 12 min win more'.
+    """
+    df = bo[(bo["action_type"] == "production") & (bo["unit"].isin(milestone_units))].copy()
+    df = df.dropna(subset=["won"])
+    if faction:
+        df = df[df["faction_short"] == faction]
+    if df.empty:
+        return pd.DataFrame()
+
+    first = df.groupby(["replay_id", "player_name"]).agg(
+        first_seconds=("seconds", "min"),
+        won=("won", "first"),
+    ).reset_index()
+    first["bucket_min"] = (first["first_seconds"] // (bucket_minutes * 60)) * bucket_minutes
+
+    stats = first.groupby("bucket_min").agg(
+        games=("won", "count"),
+        wins=("won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    return stats
+
+
 def winrate_by_unit_count(
     bo: pd.DataFrame,
     unit: str,

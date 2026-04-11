@@ -334,6 +334,59 @@ def opener_winrates(
     return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
 
 
+def winrate_by_unit_count(
+    bo: pd.DataFrame,
+    unit: str,
+    player_name: str | None = None,
+    bucket_max: int = 6,
+) -> pd.DataFrame:
+    """
+    For each player-game where 'player_name' (or any player if None) played,
+    count how many times they built 'unit' and compute winrate per count.
+
+    Returns DataFrame with index 'unit_count' and columns: games, wins, winrate_pct.
+    Counts above bucket_max are bucketed into '{bucket_max}+'.
+    """
+    df = bo.dropna(subset=["won"]).copy()
+    if player_name:
+        df = df[df["player_name"] == player_name]
+    if df.empty:
+        return pd.DataFrame()
+
+    # All player-games this player participated in
+    all_games = df.groupby(["replay_id", "player_name"])["won"].first().reset_index()
+
+    # How many of this unit each player built per game
+    unit_df = df[(df["unit"] == unit) & (df["action_type"] == "production")]
+    counts = (
+        unit_df.groupby(["replay_id", "player_name"])
+        .size()
+        .reset_index(name="unit_count")
+    )
+
+    # Merge: any game where the player didn't build the unit gets count=0
+    merged = all_games.merge(counts, on=["replay_id", "player_name"], how="left")
+    merged["unit_count"] = merged["unit_count"].fillna(0).astype(int)
+
+    # Bucket
+    merged["bucket"] = merged["unit_count"].apply(
+        lambda x: f"{bucket_max}+" if x >= bucket_max else str(x)
+    )
+
+    # Aggregate
+    stats = merged.groupby("bucket").agg(
+        games=("won", "count"),
+        wins=("won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+
+    # Sort by numeric bucket value
+    def sort_key(b):
+        return bucket_max + 1 if b == f"{bucket_max}+" else int(b)
+    stats = stats.reindex(sorted(stats.index, key=sort_key))
+    return stats
+
+
 def opener_matchup_winrates(
     bo: pd.DataFrame,
     first_n: int = 5,

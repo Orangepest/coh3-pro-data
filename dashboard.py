@@ -46,6 +46,7 @@ from analyze import (
     opener_winrates,
     opener_winrates_by_map,
     opener_matchup_winrates,
+    winrate_by_unit_count,
     battlegroup_matchup_winrates,
     battlegroup_overall_winrates,
 )
@@ -845,6 +846,50 @@ with tab_players, safe_section("Players"):
                     fig = px.bar(units_df, x="count", y="unit", orientation="h")
                     fig.update_layout(height=400, yaxis=dict(categoryorder="total ascending"))
                     st.plotly_chart(fig, use_container_width=True)
+
+                # =====================================================
+                # WINRATE BY UNIT COUNT
+                # =====================================================
+                st.markdown("---")
+                st.markdown(f"**Winrate by Unit Count** - is {selected_player}'s winrate "
+                           "exponential in how many of a given unit they make?")
+
+                # Pull this player's most-built units as the dropdown options
+                player_units = bo[
+                    (bo["player_name"] == selected_player)
+                    & (bo["action_type"] == "production")
+                ]["unit"].value_counts()
+                if not player_units.empty:
+                    unit_options = player_units.head(30).index.tolist()
+                    selected_unit_for_count = st.selectbox(
+                        "Select unit",
+                        unit_options,
+                        key=f"wr_unit_count_{selected_player}",
+                    )
+                    if selected_unit_for_count:
+                        wr_by_count = winrate_by_unit_count(
+                            bo, selected_unit_for_count, player_name=selected_player
+                        )
+                        if not wr_by_count.empty:
+                            wr_chart = wr_by_count.reset_index()
+                            wr_chart.columns = ["count", "games", "wins", "winrate_pct"]
+
+                            fig_wrc = px.bar(
+                                wr_chart,
+                                x="count", y="winrate_pct",
+                                text="games",
+                                color="winrate_pct",
+                                color_continuous_scale="RdYlGn",
+                                range_color=[0, 100],
+                                labels={
+                                    "count": f"# of {selected_unit_for_count} built",
+                                    "winrate_pct": "Win %",
+                                },
+                            )
+                            fig_wrc.update_traces(texttemplate="n=%{text}", textposition="outside")
+                            fig_wrc.update_layout(yaxis=dict(range=[0, 110]))
+                            st.plotly_chart(fig_wrc, use_container_width=True)
+                            st.dataframe(wr_chart, use_container_width=True, hide_index=True)
 
         # Head to head
         st.subheader("Head-to-Head")

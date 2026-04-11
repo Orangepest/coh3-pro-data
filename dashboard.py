@@ -766,6 +766,116 @@ with tab_builds, safe_section("Build Orders"):
         else:
             st.info("No BG matchups meet the criteria yet (need both players to pick BGs)")
 
+        # =====================================================
+        # BG WINRATES BY MAP
+        # =====================================================
+        st.subheader("Battlegroup × Map Winrates")
+        st.caption(
+            "How does each battlegroup perform on each map? Some BGs have huge swings — "
+            "Mechanized swings 39pp from Pachino (66.7%) to Twin Beach (27.3%) for example."
+        )
+        col_bgmap_a, col_bgmap_b = st.columns(2)
+        bgmap_min_games = col_bgmap_a.slider(
+            "Min games per (BG, map)", 2, 15, 3, key="bgmap_min")
+        try:
+            bg_by_map = analyze.bg_winrates_by_map(bo, min_games=bgmap_min_games)
+            if bg_by_map.empty:
+                st.info("Not enough data for current filters")
+            else:
+                # Two views: BG-centric (pick a BG, see all maps) and map-centric
+                view_mode = col_bgmap_b.selectbox(
+                    "View",
+                    ["Pick a BG → see all maps", "Pick a map → see all BGs", "Best BG per map", "Full heatmap"],
+                    key="bgmap_view",
+                )
+
+                if view_mode == "Pick a BG → see all maps":
+                    bg_options = sorted(bg_by_map.index.get_level_values("bg").unique())
+                    selected_bg = st.selectbox("Battlegroup", bg_options, key="bgmap_bg")
+                    filtered = bg_by_map.xs(selected_bg, level="bg") if selected_bg else None
+                    if filtered is not None and not filtered.empty:
+                        chart_data = filtered.reset_index().sort_values("winrate_pct")
+                        fig_bgm = px.bar(
+                            chart_data,
+                            x="winrate_pct", y="map_name",
+                            orientation="h",
+                            color="winrate_pct",
+                            color_continuous_scale="RdYlGn",
+                            range_color=[20, 80],
+                            text="games",
+                            labels={"winrate_pct": f"{selected_bg} win %", "map_name": ""},
+                        )
+                        fig_bgm.update_traces(texttemplate="n=%{text}", textposition="outside")
+                        fig_bgm.update_layout(
+                            height=max(300, len(chart_data) * 35),
+                            shapes=[dict(type="line", x0=50, x1=50, y0=-0.5,
+                                         y1=len(chart_data) - 0.5,
+                                         line=dict(color="white", width=1, dash="dash"))],
+                        )
+                        st.plotly_chart(fig_bgm, use_container_width=True)
+                        st.dataframe(filtered.reset_index(), use_container_width=True, hide_index=True)
+
+                elif view_mode == "Pick a map → see all BGs":
+                    map_options = sorted(bg_by_map.index.get_level_values("map_name").unique())
+                    selected_map = st.selectbox("Map", map_options, key="bgmap_map")
+                    filtered = bg_by_map.xs(selected_map, level="map_name") if selected_map else None
+                    if filtered is not None and not filtered.empty:
+                        chart_data = filtered.reset_index().sort_values("winrate_pct")
+                        fig_bgm = px.bar(
+                            chart_data,
+                            x="winrate_pct", y="bg",
+                            orientation="h",
+                            color="winrate_pct",
+                            color_continuous_scale="RdYlGn",
+                            range_color=[20, 80],
+                            text="games",
+                            labels={"winrate_pct": f"Win % on {selected_map}", "bg": ""},
+                        )
+                        fig_bgm.update_traces(texttemplate="n=%{text}", textposition="outside")
+                        fig_bgm.update_layout(
+                            height=max(300, len(chart_data) * 35),
+                            shapes=[dict(type="line", x0=50, x1=50, y0=-0.5,
+                                         y1=len(chart_data) - 0.5,
+                                         line=dict(color="white", width=1, dash="dash"))],
+                        )
+                        st.plotly_chart(fig_bgm, use_container_width=True)
+                        st.dataframe(filtered.reset_index(), use_container_width=True, hide_index=True)
+
+                elif view_mode == "Best BG per map":
+                    best = analyze.best_bg_per_map(bo, min_games=bgmap_min_games)
+                    if not best.empty:
+                        fig_bg_best = px.bar(
+                            best.sort_values("winrate_pct"),
+                            x="winrate_pct", y="map",
+                            orientation="h",
+                            color="winrate_pct",
+                            color_continuous_scale="RdYlGn",
+                            range_color=[40, 100],
+                            text="games",
+                            labels={"winrate_pct": "Best BG win %", "map": ""},
+                            hover_data=["best_bg", "wins", "games"],
+                        )
+                        fig_bg_best.update_traces(texttemplate="n=%{text}", textposition="outside")
+                        fig_bg_best.update_layout(height=max(300, len(best) * 35))
+                        st.plotly_chart(fig_bg_best, use_container_width=True)
+                        st.dataframe(best, use_container_width=True, hide_index=True)
+
+                else:  # Full heatmap
+                    matrix = bg_by_map.reset_index().pivot(
+                        index="bg", columns="map_name", values="winrate_pct")
+                    fig_heat = px.imshow(
+                        matrix,
+                        text_auto=".0f",
+                        color_continuous_scale="RdYlGn",
+                        zmin=20, zmax=80,
+                        labels=dict(x="Map", y="Battlegroup", color="Win %"),
+                        aspect="auto",
+                    )
+                    fig_heat.update_layout(height=600, xaxis_tickangle=-45)
+                    st.plotly_chart(fig_heat, use_container_width=True)
+        except Exception as e:
+            st.error(f"BG×Map analysis failed: {e}")
+
         # Unit popularity
         st.subheader("Most Produced Units")
         up = unit_popularity(bo).head(30)

@@ -596,6 +596,51 @@ def battlegroup_matchup_winrates(
     return stats.sort_values(["winrate_pct"], ascending=False)
 
 
+def bg_winrates_by_map(bo: pd.DataFrame, min_games: int = 3) -> pd.DataFrame:
+    """
+    Battlegroup winrates broken down by map.
+    Returns DataFrame with multiindex (map, bg) and columns: games, wins, winrate_pct.
+    """
+    bg = bo[bo["action_type"] == "battlegroup"].copy()
+    bg = bg.dropna(subset=["won", "map_name"])
+    if bg.empty:
+        return pd.DataFrame()
+
+    # Take first BG pick per player per game
+    bg = bg.sort_values("seconds")
+    first_bg = bg.groupby(["replay_id", "player_name"]).agg(
+        bg=("unit", "first"),
+        won=("won", "first"),
+        map_name=("map_name", "first"),
+    ).reset_index()
+
+    stats = first_bg.groupby(["map_name", "bg"]).agg(
+        games=("won", "count"),
+        wins=("won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+    return stats.sort_values("winrate_pct", ascending=False)
+
+
+def best_bg_per_map(bo: pd.DataFrame, min_games: int = 3) -> pd.DataFrame:
+    """For each map, the highest-winrate battlegroup."""
+    by_map = bg_winrates_by_map(bo, min_games=min_games)
+    if by_map.empty:
+        return pd.DataFrame()
+    rows = []
+    for map_name, group in by_map.groupby(level="map_name"):
+        best = group.iloc[0]  # already sorted by winrate desc
+        rows.append({
+            "map": map_name,
+            "best_bg": group.index[0][1],  # bg name from multiindex
+            "winrate_pct": best["winrate_pct"],
+            "wins": int(best["wins"]),
+            "games": int(best["games"]),
+        })
+    return pd.DataFrame(rows).sort_values("winrate_pct", ascending=False)
+
+
 def battlegroup_overall_winrates(bo: pd.DataFrame, min_games: int = 5) -> pd.DataFrame:
     """Overall winrate per battlegroup (regardless of opponent)."""
     bg = bo[bo["action_type"] == "battlegroup"].copy()

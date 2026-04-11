@@ -157,9 +157,28 @@ def scrape_build_orders(replay_id: int) -> tuple[list[dict], int | None, str | N
     return players_data, duration_s, patch
 
 
+def is_ai_player_name(name: str) -> bool:
+    """Detect AI/CPU players to filter out skirmish-vs-AI games."""
+    if not name:
+        return False
+    n = name.strip()
+    # CPU prefix in any localization
+    if n.startswith("CPU") or n.startswith("CPU-") or n.startswith("CPU "):
+        return True
+    # AI Takeover marker
+    if "AI Takeover" in n or n == "AI":
+        return True
+    return False
+
+
 def store_replay_build_orders(replay_id: int, players_data: list[dict],
                                duration_s: int | None, patch: str | None, conn):
-    """Store build order data for a replay."""
+    """Store build order data for a replay. Skips replays with AI players."""
+    # Skip games with any CPU/AI player - these are skirmishes, not 1v1 ranked
+    for player in players_data:
+        if is_ai_player_name(player.get("name", "")):
+            return 0  # signal "skipped"
+
     now = datetime.now(timezone.utc).isoformat()
 
     # Clear any existing build orders for this replay (in case of re-scrape)

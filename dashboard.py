@@ -264,6 +264,44 @@ with tab_maps, safe_section("Map Stats"):
             )
             fig3.update_traces(texttemplate="%{text}%", textposition="outside")
             st.plotly_chart(fig3, use_container_width=True)
+
+        # =====================================================
+        # WINRATE BY GAME LENGTH (per faction)
+        # =====================================================
+        st.subheader("Faction Winrate by Game Length")
+        st.caption(
+            "How does each faction perform across game lengths? Tests 'fast game' "
+            "vs 'late game' faction strengths. Note that very short (<5 min) games "
+            "include many ragequits where one player got crushed early."
+        )
+        col_wgl_a, col_wgl_b = st.columns(2)
+        wgl_bucket = col_wgl_a.slider("Bucket size (minutes)", 2, 10, 5, key="wgl_bucket")
+        wgl_min = col_wgl_b.slider("Min games per bucket", 3, 30, 5, key="wgl_min")
+        try:
+            wgl = analyze.winrate_by_game_length(df, bucket_minutes=wgl_bucket, min_games=wgl_min)
+            if not wgl.empty:
+                wgl_df = wgl.reset_index()
+                fig_wgl = px.line(
+                    wgl_df, x="length_bucket", y="winrate_pct",
+                    color="faction", markers=True,
+                    color_discrete_map=FACTION_COLORS,
+                    labels={
+                        "length_bucket": "Game length (minutes)",
+                        "winrate_pct": "Win %",
+                        "faction": "Faction",
+                    },
+                    hover_data=["games", "wins"],
+                )
+                fig_wgl.update_layout(
+                    yaxis=dict(range=[20, 80]),
+                    shapes=[dict(type="line", x0=-0.5, x1=len(wgl_df['length_bucket'].unique())-0.5,
+                                 y0=50, y1=50,
+                                 line=dict(color="white", width=1, dash="dash"))],
+                )
+                st.plotly_chart(fig_wgl, use_container_width=True)
+                st.dataframe(wgl, use_container_width=True)
+        except Exception as e:
+            st.error(f"Game length winrate failed: {e}")
     else:
         st.warning("No match data. Run: `python3 run.py scrape-matches`")
 

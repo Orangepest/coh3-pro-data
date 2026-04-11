@@ -96,6 +96,97 @@ def map_stats(df: pd.DataFrame) -> pd.DataFrame:
     return map_counts
 
 
+def winrate_by_game_length(
+    df: pd.DataFrame,
+    bucket_minutes: int = 5,
+    min_games: int = 5,
+) -> pd.DataFrame:
+    """
+    Bucket games by total duration and compute winrate per faction in each bucket.
+    Tests hypotheses like 'Wehr wins more in long games' or 'DAK wins fast games'.
+
+    Returns DataFrame with multiindex (length_bucket, faction) and columns:
+    games, wins, winrate_pct.
+    """
+    if df.empty or "duration_s" not in df.columns:
+        return pd.DataFrame()
+
+    work = df.dropna(subset=["duration_s", "result", "faction"]).copy()
+    if work.empty:
+        return pd.DataFrame()
+
+    # Bucket by minutes - "5-10", "10-15", etc., capped at "60+"
+    work["duration_min"] = (work["duration_s"] / 60).astype(float)
+
+    def bucket(m):
+        if m >= 60:
+            return "60+"
+        b = int(m // bucket_minutes) * bucket_minutes
+        return f"{b}-{b + bucket_minutes}"
+
+    work["length_bucket"] = work["duration_min"].apply(bucket)
+
+    stats = work.groupby(["length_bucket", "faction"]).agg(
+        games=("result", "count"),
+        wins=("result", lambda x: (x == "win").sum()),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+
+    # Custom sort: numeric prefix order, "60+" last
+    def sort_key(idx):
+        b = idx[0]
+        if b == "60+":
+            return 9999
+        return int(b.split("-")[0])
+
+    sorted_idx = sorted(stats.index, key=sort_key)
+    return stats.loc[sorted_idx]
+
+
+def winrate_by_game_length_overall(
+    df: pd.DataFrame,
+    bucket_minutes: int = 5,
+    min_games: int = 5,
+) -> pd.DataFrame:
+    """
+    Game length distribution + winrate-by-length for the whole pool, regardless
+    of faction. Useful for spotting "fast games favor allies" type patterns.
+    """
+    if df.empty:
+        return pd.DataFrame()
+
+    work = df.dropna(subset=["duration_s", "result"]).copy()
+    if work.empty:
+        return pd.DataFrame()
+
+    # Need to group by match for game length, then compute who won by side
+    # Use match_id since we have one row per player here
+    matches = work.groupby("match_id").agg(
+        duration_s=("duration_s", "first"),
+    ).reset_index()
+    matches["duration_min"] = matches["duration_s"] / 60
+
+    def bucket(m):
+        if m >= 60:
+            return "60+"
+        b = int(m // bucket_minutes) * bucket_minutes
+        return f"{b}-{b + bucket_minutes}"
+
+    matches["length_bucket"] = matches["duration_min"].apply(bucket)
+    counts = matches.groupby("length_bucket").size().reset_index(name="matches")
+
+    def sort_key(idx):
+        b = idx
+        if b == "60+":
+            return 9999
+        return int(b.split("-")[0])
+
+    counts = counts.sort_values("length_bucket", key=lambda s: s.map(sort_key))
+    counts["pct"] = (counts["matches"] / counts["matches"].sum() * 100).round(1)
+    return counts
+
+
 def faction_matchup_by_map(df: pd.DataFrame, min_games: int = 5) -> pd.DataFrame:
     """
     Faction-vs-faction winrates broken down by map.

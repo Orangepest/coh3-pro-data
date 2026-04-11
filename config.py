@@ -51,7 +51,11 @@ REQUEST_DELAY = 1.0  # seconds between API requests
 MAX_RETRIES = 3
 
 # --- Database ---
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "coh3_pro.db")
+# Override with COH3DATA_DB_PATH env var (used by tests).
+DB_PATH = os.environ.get(
+    "COH3DATA_DB_PATH",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "coh3_pro.db"),
+)
 
 # --- Scraping ---
 LEADERBOARD_PAGE_SIZE = 200  # max per request

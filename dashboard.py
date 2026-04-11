@@ -22,34 +22,42 @@ def safe_section(name: str):
         with st.expander("Show traceback"):
             st.code(traceback.format_exc())
 
-from analyze import (
-    load_matches_df,
-    load_leaderboard_df,
-    load_build_orders_df,
-    available_patches,
-    faction_winrates,
-    faction_matchup_matrix,
-    map_stats,
-    map_faction_winrates,
-    duration_distribution,
-    top_players,
-    head_to_head,
-    meta_trends,
-    opener_analysis,
-    battlegroup_pickrates,
-    tech_timings,
-    unit_popularity,
-    first_unit_timing,
-    player_build_tendencies,
-    category_timing_comparison,
-    category_arrival_at_minute,
-    opener_winrates,
-    opener_winrates_by_map,
-    opener_matchup_winrates,
-    winrate_by_unit_count,
-    battlegroup_matchup_winrates,
-    battlegroup_overall_winrates,
-)
+# Import the whole module rather than individual functions.
+# This way, adding a new function to analyze.py won't break the dashboard's
+# top-level import on Streamlit Cloud (which sometimes lags loading the new
+# version of analyze.py while loading the new dashboard.py). Missing functions
+# now fail at call-time inside safe_section() rather than at import time.
+import analyze
+
+# Convenience: bind the most-used functions to the global namespace so the rest
+# of this file doesn't need 'analyze.' prefix everywhere. New functions added
+# later should be referenced as 'analyze.<name>' so they fail gracefully via
+# safe_section if not yet deployed.
+load_matches_df = analyze.load_matches_df
+load_leaderboard_df = analyze.load_leaderboard_df
+load_build_orders_df = analyze.load_build_orders_df
+available_patches = analyze.available_patches
+faction_winrates = analyze.faction_winrates
+faction_matchup_matrix = analyze.faction_matchup_matrix
+map_stats = analyze.map_stats
+map_faction_winrates = analyze.map_faction_winrates
+duration_distribution = analyze.duration_distribution
+top_players = analyze.top_players
+head_to_head = analyze.head_to_head
+meta_trends = analyze.meta_trends
+opener_analysis = analyze.opener_analysis
+battlegroup_pickrates = analyze.battlegroup_pickrates
+tech_timings = analyze.tech_timings
+unit_popularity = analyze.unit_popularity
+first_unit_timing = analyze.first_unit_timing
+player_build_tendencies = analyze.player_build_tendencies
+category_timing_comparison = analyze.category_timing_comparison
+category_arrival_at_minute = analyze.category_arrival_at_minute
+
+# Newer functions referenced via analyze.<name> so safe_section handles missing ones.
+# (opener_winrates, opener_winrates_by_map, opener_matchup_winrates,
+#  winrate_by_unit_count, battlegroup_matchup_winrates, battlegroup_overall_winrates)
+
 from unit_categories import all_categories, CATEGORY_LABELS
 from db import get_conn
 from config import MIN_ELO, DB_PATH
@@ -306,7 +314,7 @@ with tab_builds, safe_section("Build Orders"):
             map_options = ["All maps"] + sorted(with_winners["map_name"].dropna().unique().tolist())
             wr_map = col_d.selectbox("Map", map_options, key="wr_map")
 
-            wr_result = opener_winrates(
+            wr_result = analyze.opener_winrates(
                 with_winners,
                 first_n=wr_depth,
                 faction=wr_faction if wr_faction != "All" else None,
@@ -353,7 +361,7 @@ with tab_builds, safe_section("Build Orders"):
                 # Compute per map
                 rows = []
                 for m in sorted(with_winners["map_name"].dropna().unique()):
-                    map_wr = opener_winrates(
+                    map_wr = analyze.opener_winrates(
                         with_winners,
                         first_n=map_first_n,
                         faction=wr_faction,
@@ -413,7 +421,7 @@ with tab_builds, safe_section("Build Orders"):
             mu_faction_a = col_j.selectbox("Your faction", faction_options, key="mu_fac_a")
             mu_faction_b = col_k.selectbox("Opponent faction", faction_options, key="mu_fac_b")
 
-            mu_result = opener_matchup_winrates(
+            mu_result = analyze.opener_matchup_winrates(
                 with_winners,
                 first_n=mu_first_n,
                 faction_a=mu_faction_a if mu_faction_a != "All" else None,
@@ -497,7 +505,7 @@ with tab_builds, safe_section("Build Orders"):
         # BG OVERALL WINRATES
         # =====================================================
         st.subheader("Battlegroup Overall Winrates")
-        bg_overall = battlegroup_overall_winrates(bo, min_games=10)
+        bg_overall = analyze.battlegroup_overall_winrates(bo, min_games=10)
         if not bg_overall.empty:
             bg_overall_chart = bg_overall.reset_index().sort_values("winrate_pct")
             fig_bgwr = px.bar(
@@ -523,7 +531,7 @@ with tab_builds, safe_section("Build Orders"):
         st.caption("Row picks vs column picks. Cell = row's winrate %. "
                    "Only shows matchups with at least min_games occurrences.")
         bg_min_games = st.slider("Min games per matchup", 2, 20, 3, key="bg_matchup_min")
-        bg_mu = battlegroup_matchup_winrates(bo, min_games=bg_min_games)
+        bg_mu = analyze.battlegroup_matchup_winrates(bo, min_games=bg_min_games)
         if not bg_mu.empty:
             # Pivot into matrix form
             matrix = bg_mu.reset_index().pivot(index="bg_a", columns="bg_b", values="winrate_pct")
@@ -867,7 +875,7 @@ with tab_players, safe_section("Players"):
                         key=f"wr_unit_count_{selected_player}",
                     )
                     if selected_unit_for_count:
-                        wr_by_count = winrate_by_unit_count(
+                        wr_by_count = analyze.winrate_by_unit_count(
                             bo, selected_unit_for_count, player_name=selected_player
                         )
                         if not wr_by_count.empty:

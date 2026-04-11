@@ -197,12 +197,7 @@ def head_to_head(df: pd.DataFrame, player1_alias: str, player2_alias: str) -> pd
 # Units that share a display name across factions get a "(FACTION)" suffix
 # so they can be analyzed separately. Wehr Panzergrenadier and DAK Panzergrenadier
 # are completely different units in CoH3 despite sharing the cohdb display name.
-AMBIGUOUS_SHARED_NAMES = {
-    "8 Rad Armored Car",
-    "Panzergrenadier Squad",
-    "Sniper",
-    "Tiger Heavy Tank",
-}
+from canonical_roster import AMBIGUOUS_SHARED_NAMES
 
 
 def player_slots() -> pd.DataFrame:
@@ -476,9 +471,12 @@ def key_milestone_timings(
     """
     from unit_categories import UNIT_CATEGORIES
 
-    # Build category sets
+    # Build category sets, optionally filtered by faction so we never pull
+    # cross-faction units that would never match anyway.
     by_cat: dict[str, set[str]] = {}
-    for unit, (cat, _) in UNIT_CATEGORIES.items():
+    for unit, (cat, fac) in UNIT_CATEGORIES.items():
+        if faction and fac != faction:
+            continue
         by_cat.setdefault(cat, set()).add(unit)
 
     # Filter by faction
@@ -488,10 +486,11 @@ def key_milestone_timings(
     if df.empty:
         return pd.DataFrame()
 
-    # For each (replay, player), find first time each category was built
+    # For each (replay, player), find first time each category was built.
+    # Skipped: "engineers" - all factions have a starting engineer/pioneer at
+    # t=0, so the metric is meaningless.
     milestones = {
         "First mainline infantry": "mainline_infantry",
-        "First engineer": "engineers",
         "First HMG": "hmg",
         "First mortar": "mortar",
         "First AT gun": "at_gun",
@@ -502,6 +501,9 @@ def key_milestone_timings(
         "First heavy tank": "heavy_tank",
         "First tank destroyer": "tank_destroyer",
         "First artillery": "artillery",
+        "First assault tank": "assault_tank",
+        "First AA": "aa",
+        "First elite infantry": "elite_infantry",
     }
 
     rows = []
@@ -559,7 +561,12 @@ def milestone_timing_winrate_correlation(
     For a given milestone (set of units), bucket player-games by when they
     first achieved it and compute winrate per bucket.
     Tests hypotheses like 'players who get a medium tank by 12 min win more'.
+
+    Bucket label N means the player first built the unit in [N, N+bucket_minutes) minutes.
     """
+    if bucket_minutes <= 0:
+        raise ValueError("bucket_minutes must be positive")
+
     df = bo[(bo["action_type"] == "production") & (bo["unit"].isin(milestone_units))].copy()
     df = df.dropna(subset=["won"])
     if faction:
@@ -571,14 +578,14 @@ def milestone_timing_winrate_correlation(
         first_seconds=("seconds", "min"),
         won=("won", "first"),
     ).reset_index()
-    first["bucket_min"] = (first["first_seconds"] // (bucket_minutes * 60)) * bucket_minutes
+    first["bucket_min"] = ((first["first_seconds"] // (bucket_minutes * 60)) * bucket_minutes).astype(int)
 
     stats = first.groupby("bucket_min").agg(
         games=("won", "count"),
         wins=("won", "sum"),
     )
     stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
-    return stats
+    return stats.sort_index()
 
 
 def winrate_by_unit_count(

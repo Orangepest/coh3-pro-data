@@ -1,4 +1,7 @@
 """
+SHARED CONSTANTS used by multiple modules:
+- AMBIGUOUS_SHARED_NAMES: unit names that appear in multiple factions
+
 Hand-curated canonical base tech tree for CoH3 1v1 multiplayer.
 
 This is the source of truth - typed by a pro player from memory.
@@ -18,6 +21,17 @@ Special flags:
   tier_upgrade_locked = unit requires the tier's upgrade unlock (not free)
   vehicle_upgrade_path = unit is a vehicle weapon upgrade variant of another base unit
 """
+
+# Single source of truth for unit names that exist on multiple factions.
+# Imported by analyze.py, resolve_player_sides.py, and build_classifier_data.py
+# so they all stay in sync.
+AMBIGUOUS_SHARED_NAMES: set[str] = {
+    "8 Rad Armored Car",      # DAK base T2 + Wehr Mechanized BG callin
+    "Panzergrenadier Squad",  # DAK T0 mainline (palmgren) + Wehr T3 elite
+    "Sniper",                 # USF T2 + Wehr T1
+    "Tiger Heavy Tank",       # Wehr Breakthrough BG + DAK T0 callin tree
+}
+
 
 CANONICAL_BASE = {
     # =================================================================

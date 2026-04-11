@@ -110,15 +110,12 @@ def main():
         names.add(cohdb_name)
 
     # Add (FACTION) suffixed forms for shared names that get disambiguated at load time
-    # Keep this in sync with AMBIGUOUS_SHARED_NAMES in analyze.py
-    AMBIGUOUS_SHARED = {
-        "8 Rad Armored Car": ["DAK", "WEHR"],
-        "Panzergrenadier Squad": ["DAK", "WEHR"],
-        "Sniper": ["US", "WEHR"],
-        "Tiger Heavy Tank": ["WEHR", "DAK"],
-    }
-    for base_name, factions in AMBIGUOUS_SHARED.items():
-        for fac in factions:
+    # Source of truth: canonical_roster.AMBIGUOUS_SHARED_NAMES
+    from canonical_roster import AMBIGUOUS_SHARED_NAMES as _ambig
+    # We don't know per-name which factions to suffix here, so add all 4 - the
+    # extras don't hurt (they just won't be used by load_build_orders_df).
+    for base_name in _ambig:
+        for fac in ("US", "WEHR", "UK", "DAK"):
             names.add(f"{base_name} ({fac})")
 
     sorted_names = sorted(names)

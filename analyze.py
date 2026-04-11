@@ -963,6 +963,97 @@ def opener_matchup_winrates(
     return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
 
 
+def list_openers_for_faction(
+    bo: pd.DataFrame,
+    faction: str,
+    first_n: int = 4,
+    min_games: int = 5,
+) -> pd.DataFrame:
+    """List all distinct openers a faction plays, ranked by frequency.
+
+    Used to power the "pick an opener" dropdown in the counter-analysis UI.
+    """
+    df = bo[(bo["action_type"] == "production") & (bo["faction_short"] == faction)].copy()
+    if df.empty:
+        return pd.DataFrame()
+    df = df.sort_values("seconds")
+    df["order"] = df.groupby(["replay_id", "player_name"]).cumcount() + 1
+    first = df[df["order"] <= first_n]
+    openers = first.groupby(["replay_id", "player_name"]).agg(
+        opener=("unit", lambda x: " -> ".join(x)),
+    ).reset_index()
+    openers["unit_count"] = openers["opener"].apply(lambda s: s.count(" -> ") + 1)
+    openers = openers[openers["unit_count"] == first_n]
+    counts = openers["opener"].value_counts().reset_index()
+    counts.columns = ["opener", "games"]
+    return counts[counts["games"] >= min_games]
+
+
+def counter_openers(
+    bo: pd.DataFrame,
+    target_faction: str,
+    target_opener: str,
+    first_n: int = 4,
+    min_games: int = 3,
+) -> pd.DataFrame:
+    """For a given (faction, opener), find which opposing-faction openers
+    BEAT it most often. Returns one row per (counter_faction, counter_opener)
+    with games + the *counter's* winrate against the target.
+    """
+    df = bo[bo["action_type"] == "production"].copy()
+    df = df.dropna(subset=["won"])
+    if df.empty:
+        return pd.DataFrame()
+
+    df = df.sort_values("seconds")
+    df["order"] = df.groupby(["replay_id", "player_name"]).cumcount() + 1
+    first = df[df["order"] <= first_n]
+
+    openers = first.groupby(["replay_id", "player_name"]).agg(
+        opener=("unit", lambda x: " -> ".join(x)),
+        won=("won", "first"),
+        faction=("faction_short", "first"),
+    ).reset_index()
+    openers["unit_count"] = openers["opener"].apply(lambda s: s.count(" -> ") + 1)
+    openers = openers[openers["unit_count"] == first_n]
+
+    # Need both players per replay
+    counts = openers.groupby("replay_id").size()
+    valid = counts[counts == 2].index
+    openers = openers[openers["replay_id"].isin(valid)]
+
+    rows = []
+    for rid, group in openers.groupby("replay_id"):
+        if len(group) != 2:
+            continue
+        p1, p2 = group.iloc[0], group.iloc[1]
+        # Was either side the target opener?
+        if p1["faction"] == target_faction and p1["opener"] == target_opener:
+            rows.append({
+                "counter_faction": p2["faction"],
+                "counter_opener": p2["opener"],
+                "counter_won": int(p2["won"]),
+            })
+        if p2["faction"] == target_faction and p2["opener"] == target_opener:
+            rows.append({
+                "counter_faction": p1["faction"],
+                "counter_opener": p1["opener"],
+                "counter_won": int(p1["won"]),
+            })
+
+    if not rows:
+        return pd.DataFrame()
+
+    cdf = pd.DataFrame(rows)
+    stats = cdf.groupby(["counter_faction", "counter_opener"]).agg(
+        games=("counter_won", "count"),
+        wins=("counter_won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+    return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
+
+
 def battlegroup_matchup_winrates(
     bo: pd.DataFrame,
     min_games: int = 3,

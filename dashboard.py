@@ -836,6 +836,106 @@ with tab_builds, safe_section("Build Orders"):
                         st.plotly_chart(fig_lookup, use_container_width=True)
                         st.dataframe(lookup_display, use_container_width=True, hide_index=True)
 
+            # =====================================================
+            # COUNTER ANALYSIS: pick a target opener, see best counters per faction
+            # =====================================================
+            st.markdown("---")
+            st.subheader("Counter Analysis")
+            st.caption(
+                "Pick an opener you want to **counter**. Returns the opposing-faction "
+                "openers ranked by how often they beat it. Win % shown is from the "
+                "*counter's* perspective."
+            )
+
+            col_x, col_y, col_z = st.columns(3)
+            counter_depth = col_x.slider("Opener length", 3, 6, 4, key="counter_depth")
+            counter_min_target = col_y.slider("Min games for target opener", 5, 50, 10, key="counter_min_target")
+            counter_min_pair = col_z.slider("Min games per counter", 2, 10, 3, key="counter_min_pair")
+
+            target_faction = st.selectbox(
+                "Faction whose opener you want to counter",
+                ["us", "wehr", "uk", "dak"],
+                key="counter_target_faction",
+            )
+            opener_list = analyze.list_openers_for_faction(
+                with_winners,
+                faction=target_faction,
+                first_n=counter_depth,
+                min_games=counter_min_target,
+            )
+            if opener_list.empty:
+                st.info(f"No {target_faction.upper()} openers meet the min-games threshold. Lower it.")
+            else:
+                opener_options = opener_list["opener"].tolist()
+                target_opener = st.selectbox(
+                    f"{target_faction.upper()} opener to counter ({len(opener_options)} options)",
+                    opener_options,
+                    format_func=lambda s: f"{s}  (n={int(opener_list[opener_list['opener']==s]['games'].iloc[0])})",
+                    key="counter_target_opener",
+                )
+                if target_opener:
+                    counters = analyze.counter_openers(
+                        with_winners,
+                        target_faction=target_faction,
+                        target_opener=target_opener,
+                        first_n=counter_depth,
+                        min_games=counter_min_pair,
+                    )
+                    if counters.empty:
+                        st.info("No counters meet the min-games threshold. Try lowering it.")
+                    else:
+                        cdf = counters.reset_index()
+                        # Best counter per opposing faction (highest WR with most games as tiebreak)
+                        st.markdown("**Best counter per opposing faction**")
+                        best_per_fac = (
+                            cdf.sort_values(["winrate_pct", "games"], ascending=[False, False])
+                               .groupby("counter_faction").head(1)
+                        )
+                        st.dataframe(
+                            best_per_fac[["counter_faction", "counter_opener", "games", "wins", "winrate_pct"]]
+                                .rename(columns={
+                                    "counter_faction": "Faction",
+                                    "counter_opener": "Opener",
+                                    "games": "Games",
+                                    "wins": "Wins",
+                                    "winrate_pct": "Win %",
+                                }),
+                            use_container_width=True, hide_index=True,
+                        )
+
+                        # Full ranked list
+                        st.markdown(f"**All {len(cdf)} counters** (ranked by counter's win %)")
+                        short_color_map = {
+                            "us": "#4CAF50", "uk": "#2196F3",
+                            "wehr": "#9E9E9E", "dak": "#FFC107",
+                        }
+                        fig_counter = px.bar(
+                            cdf.head(20).sort_values("winrate_pct"),
+                            x="winrate_pct", y="counter_opener",
+                            orientation="h",
+                            color="counter_faction",
+                            text="games",
+                            color_discrete_map=short_color_map,
+                            labels={
+                                "winrate_pct": "Counter's Win %",
+                                "counter_opener": "",
+                                "counter_faction": "Faction",
+                            },
+                        )
+                        fig_counter.update_traces(texttemplate="n=%{text}", textposition="outside")
+                        fig_counter.update_layout(height=max(400, len(cdf.head(20)) * 30))
+                        st.plotly_chart(fig_counter, use_container_width=True)
+                        st.dataframe(
+                            cdf.rename(columns={
+                                "counter_faction": "Faction",
+                                "counter_opener": "Opener",
+                                "games": "Games",
+                                "wins": "Wins",
+                                "winrate_pct": "Win %",
+                            }),
+                            use_container_width=True, hide_index=True,
+                        )
+
         # Battlegroup pickrates
         st.subheader("Battlegroup Pick Rates")
         bg = battlegroup_pickrates(bo)

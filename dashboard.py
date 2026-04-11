@@ -270,27 +270,35 @@ with tab_maps, safe_section("Map Stats"):
     # =====================================================
     # SLOT POSITION ADVANTAGE
     # =====================================================
-    st.subheader("Map Position Advantage (Slot 0 vs Slot 1)")
+    st.subheader("Map Position Advantage")
     st.caption(
-        "Slot 0 = the player who appears first in the cohdb timeline (= player 1 in "
-        ".rec file). On asymmetric maps, one slot has a real positional advantage. "
-        "Slot 1 winrate is just (100 - slot 0)."
+        "On asymmetric maps, one spawn position has a measurable advantage. "
+        "Slot 0 = first player in the cohdb timeline. Maps with verified labels "
+        "show the physical position; others show 'slot 0/1'."
     )
     try:
+        from map_slot_labels import slot_label, is_labeled
         slot_data = analyze.slot_winrates_by_map(min_games=10)
         if not slot_data.empty:
             slot_chart = slot_data.reset_index()
+            def make_label(row):
+                m = row["map_name"]
+                if is_labeled(m):
+                    return f"{m}  ({slot_label(m, 0)})"
+                return f"{m}  (slot 0)"
+            slot_chart["display"] = slot_chart.apply(make_label, axis=1)
+
             fig_slot = px.bar(
                 slot_chart.sort_values("slot0_winrate_pct"),
-                x="slot0_winrate_pct", y="map_name",
+                x="slot0_winrate_pct", y="display",
                 orientation="h",
                 color="slot0_winrate_pct",
                 color_continuous_scale="RdYlGn",
                 range_color=[35, 65],
                 text="games",
                 labels={
-                    "slot0_winrate_pct": "Slot 0 Win %",
-                    "map_name": "",
+                    "slot0_winrate_pct": "Slot 0 / labeled position win %",
+                    "display": "",
                 },
                 hover_data=["slot0_wins", "games"],
             )
@@ -302,7 +310,21 @@ with tab_maps, safe_section("Map Stats"):
                              line=dict(color="white", width=1, dash="dash"))],
             )
             st.plotly_chart(fig_slot, use_container_width=True)
-            st.dataframe(slot_data, use_container_width=True)
+
+            display_table = slot_data.copy().reset_index()
+            display_table["slot_0_position"] = display_table["map_name"].apply(
+                lambda m: slot_label(m, 0))
+            display_table["slot_1_position"] = display_table["map_name"].apply(
+                lambda m: slot_label(m, 1))
+            st.dataframe(
+                display_table[["map_name", "slot_0_position", "slot_1_position",
+                              "games", "slot0_wins", "slot0_winrate_pct"]],
+                use_container_width=True, hide_index=True,
+            )
+
+            unlabeled = sum(1 for m in slot_data.index if not is_labeled(m))
+            if unlabeled > 0:
+                st.info(f"{unlabeled} maps still need slot→position labels in map_slot_labels.py")
     except Exception as e:
         st.error(f"slot data unavailable: {e}")
 

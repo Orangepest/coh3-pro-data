@@ -273,9 +273,37 @@ with tab_maps, safe_section("Map Stats"):
     st.subheader("Map Position Advantage")
     st.caption(
         "On asymmetric maps, one spawn position has a measurable advantage. "
-        "Slot 0 = first player in the cohdb timeline. Maps with verified labels "
-        "show the physical position; others show 'slot 0/1'."
+        "Slot 0 = first player in the cohdb timeline (= first player in the .rec file). "
+        "Slot 1 winrate is just (100 − slot 0)."
     )
+
+    with st.expander("⚠ Caveats - read me before drawing conclusions"):
+        st.markdown("""
+**Sample size limits:** Most maps have 40-150 games. Anything within ±5 percentage
+points of 50% (basically Faymonville and Djebel) is statistical noise — those maps
+are effectively symmetric.
+
+**Slot labels are user-derived, not verified per game:** Only Crossing in the Woods
+is verified by direct cast→DB replay matching. The other 5 labeled maps were derived
+by combining ONE Propagandacast video observation with the user's gut feel for which
+side is favored. They could be wrong if either:
+  - the cast video happened to be a slot-flipped game (unlikely but possible)
+  - the user's intuition about the favored side is biased
+
+**Slot order varies game-to-game:** For the same pair of players, slot 0 vs slot 1
+is randomized by matchmaking. The labels here are about FIXED physical positions per
+map, not about specific players.
+
+**ELO is high (1600+):** These winrates are from the top 1v1 ranked. Lower ELO games
+may behave differently — at lower skill, positional advantage matters less because
+mistakes dominate.
+
+**Patch-specific:** Data is from patch 2.3.1 only. Spawn balance may shift on patches.
+
+**Some maps are missing labels** (bologna, djebel, villa_fiore, egletons, desert_village,
+tuscan_vineyard, cliff_crossing) — they show 'slot 0/1' instead of physical positions.
+""")
+
     try:
         from map_slot_labels import slot_label, is_labeled
         slot_data = analyze.slot_winrates_by_map(min_games=10)
@@ -284,8 +312,10 @@ with tab_maps, safe_section("Map Stats"):
             def make_label(row):
                 m = row["map_name"]
                 if is_labeled(m):
-                    return f"{m}  ({slot_label(m, 0)})"
-                return f"{m}  (slot 0)"
+                    s0, s1 = slot_label(m, 0), slot_label(m, 1)
+                    favored = s0 if row["slot0_winrate_pct"] >= 50 else s1
+                    return f"{m}  →  {favored} favored"
+                return f"{m}  (unlabeled)"
             slot_chart["display"] = slot_chart.apply(make_label, axis=1)
 
             fig_slot = px.bar(
@@ -297,7 +327,7 @@ with tab_maps, safe_section("Map Stats"):
                 range_color=[35, 65],
                 text="games",
                 labels={
-                    "slot0_winrate_pct": "Slot 0 / labeled position win %",
+                    "slot0_winrate_pct": "Slot 0 win % (50% = symmetric)",
                     "display": "",
                 },
                 hover_data=["slot0_wins", "games"],
@@ -312,19 +342,31 @@ with tab_maps, safe_section("Map Stats"):
             st.plotly_chart(fig_slot, use_container_width=True)
 
             display_table = slot_data.copy().reset_index()
-            display_table["slot_0_position"] = display_table["map_name"].apply(
+            display_table["slot_0"] = display_table["map_name"].apply(
                 lambda m: slot_label(m, 0))
-            display_table["slot_1_position"] = display_table["map_name"].apply(
+            display_table["slot_1"] = display_table["map_name"].apply(
                 lambda m: slot_label(m, 1))
+            display_table["labeled"] = display_table["map_name"].apply(
+                lambda m: "✓" if is_labeled(m) else "—")
+            display_table["slot_1_winrate_pct"] = (100 - display_table["slot0_winrate_pct"]).round(1)
             st.dataframe(
-                display_table[["map_name", "slot_0_position", "slot_1_position",
-                              "games", "slot0_wins", "slot0_winrate_pct"]],
+                display_table[["map_name", "labeled", "slot_0", "slot_1",
+                              "games", "slot0_winrate_pct", "slot_1_winrate_pct"]]
+                .rename(columns={
+                    "slot_0": "slot 0 =",
+                    "slot_1": "slot 1 =",
+                    "slot0_winrate_pct": "slot 0 win %",
+                    "slot_1_winrate_pct": "slot 1 win %",
+                }),
                 use_container_width=True, hide_index=True,
             )
 
             unlabeled = sum(1 for m in slot_data.index if not is_labeled(m))
             if unlabeled > 0:
-                st.info(f"{unlabeled} maps still need slot→position labels in map_slot_labels.py")
+                st.info(
+                    f"{unlabeled} maps still show slot 0/1 instead of physical positions. "
+                    "Add them to map_slot_labels.py once verified."
+                )
     except Exception as e:
         st.error(f"slot data unavailable: {e}")
 

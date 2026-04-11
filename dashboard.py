@@ -267,6 +267,45 @@ with tab_maps, safe_section("Map Stats"):
     else:
         st.warning("No match data. Run: `python3 run.py scrape-matches`")
 
+    # =====================================================
+    # SLOT POSITION ADVANTAGE
+    # =====================================================
+    st.subheader("Map Position Advantage (Slot 0 vs Slot 1)")
+    st.caption(
+        "Slot 0 = the player who appears first in the cohdb timeline (= player 1 in "
+        ".rec file). On asymmetric maps, one slot has a real positional advantage. "
+        "Slot 1 winrate is just (100 - slot 0)."
+    )
+    try:
+        slot_data = analyze.slot_winrates_by_map(min_games=10)
+        if not slot_data.empty:
+            slot_chart = slot_data.reset_index()
+            fig_slot = px.bar(
+                slot_chart.sort_values("slot0_winrate_pct"),
+                x="slot0_winrate_pct", y="map_name",
+                orientation="h",
+                color="slot0_winrate_pct",
+                color_continuous_scale="RdYlGn",
+                range_color=[35, 65],
+                text="games",
+                labels={
+                    "slot0_winrate_pct": "Slot 0 Win %",
+                    "map_name": "",
+                },
+                hover_data=["slot0_wins", "games"],
+            )
+            fig_slot.update_traces(texttemplate="n=%{text}", textposition="outside")
+            fig_slot.update_layout(
+                height=max(400, len(slot_data) * 35),
+                shapes=[dict(type="line", x0=50, x1=50, y0=-0.5,
+                             y1=len(slot_data) - 0.5,
+                             line=dict(color="white", width=1, dash="dash"))],
+            )
+            st.plotly_chart(fig_slot, use_container_width=True)
+            st.dataframe(slot_data, use_container_width=True)
+    except Exception as e:
+        st.error(f"slot data unavailable: {e}")
+
 
 # =========================================================================
 # TAB 3: Build Orders
@@ -403,6 +442,105 @@ with tab_builds, safe_section("Build Orders"):
                     st.plotly_chart(fig_map, use_container_width=True)
                 else:
                     st.info(f"No openers meet the criteria for {wr_faction}")
+
+            # =====================================================
+            # SPECIFIC OPENER LOOKUP - winrate per map for an opener
+            # =====================================================
+            st.subheader("Specific Opener × Map Winrate")
+            st.caption('Pick a faction and a specific opener, see its winrate '
+                       'on each map. e.g. "Pioneer → Grenadier x3 → MG 42" on Faymonville')
+            col_l, col_m = st.columns(2)
+            sp_faction = col_l.selectbox(
+                "Faction",
+                ["us", "wehr", "uk", "dak"],
+                key="sp_faction",
+            )
+            sp_first_n = col_m.slider("Opener length", 3, 8, 5, key="sp_first_n")
+
+            # Compute openers globally for this faction (no map filter) so we can
+            # populate the dropdown with all known openers for that faction
+            faction_openers = analyze.opener_winrates(
+                with_winners,
+                first_n=sp_first_n,
+                faction=sp_faction,
+                min_games=2,  # low threshold for the dropdown options
+            )
+            if faction_openers.empty:
+                st.info(f"No openers found for {sp_faction.upper()}")
+            else:
+                opener_list = faction_openers.index.tolist()
+
+                # Search filter to narrow the dropdown
+                search = st.text_input(
+                    "Search openers (e.g. 'Grenadier MG' to filter)",
+                    key="sp_search",
+                    placeholder="Type to filter the dropdown",
+                )
+                if search:
+                    filtered = [o for o in opener_list if all(
+                        kw.lower() in o.lower() for kw in search.split())]
+                else:
+                    filtered = opener_list
+
+                if not filtered:
+                    st.warning(f"No openers match '{search}'")
+                else:
+                    selected_opener = st.selectbox(
+                        f"Opener ({len(filtered)} available)",
+                        filtered,
+                        key="sp_opener",
+                    )
+
+                    # Compute per-map winrate for this specific opener
+                    per_map_rows = []
+                    for m in sorted(with_winners["map_name"].dropna().unique()):
+                        m_wr = analyze.opener_winrates(
+                            with_winners,
+                            first_n=sp_first_n,
+                            faction=sp_faction,
+                            map_name=m,
+                            min_games=1,
+                        )
+                        if selected_opener in m_wr.index:
+                            row = m_wr.loc[selected_opener]
+                            per_map_rows.append({
+                                "map": m,
+                                "games": int(row["games"]),
+                                "wins": int(row["wins"]),
+                                "winrate_pct": row["winrate_pct"],
+                            })
+
+                    if not per_map_rows:
+                        st.info("This opener wasn't played on any map yet")
+                    else:
+                        per_map_df = pd.DataFrame(per_map_rows).sort_values(
+                            "winrate_pct", ascending=False)
+                        # Show overall row at top
+                        overall_row = faction_openers.loc[selected_opener]
+                        st.metric(
+                            f"Overall winrate for this opener",
+                            f"{overall_row['winrate_pct']}%",
+                            delta=f"{int(overall_row['wins'])}W / {int(overall_row['games'])}G",
+                        )
+                        fig_sp = px.bar(
+                            per_map_df.sort_values("winrate_pct"),
+                            x="winrate_pct", y="map",
+                            orientation="h",
+                            color="winrate_pct",
+                            color_continuous_scale="RdYlGn",
+                            range_color=[0, 100],
+                            text="games",
+                            labels={"winrate_pct": "Win %", "map": ""},
+                        )
+                        fig_sp.update_traces(texttemplate="n=%{text}", textposition="outside")
+                        fig_sp.update_layout(
+                            height=max(300, len(per_map_df) * 35),
+                            shapes=[dict(type="line", x0=50, x1=50, y0=-0.5,
+                                         y1=len(per_map_df) - 0.5,
+                                         line=dict(color="white", width=1, dash="dash"))],
+                        )
+                        st.plotly_chart(fig_sp, use_container_width=True)
+                        st.dataframe(per_map_df, use_container_width=True, hide_index=True)
 
             # =====================================================
             # OPENER vs OPENER MATCHUPS

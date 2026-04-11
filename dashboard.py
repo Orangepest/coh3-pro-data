@@ -268,6 +268,116 @@ with tab_maps, safe_section("Map Stats"):
         st.warning("No match data. Run: `python3 run.py scrape-matches`")
 
     # =====================================================
+    # FACTION MATCHUP BY MAP
+    # =====================================================
+    if not df.empty:
+        st.subheader("Faction Matchup × Map")
+        st.caption(
+            "How does faction X perform vs faction Y on each map? "
+            "Some maps strongly favor specific matchups."
+        )
+        col_fmm_a, col_fmm_b = st.columns(2)
+        fmm_min = col_fmm_a.slider("Min games per (map, A vs B)", 3, 20, 5, key="fmm_min")
+        fmm_view = col_fmm_b.selectbox(
+            "View",
+            ["Pick a map → see all matchups", "Pick a matchup → see all maps", "Most extreme matchups"],
+            key="fmm_view",
+        )
+        try:
+            fmm_data = analyze.faction_matchup_by_map(df, min_games=fmm_min)
+            if fmm_data.empty:
+                st.info("No matchups meet the criteria")
+            else:
+                if fmm_view == "Pick a map → see all matchups":
+                    map_options = sorted(fmm_data.index.get_level_values("map_name").unique())
+                    sel_map = st.selectbox("Map", map_options, key="fmm_map")
+                    if sel_map:
+                        sub = fmm_data.xs(sel_map, level="map_name")
+                        if not sub.empty:
+                            chart = sub.reset_index()
+                            chart["matchup"] = chart["faction_a"] + " vs " + chart["faction_b"]
+                            fig_fmm = px.bar(
+                                chart.sort_values("winrate_pct"),
+                                x="winrate_pct", y="matchup",
+                                orientation="h",
+                                color="winrate_pct",
+                                color_continuous_scale="RdYlGn",
+                                range_color=[20, 80],
+                                text="games",
+                                labels={"winrate_pct": "Faction A win %", "matchup": ""},
+                            )
+                            fig_fmm.update_traces(texttemplate="n=%{text}", textposition="outside")
+                            fig_fmm.update_layout(
+                                height=max(300, len(chart) * 35),
+                                shapes=[dict(type="line", x0=50, x1=50, y0=-0.5,
+                                             y1=len(chart) - 0.5,
+                                             line=dict(color="white", width=1, dash="dash"))],
+                            )
+                            st.plotly_chart(fig_fmm, use_container_width=True)
+                            st.dataframe(sub.reset_index(), use_container_width=True, hide_index=True)
+
+                elif fmm_view == "Pick a matchup → see all maps":
+                    factions = sorted(set(fmm_data.index.get_level_values("faction_a").unique()) |
+                                      set(fmm_data.index.get_level_values("faction_b").unique()))
+                    col_x, col_y = st.columns(2)
+                    sel_a = col_x.selectbox("Faction A (your side)", factions, key="fmm_a")
+                    sel_b = col_y.selectbox("Faction B (opponent)", factions,
+                                            index=min(1, len(factions)-1), key="fmm_b")
+                    if sel_a and sel_b and sel_a != sel_b:
+                        # Pull all maps where this matchup appears
+                        sub = fmm_data[
+                            (fmm_data.index.get_level_values("faction_a") == sel_a) &
+                            (fmm_data.index.get_level_values("faction_b") == sel_b)
+                        ]
+                        if not sub.empty:
+                            chart = sub.reset_index()[["map_name", "winrate_pct", "games", "a_wins"]]
+                            fig_fmm2 = px.bar(
+                                chart.sort_values("winrate_pct"),
+                                x="winrate_pct", y="map_name",
+                                orientation="h",
+                                color="winrate_pct",
+                                color_continuous_scale="RdYlGn",
+                                range_color=[20, 80],
+                                text="games",
+                                labels={"winrate_pct": f"{sel_a} vs {sel_b} win %", "map_name": ""},
+                            )
+                            fig_fmm2.update_traces(texttemplate="n=%{text}", textposition="outside")
+                            fig_fmm2.update_layout(
+                                height=max(300, len(chart) * 35),
+                                shapes=[dict(type="line", x0=50, x1=50, y0=-0.5,
+                                             y1=len(chart) - 0.5,
+                                             line=dict(color="white", width=1, dash="dash"))],
+                            )
+                            st.plotly_chart(fig_fmm2, use_container_width=True)
+                            st.dataframe(chart, use_container_width=True, hide_index=True)
+                        else:
+                            st.info("No data for this matchup")
+
+                else:  # Most extreme matchups
+                    extreme = fmm_data.copy()
+                    extreme["abs_dev"] = (extreme["winrate_pct"] - 50).abs()
+                    top = extreme.sort_values("abs_dev", ascending=False).head(20)
+                    chart = top.reset_index()
+                    chart["matchup"] = chart["map_name"] + ": " + chart["faction_a"] + " vs " + chart["faction_b"]
+                    fig_fmm3 = px.bar(
+                        chart.sort_values("winrate_pct"),
+                        x="winrate_pct", y="matchup",
+                        orientation="h",
+                        color="winrate_pct",
+                        color_continuous_scale="RdYlGn",
+                        range_color=[20, 80],
+                        text="games",
+                        labels={"winrate_pct": "Win %", "matchup": ""},
+                    )
+                    fig_fmm3.update_traces(texttemplate="n=%{text}", textposition="outside")
+                    fig_fmm3.update_layout(height=max(500, len(chart) * 30))
+                    st.plotly_chart(fig_fmm3, use_container_width=True)
+                    st.dataframe(chart[["map_name", "faction_a", "faction_b", "games", "a_wins", "winrate_pct"]],
+                                 use_container_width=True, hide_index=True)
+        except Exception as e:
+            st.error(f"Faction matchup by map failed: {e}")
+
+    # =====================================================
     # SLOT POSITION ADVANTAGE
     # =====================================================
     st.subheader("Map Position Advantage")

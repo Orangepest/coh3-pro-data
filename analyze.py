@@ -96,6 +96,47 @@ def map_stats(df: pd.DataFrame) -> pd.DataFrame:
     return map_counts
 
 
+def faction_matchup_by_map(df: pd.DataFrame, min_games: int = 5) -> pd.DataFrame:
+    """
+    Faction-vs-faction winrates broken down by map.
+    Returns DataFrame indexed by (map_name, faction_a, faction_b) with columns:
+    games, a_wins, winrate_pct (winrate of faction_a vs faction_b on that map).
+    """
+    # Get winners and losers per match
+    winners = df[df["result"] == "win"][["match_id", "map_name", "faction"]].rename(
+        columns={"faction": "winner_faction"})
+    losers = df[df["result"] == "loss"][["match_id", "map_name", "faction"]].rename(
+        columns={"faction": "loser_faction"})
+    matchups = winners.merge(losers, on=["match_id", "map_name"])
+    if matchups.empty:
+        return pd.DataFrame()
+
+    # For each (map, A, B): how many times did A win against B?
+    a_wins = (
+        matchups.groupby(["map_name", "winner_faction", "loser_faction"])
+        .size()
+        .reset_index(name="a_wins")
+        .rename(columns={"winner_faction": "faction_a", "loser_faction": "faction_b"})
+    )
+    # And how many times did B win against A (i.e. A lost to B)
+    b_wins = (
+        matchups.groupby(["map_name", "loser_faction", "winner_faction"])
+        .size()
+        .reset_index(name="b_wins")
+        .rename(columns={"loser_faction": "faction_a", "winner_faction": "faction_b"})
+    )
+
+    merged = a_wins.merge(b_wins, on=["map_name", "faction_a", "faction_b"], how="outer").fillna(0)
+    merged["games"] = merged["a_wins"] + merged["b_wins"]
+    merged["winrate_pct"] = (merged["a_wins"] / merged["games"] * 100).round(1)
+    merged = merged[merged["games"] >= min_games]
+    merged["a_wins"] = merged["a_wins"].astype(int)
+    merged["b_wins"] = merged["b_wins"].astype(int)
+    merged["games"] = merged["games"].astype(int)
+    return merged.set_index(["map_name", "faction_a", "faction_b"]).sort_values(
+        "winrate_pct", ascending=False)
+
+
 def map_faction_winrates(df: pd.DataFrame) -> pd.DataFrame:
     """Faction win rates broken down by map."""
     wins = df[df["result"] == "win"].groupby(["map_name", "faction"]).size()

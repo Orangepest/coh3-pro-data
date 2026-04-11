@@ -247,9 +247,12 @@ def slot_winrates_by_map(min_games: int = 5) -> pd.DataFrame:
     if base.empty:
         return pd.DataFrame()
 
-    base = base.dropna(subset=["won", "map_name"])
+    # CRITICAL: assign slot BEFORE dropping rows. Otherwise if one player
+    # in a replay has won=NULL, dropping them flips the surviving player's
+    # slot from 1 to 0, corrupting the position labels.
     base = base.sort_values(["replay_id", "first_id"])
     base["slot"] = base.groupby("replay_id").cumcount()
+    base = base.dropna(subset=["won", "map_name"])
 
     # Only slot 0 winrate (slot 1 is just 100% - slot 0 winrate in 1v1)
     slot0 = base[base["slot"] == 0]

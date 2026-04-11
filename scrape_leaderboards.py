@@ -45,6 +45,9 @@ def scrape_faction_leaderboard(faction: str, leaderboard_id: int):
 
     conn = get_conn()
     now = datetime.now(timezone.utc).isoformat()
+    # Delete prior entries for this faction to prevent unbounded growth
+    conn.execute("DELETE FROM leaderboard_entries WHERE faction = ?", (faction,))
+    conn.commit()
     start = 1
     total_saved = 0
     done = False

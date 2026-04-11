@@ -14,12 +14,23 @@ from db import get_conn, init_db
 from canonical_roster import CANONICAL_BASE
 
 
-# Build a unit_name -> faction map from canonical roster
-UNIT_TO_FACTION = {}
+# Build a unit_name -> faction map from canonical roster.
+# CRITICAL: Skip ambiguous names (units with the same display name across factions).
+# These would otherwise dict-last-write-wins their faction assignment, biasing
+# the faction inference fallback. Disambiguation is handled at query time in
+# load_build_orders_df via AMBIGUOUS_SHARED_NAMES.
+_AMBIGUOUS_NAMES = {"Panzergrenadier Squad", "Sniper", "8 Rad Armored Car", "Tiger Heavy Tank"}
+
+_name_to_factions: dict[str, set[str]] = {}
 for fac, tiers in CANONICAL_BASE.items():
     for tier_units in tiers.values():
         for u in tier_units:
-            UNIT_TO_FACTION[u["name"]] = fac
+            _name_to_factions.setdefault(u["name"], set()).add(fac)
+
+UNIT_TO_FACTION = {
+    name: next(iter(facs)) for name, facs in _name_to_factions.items()
+    if len(facs) == 1 and name not in _AMBIGUOUS_NAMES
+}
 
 
 # Map our short faction codes to cohdb side

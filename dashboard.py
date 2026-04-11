@@ -1356,6 +1356,96 @@ with tab_players, safe_section("Players"):
         if not tp.empty:
             st.dataframe(tp, use_container_width=True)
 
+    # =====================================================
+    # PLAYER TIER COMPARISON - do top-30 ELO players play differently?
+    # =====================================================
+    st.markdown("---")
+    st.subheader("Player Skill Tier Breakdown")
+    st.caption(
+        "Players are bucketed by **peak ELO** across any faction. "
+        "**S** = top 30 globally, **A** = 1900-2000, **B** = 1700-1900, **C** = 1600-1700. "
+        "How do top-tier players differ from the rest in faction prefs, BG picks, and openers?"
+    )
+
+    pt = analyze.player_tiers(top_n_threshold=30)
+    if not pt.empty:
+        tier_counts = pt["tier"].value_counts().reindex(["S", "A", "B", "C"]).fillna(0).astype(int)
+        cols = st.columns(4)
+        for i, t in enumerate(["S", "A", "B", "C"]):
+            cols[i].metric(f"Tier {t}", f"{int(tier_counts[t])} players")
+
+        # --- Faction winrate by tier ---
+        if not df.empty:
+            st.markdown("**Faction Winrate by Tier**")
+            st.caption("Same data, sliced by skill. Higher tiers winning more is expected; the *gap* per faction tells you which factions reward skill the most.")
+            fwt = analyze.faction_winrate_by_tier(df, top_n=30)
+            if not fwt.empty:
+                fwt_reset = fwt.reset_index()
+                fig_fwt = px.bar(
+                    fwt_reset,
+                    x="faction", y="winrate_pct",
+                    color="tier",
+                    barmode="group",
+                    text="games",
+                    category_orders={"tier": ["S", "A", "B", "C"]},
+                    labels={"winrate_pct": "Win %", "faction": "Faction", "games": "Games"},
+                    color_discrete_map={"S": "#FFD700", "A": "#C0C0C0", "B": "#CD7F32", "C": "#888888"},
+                )
+                fig_fwt.update_traces(texttemplate="n=%{text}", textposition="outside")
+                fig_fwt.update_layout(yaxis=dict(range=[0, 100]))
+                st.plotly_chart(fig_fwt, use_container_width=True)
+                st.dataframe(fwt_reset, use_container_width=True, hide_index=True)
+
+        # --- BG picks by tier ---
+        if not bo.empty:
+            st.markdown("**Battlegroup Picks by Tier**")
+            st.caption("Which BGs do top players favor that the rest don't? High S-tier pickrate + low C-tier pickrate = a 'pro pick'.")
+            min_bg_games = st.slider("Min games per BG/tier", 3, 20, 5, key="bg_tier_min")
+            bpt = analyze.bg_picks_by_tier(bo, top_n=30, min_games=min_bg_games)
+            if not bpt.empty:
+                bpt_reset = bpt.reset_index()
+                tier_filter = st.multiselect(
+                    "Tiers to show",
+                    ["S", "A", "B", "C"],
+                    default=["S", "C"],
+                    key="bg_tier_filter",
+                )
+                bpt_filtered = bpt_reset[bpt_reset["tier"].isin(tier_filter)]
+                fig_bpt = px.bar(
+                    bpt_filtered,
+                    x="bg", y="pickrate_pct",
+                    color="tier",
+                    barmode="group",
+                    text="winrate_pct",
+                    category_orders={"tier": ["S", "A", "B", "C"]},
+                    labels={"pickrate_pct": "Pick %", "bg": "Battlegroup", "winrate_pct": "Win %"},
+                    color_discrete_map={"S": "#FFD700", "A": "#C0C0C0", "B": "#CD7F32", "C": "#888888"},
+                )
+                fig_bpt.update_traces(texttemplate="%{text}%", textposition="outside")
+                fig_bpt.update_layout(height=550, xaxis={"tickangle": -45})
+                st.plotly_chart(fig_bpt, use_container_width=True)
+                st.dataframe(bpt_reset, use_container_width=True, hide_index=True)
+
+        # --- Openers by tier ---
+        if not bo.empty:
+            st.markdown("**Top Openers by Tier**")
+            st.caption("First N production units. Compare what S-tier opens with vs the rest.")
+            col_a, col_b = st.columns(2)
+            opener_n = col_a.slider("Opener depth", 3, 6, 5, key="opener_tier_depth")
+            opener_min = col_b.slider("Min games", 2, 10, 3, key="opener_tier_min")
+            opt = analyze.opener_picks_by_tier(bo, first_n=opener_n, top_n=30, min_games=opener_min)
+            if not opt.empty:
+                opt_reset = opt.reset_index()
+                tier_pick = st.selectbox("Show tier", ["S", "A", "B", "C"], key="opener_tier_pick")
+                opt_filtered = opt_reset[opt_reset["tier"] == tier_pick].head(20)
+                if not opt_filtered.empty:
+                    st.dataframe(
+                        opt_filtered[["opener", "games", "winrate_pct"]],
+                        use_container_width=True, hide_index=True,
+                    )
+                else:
+                    st.info(f"No openers meet the threshold for tier {tier_pick}")
+
     # Player build tendencies from cohdb
     if not bo.empty:
         st.subheader("Player Build Analysis")

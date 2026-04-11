@@ -96,6 +96,156 @@ def map_stats(df: pd.DataFrame) -> pd.DataFrame:
     return map_counts
 
 
+def player_tiers(top_n_threshold: int = 30) -> pd.DataFrame:
+    """
+    Assign each player a skill tier based on their peak ELO across all factions.
+    Tiers:
+      S - top N players by peak ELO (default top 30)
+      A - 1900-2000 ELO peak
+      B - 1700-1900 ELO peak
+      C - 1600-1700 ELO peak
+    Returns DataFrame with columns: alias, peak_elo, tier
+    """
+    conn = get_conn()
+    df = pd.read_sql_query("""
+        SELECT p.alias, MAX(le.elo) as peak_elo
+        FROM leaderboard_entries le
+        JOIN players p ON le.profile_id = p.profile_id
+        WHERE p.alias != ''
+        GROUP BY p.alias
+        ORDER BY peak_elo DESC
+    """, conn)
+    conn.close()
+    if df.empty:
+        return df
+
+    # S = top N
+    df["tier"] = "C"
+    df.loc[df["peak_elo"] >= 1700, "tier"] = "B"
+    df.loc[df["peak_elo"] >= 1900, "tier"] = "A"
+    df.loc[df.index[:top_n_threshold], "tier"] = "S"
+    return df
+
+
+def faction_winrate_by_tier(df: pd.DataFrame, top_n: int = 30) -> pd.DataFrame:
+    """Faction winrate broken down by player skill tier."""
+    if df.empty:
+        return pd.DataFrame()
+
+    tiers = player_tiers(top_n_threshold=top_n)
+    if tiers.empty:
+        return pd.DataFrame()
+
+    work = df.merge(
+        tiers[["alias", "tier"]],
+        on="alias",
+        how="inner",  # only players we know the tier of
+    )
+    if work.empty:
+        return pd.DataFrame()
+
+    stats = work.groupby(["tier", "faction"]).agg(
+        games=("result", "count"),
+        wins=("result", lambda x: (x == "win").sum()),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    # Sort tiers as S > A > B > C
+    tier_order = {"S": 0, "A": 1, "B": 2, "C": 3}
+    stats = stats.reset_index()
+    stats["_t"] = stats["tier"].map(tier_order)
+    stats = stats.sort_values(["_t", "winrate_pct"], ascending=[True, False])
+    return stats.drop(columns=["_t"]).set_index(["tier", "faction"])
+
+
+def bg_picks_by_tier(bo: pd.DataFrame, top_n: int = 30, min_games: int = 5) -> pd.DataFrame:
+    """
+    Battlegroup pick rates and winrates split by player skill tier.
+    Compares what top-N players pick vs the rest.
+    """
+    bg = bo[bo["action_type"] == "battlegroup"].copy()
+    bg = bg.dropna(subset=["won"])
+    if bg.empty:
+        return pd.DataFrame()
+
+    bg = bg.sort_values("seconds")
+    first_bg = bg.groupby(["replay_id", "player_name"]).agg(
+        bg=("unit", "first"),
+        won=("won", "first"),
+    ).reset_index()
+
+    # Attach tier via player_name == alias
+    tiers = player_tiers(top_n_threshold=top_n)
+    merged = first_bg.merge(
+        tiers[["alias", "tier"]].rename(columns={"alias": "player_name"}),
+        on="player_name",
+        how="inner",
+    )
+    if merged.empty:
+        return pd.DataFrame()
+
+    stats = merged.groupby(["tier", "bg"]).agg(
+        picks=("won", "count"),
+        wins=("won", "sum"),
+    )
+    # Add pick rate per tier
+    tier_totals = merged.groupby("tier").size()
+    stats["pickrate_pct"] = stats.apply(
+        lambda row: round(row["picks"] / tier_totals.get(row.name[0], 1) * 100, 1),
+        axis=1,
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["picks"] * 100).round(1)
+    stats = stats[stats["picks"] >= min_games]
+    tier_order = {"S": 0, "A": 1, "B": 2, "C": 3}
+    stats = stats.reset_index()
+    stats["_t"] = stats["tier"].map(tier_order)
+    stats = stats.sort_values(["_t", "pickrate_pct"], ascending=[True, False])
+    return stats.drop(columns=["_t"]).set_index(["tier", "bg"])
+
+
+def opener_picks_by_tier(
+    bo: pd.DataFrame,
+    first_n: int = 5,
+    top_n: int = 30,
+    min_games: int = 3,
+) -> pd.DataFrame:
+    """Top openers per skill tier - what do top players play differently?"""
+    df = bo[bo["action_type"] == "production"].copy()
+    df = df.dropna(subset=["won"])
+    if df.empty:
+        return pd.DataFrame()
+
+    df = df.sort_values("seconds")
+    df["order"] = df.groupby(["replay_id", "player_name"]).cumcount() + 1
+    first = df[df["order"] <= first_n]
+    openers = first.groupby(["replay_id", "player_name"]).agg(
+        opener=("unit", lambda x: " -> ".join(x)),
+        won=("won", "first"),
+    ).reset_index()
+    openers["unit_count"] = openers["opener"].apply(lambda s: s.count(" -> ") + 1)
+    openers = openers[openers["unit_count"] == first_n]
+
+    tiers = player_tiers(top_n_threshold=top_n)
+    merged = openers.merge(
+        tiers[["alias", "tier"]].rename(columns={"alias": "player_name"}),
+        on="player_name",
+        how="inner",
+    )
+    if merged.empty:
+        return pd.DataFrame()
+
+    stats = merged.groupby(["tier", "opener"]).agg(
+        games=("won", "count"),
+        wins=("won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+    tier_order = {"S": 0, "A": 1, "B": 2, "C": 3}
+    stats = stats.reset_index()
+    stats["_t"] = stats["tier"].map(tier_order)
+    stats = stats.sort_values(["_t", "games"], ascending=[True, False])
+    return stats.drop(columns=["_t"]).set_index(["tier", "opener"])
+
+
 def winrate_by_game_length(
     df: pd.DataFrame,
     bucket_minutes: int = 5,

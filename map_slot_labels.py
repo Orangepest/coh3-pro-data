@@ -12,23 +12,39 @@ Empty entries mean we haven't labeled that map yet.
 """
 
 MAP_SLOT_LABELS: dict[str, dict[int, str]] = {
-    # Verified by Tushkan vs Nicko Propagandacast game (replay 5270772):
-    # Tushkan = slot 0 = south, Nicko = slot 1 = north
+    # Verified by Tushkan vs Nicko Propagandacast (replay 5270772):
+    # Tushkan = slot 0 = south
     "crossing_in_the_woods_2p": {0: "south", 1: "north"},
 
-    # === To be labeled (need slot↔position mapping confirmed) ===
-    # "langres_2p":              {},
-    # "twin_beach_2p_mkii":      {},
-    # "angoville_farms_2p":      {},
-    # "pachino_2p":              {},
-    # "bologna_2p":              {},
-    # "faymonville":             {},
-    # "egletons_2p":             {},
-    # "desert_village_2p_mkiii": {},
-    # "djebel_2p":               {},
-    # "tuscan_vineyard_2p":      {},
-    # "cliff_crossing_2p":       {},
-    # "villa_fiore_2p_mkii":     {},
+    # Cross-verified by user observation + favoredness gut-check:
+    # Cast: Rei was south. User: south favored (53.2%).
+    # 53.2% is slot 0, so south = slot 0 ✓
+    "langres_2p": {0: "south", 1: "north"},
+
+    # Cast: Tushkan was south. User: north favored (57.5%).
+    # 57.5% is slot 1, so north = slot 1, south = slot 0 ✓
+    "angoville_farms_2p": {0: "south", 1: "north"},
+
+    # Cast: Barbarossa was south. User: south favored (59.2%).
+    # 59.2% is slot 0, so south = slot 0 ✓
+    "twin_beach_2p_mkii": {0: "south", 1: "north"},
+
+    # User: north favored (57.4%). 57.4% is slot 1, so north = slot 1.
+    "pachino_2p": {0: "south", 1: "north"},
+
+    # Cast: Rei was north. User: south historically favored (slot 1 = 50.6%).
+    # If south is slot 1, then Rei (north) was slot 0. Aligns with cast obs ✓
+    # Note: this is the only map where slot 0 = north so far
+    "faymonville": {0: "north", 1: "south"},
+
+    # === To be labeled ===
+    # "bologna_2p":              {},  # user has no gut feel
+    # "djebel_2p":               {},  # user thinks even (47.5/52.5 confirms)
+    # "villa_fiore_2p_mkii":     {},  # user thinks even
+    # "egletons_2p":             {},  # no cast video matched
+    # "desert_village_2p_mkiii": {},  # no cast video matched
+    # "tuscan_vineyard_2p":      {},  # no cast video matched
+    # "cliff_crossing_2p":       {},  # no cast video matched
 }
 
 

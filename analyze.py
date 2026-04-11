@@ -162,12 +162,17 @@ def duration_distribution(df: pd.DataFrame) -> pd.DataFrame:
 
 def top_players(df: pd.DataFrame, n: int = 30) -> pd.DataFrame:
     """Top players by number of pro-level matches played."""
+    def _safe_factions(x):
+        # Drop NaN before sorting - mixing str + NaN raises TypeError
+        clean = [f for f in x.dropna().unique() if isinstance(f, str)]
+        return ", ".join(sorted(clean))
+
     player_stats = df.groupby(["profile_id", "alias"]).agg(
         total_games=("match_id", "nunique"),
         wins=("result", lambda x: (x == "win").sum()),
         avg_elo=("elo_after", lambda x: round(x.dropna().mean()) if not x.dropna().empty else 0),
         peak_elo=("elo_after", lambda x: x.dropna().max() if not x.dropna().empty else 0),
-        factions_played=("faction", lambda x: ", ".join(sorted(x.unique()))),
+        factions_played=("faction", _safe_factions),
     )
     player_stats["winrate_pct"] = (player_stats["wins"] / player_stats["total_games"] * 100).round(1)
     return player_stats.sort_values("total_games", ascending=False).head(n)

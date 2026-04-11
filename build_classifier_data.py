@@ -109,14 +109,21 @@ def main():
     for cohdb_name in ALIASES:
         names.add(cohdb_name)
 
-    # Add (FACTION) suffixed forms for shared names that get disambiguated at load time
-    # Source of truth: canonical_roster.AMBIGUOUS_SHARED_NAMES
-    from canonical_roster import AMBIGUOUS_SHARED_NAMES as _ambig
-    # We don't know per-name which factions to suffix here, so add all 4 - the
-    # extras don't hurt (they just won't be used by load_build_orders_df).
-    for base_name in _ambig:
-        for fac in ("US", "WEHR", "UK", "DAK"):
-            names.add(f"{base_name} ({fac})")
+    # Add (FACTION) suffixed forms for shared names. Look up each ambiguous
+    # name in CANONICAL_BASE to find which factions actually have it, then
+    # only add suffix variants for those factions. Avoids polluting UNIT_NAMES
+    # with impossible variants like "Tiger Heavy Tank (UK)".
+    from canonical_roster import AMBIGUOUS_SHARED_NAMES, CANONICAL_BASE
+    fac_short_to_upper = {"us": "US", "wehr": "WEHR", "uk": "UK", "dak": "DAK"}
+    for base_name in AMBIGUOUS_SHARED_NAMES:
+        actual_factions = set()
+        for fac, tiers in CANONICAL_BASE.items():
+            for tier_units in tiers.values():
+                for u in tier_units:
+                    if u["name"] == base_name:
+                        actual_factions.add(fac)
+        for fac in actual_factions:
+            names.add(f"{base_name} ({fac_short_to_upper[fac]})")
 
     sorted_names = sorted(names)
 

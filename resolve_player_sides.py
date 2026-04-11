@@ -100,6 +100,7 @@ def resolve_all():
     name_match = 0
     faction_inferred = 0
     unresolved = 0
+    unknown_slugs: dict[str, int] = {}  # for diagnostic warning at end
 
     for row in pairs:
         rid = row["replay_id"]
@@ -118,6 +119,8 @@ def resolve_all():
                 (k for k, v in FACTION_TO_SLUGS.items() if slug in v),
                 None,
             )
+            if faction_short is None and slug:
+                unknown_slugs[slug] = unknown_slugs.get(slug, 0) + 1
             conn.execute("""
                 INSERT INTO build_orders_player_resolved
                     (replay_id, player_name, faction, side, won, resolved_via)
@@ -161,6 +164,10 @@ def resolve_all():
     print(f"  name_match:        {name_match}")
     print(f"  faction_inference: {faction_inferred}")
     print(f"  unresolved:        {unresolved}")
+
+    if unknown_slugs:
+        print(f"\n!! Unknown cohdb faction slugs (faction_short stored as NULL): {unknown_slugs}")
+        print("   Add these to FACTION_TO_SLUGS in resolve_player_sides.py")
 
     coverage = (name_match + faction_inferred) / max(1, len(pairs)) * 100
     print(f"\nFinal coverage: {coverage:.1f}%")

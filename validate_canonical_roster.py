@@ -59,16 +59,27 @@ def main():
                     )
 
     # Check 3: unit_categories names exist in game data
+    # Skip suffixed forms like "8 Rad Armored Car (DAK)" - those are disambiguated
+    # at query time in analyze.load_build_orders_df, not stored under that name in unit_db.
     print("Check 3: unit_categories names exist in game data...")
     from unit_categories import UNIT_CATEGORIES
     db_names = {s["name"] for s in db["squads"]}
     for unit_name in UNIT_CATEGORIES:
+        if " (" in unit_name and unit_name.endswith(")"):
+            # Disambiguated suffix form - check the base name
+            base_name = unit_name.rsplit(" (", 1)[0]
+            if base_name not in db_names:
+                warnings.append(
+                    f"  '{unit_name}' (base '{base_name}') not found in unit_db.json"
+                )
+            continue
         if unit_name not in db_names:
             warnings.append(
                 f"  '{unit_name}' in UNIT_CATEGORIES but not found in unit_db.json"
             )
 
     # Check 4: faction tags in unit_categories match canonical_roster
+    # Skip suffixed forms - those are explicitly faction-tagged in their name
     print("Check 4: unit_categories faction tags match canonical roster...")
     canonical_unit_to_fac = {}
     for fac, tiers in CANONICAL_BASE.items():
@@ -77,6 +88,8 @@ def main():
                 canonical_unit_to_fac[u["name"]] = fac
 
     for unit_name, (category, declared_fac) in UNIT_CATEGORIES.items():
+        if " (" in unit_name and unit_name.endswith(")"):
+            continue  # disambiguated, faction is in the name
         canonical_fac = canonical_unit_to_fac.get(unit_name)
         if canonical_fac and canonical_fac != declared_fac:
             failures.append(

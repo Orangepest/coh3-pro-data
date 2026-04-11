@@ -153,9 +153,81 @@ def head_to_head(df: pd.DataFrame, player1_alias: str, player2_alias: str) -> pd
     return merged
 
 
+# Units that share a display name across factions get a "(FACTION)" suffix
+# so they can be analyzed separately. Wehr Panzergrenadier and DAK Panzergrenadier
+# are completely different units in CoH3 despite sharing the cohdb display name.
+AMBIGUOUS_SHARED_NAMES = {
+    "8 Rad Armored Car",
+    "Panzergrenadier Squad",
+    "Sniper",
+    "Tiger Heavy Tank",
+}
+
+
+def player_slots() -> pd.DataFrame:
+    """
+    Recover the original player slot order from build_orders insertion order.
+    The cohdb scraper inserts players in the order they appear in the timeline JSON,
+    which preserves the .rec file's player slot order (slot 0, slot 1).
+
+    Returns DataFrame with columns: replay_id, player_name, slot (0 or 1).
+    """
+    conn = get_conn()
+    df = pd.read_sql_query("""
+        SELECT replay_id, player_name, MIN(id) as first_id
+        FROM build_orders
+        GROUP BY replay_id, player_name
+        ORDER BY replay_id, first_id
+    """, conn)
+    conn.close()
+    if df.empty:
+        return df
+    df["slot"] = df.groupby("replay_id").cumcount()
+    return df[["replay_id", "player_name", "slot"]]
+
+
+def slot_winrates_by_map(min_games: int = 5) -> pd.DataFrame:
+    """
+    For each map, compute slot 0 vs slot 1 winrates. If a map has positional
+    asymmetry, slot 0 will consistently win/lose more than 50%.
+    """
+    conn = get_conn()
+    base = pd.read_sql_query("""
+        SELECT bo.replay_id, bo.player_name, MIN(bo.id) as first_id,
+               cr.map_name, bopr.won
+        FROM build_orders bo
+        JOIN cohdb_replays cr ON bo.replay_id = cr.replay_id
+        LEFT JOIN build_orders_player_resolved bopr
+            ON bo.replay_id = bopr.replay_id AND bo.player_name = bopr.player_name
+        GROUP BY bo.replay_id, bo.player_name
+    """, conn)
+    conn.close()
+
+    if base.empty:
+        return pd.DataFrame()
+
+    base = base.dropna(subset=["won", "map_name"])
+    base = base.sort_values(["replay_id", "first_id"])
+    base["slot"] = base.groupby("replay_id").cumcount()
+
+    # Only slot 0 winrate (slot 1 is just 100% - slot 0 winrate in 1v1)
+    slot0 = base[base["slot"] == 0]
+    stats = slot0.groupby("map_name").agg(
+        games=("won", "count"),
+        slot0_wins=("won", "sum"),
+    )
+    stats["slot0_winrate_pct"] = (stats["slot0_wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+    return stats.sort_values("slot0_winrate_pct", ascending=False)
+
+
 def load_build_orders_df(patch: str | None = None) -> pd.DataFrame:
     """Load build order data from cohdb, optionally filtered by patch.
     Joins with build_orders_player_resolved (which handles name mismatches via faction inference).
+
+    For units in AMBIGUOUS_SHARED_NAMES (shared display name across factions),
+    the unit column is rewritten as 'Name (FACTION)' so they can be analyzed
+    separately.
     """
     conn = get_conn()
     query = """
@@ -185,6 +257,17 @@ def load_build_orders_df(patch: str | None = None) -> pd.DataFrame:
     df = pd.read_sql_query(query, conn, params=params)
     conn.close()
     df["minutes"] = df["seconds"] / 60
+
+    # Disambiguate shared unit names by appending faction
+    if not df.empty:
+        ambig_mask = df["unit"].isin(AMBIGUOUS_SHARED_NAMES) & df["faction_short"].notna()
+        df.loc[ambig_mask, "unit"] = (
+            df.loc[ambig_mask, "unit"]
+            + " ("
+            + df.loc[ambig_mask, "faction_short"].str.upper()
+            + ")"
+        )
+
     return df
 
 

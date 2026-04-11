@@ -9,7 +9,8 @@ UNIT_CATEGORIES = {
     "Riflemen Squad":           ("mainline_infantry", "us"),
     "Grenadier Squad":          ("mainline_infantry", "wehr"),
     "Infantry Section":         ("mainline_infantry", "uk"),
-    "Panzergrenadier Squad":    ("mainline_infantry", "dak"),
+    "Panzergrenadier Squad (DAK)":  ("mainline_infantry", "dak"),  # palmgren
+    "Panzergrenadier Squad (WEHR)": ("elite_infantry", "wehr"),    # T3 elite, different unit
 
     # ===== ENGINEERS / PIONEERS =====
     "Engineer Squad":           ("engineers", "us"),
@@ -45,6 +46,10 @@ UNIT_CATEGORIES = {
     "Jäger Squad":              ("recon_infantry", "wehr"),
     "Stoßtruppen Squad":        ("recon_infantry", "wehr"),
 
+    # ===== SNIPERS =====
+    "Sniper (US)":              ("sniper", "us"),
+    "Sniper (WEHR)":            ("sniper", "wehr"),
+
     # ===== LIGHT VEHICLES (scout cars, motorcycles) =====
     "1⁄4-ton 4x4 Truck":        ("light_vehicle", "us"),
     "M29 Weasel Recon Vehicle": ("light_vehicle", "us"),
@@ -55,7 +60,8 @@ UNIT_CATEGORIES = {
 
     # ===== ARMORED CARS =====
     "M8 Greyhound Armored Car": ("armored_car", "us"),
-    "8 Rad Armored Car":        ("armored_car", "dak"),
+    "8 Rad Armored Car (DAK)":  ("armored_car", "dak"),  # DAK base T2
+    "8 Rad Armored Car (WEHR)": ("armored_car", "wehr"), # Wehr Mechanized BG callin
     "Humber Armored Car":       ("armored_car", "uk"),
 
     # ===== HALF-TRACKS / APCs =====
@@ -86,7 +92,8 @@ UNIT_CATEGORIES = {
     "Valentine II Medium Tank": ("medium_tank", "uk"),
 
     # ===== HEAVY TANKS =====
-    "Tiger Heavy Tank":         ("heavy_tank", "wehr"),
+    "Tiger Heavy Tank (WEHR)":  ("heavy_tank", "wehr"),
+    "Tiger Heavy Tank (DAK)":   ("heavy_tank", "dak"),  # via T0 callin tree T4 upgrade
     "Panther Heavy Tank":       ("heavy_tank", "wehr"),
     "King Tiger Heavy Tank":    ("heavy_tank", "wehr"),
     "M26 Pershing Heavy Tank":  ("heavy_tank", "us"),
@@ -162,6 +169,7 @@ CATEGORY_LABELS = {
     "hmg": "Heavy MGs",
     "mortar": "Mortars",
     "at_gun": "AT Guns",
+    "sniper": "Snipers",
     "recon_infantry": "Scout / Recon Infantry",
     "light_vehicle": "Light Vehicles",
     "armored_car": "Armored Cars",

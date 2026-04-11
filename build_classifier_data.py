@@ -109,6 +109,18 @@ def main():
     for cohdb_name in ALIASES:
         names.add(cohdb_name)
 
+    # Add (FACTION) suffixed forms for shared names that get disambiguated at load time
+    # Keep this in sync with AMBIGUOUS_SHARED_NAMES in analyze.py
+    AMBIGUOUS_SHARED = {
+        "8 Rad Armored Car": ["DAK", "WEHR"],
+        "Panzergrenadier Squad": ["DAK", "WEHR"],
+        "Sniper": ["US", "WEHR"],
+        "Tiger Heavy Tank": ["WEHR", "DAK"],
+    }
+    for base_name, factions in AMBIGUOUS_SHARED.items():
+        for fac in factions:
+            names.add(f"{base_name} ({fac})")
+
     sorted_names = sorted(names)
 
     out = [

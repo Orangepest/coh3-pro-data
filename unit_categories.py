@@ -34,10 +34,10 @@ UNIT_CATEGORIES = {
     "M1 Anti-tank Gun Team":        ("at_gun", "us"),
     "Pak 40 Anti-tank Gun Team":    ("at_gun", "wehr"),
     "6-pounder Anti-tank Gun Team": ("at_gun", "uk"),
-    "2-pounder Anti-tank Gun Team": ("at_gun", "uk"),
     "Pak 38 Anti-tank Gun Team":    ("at_gun", "dak"),
     "Flak 36 Anti-tank Gun Team":   ("at_gun", "dak"),
     "17-pounder Anti-tank Gun Team": ("at_gun", "uk"),
+    "2-pounder Light Anti-tank Gun Team": ("at_gun", "uk"),  # was "2-pounder Anti-tank Gun Team"
 
     # ===== SCOUT / RECON INFANTRY =====
     "Scout Squad":              ("recon_infantry", "us"),
@@ -48,8 +48,8 @@ UNIT_CATEGORIES = {
     # ===== LIGHT VEHICLES (scout cars, motorcycles) =====
     "1⁄4-ton 4x4 Truck":        ("light_vehicle", "us"),
     "M29 Weasel Recon Vehicle": ("light_vehicle", "us"),
-    "Kradschützen Motorcycle Team": ("light_vehicle", "wehr"),
-    "Kettenkrad Recon Vehicle": ("light_vehicle", "dak"),
+    "Kradschützen Motorcycle Team": ("light_vehicle", "dak"),  # DAK, not Wehr
+    "Kettenkrad Recon Vehicle": ("light_vehicle", "wehr"),     # Wehr, not DAK
     "221 Scout Car":            ("light_vehicle", "wehr"),
     "Dingo Light Scout Car":    ("light_vehicle", "uk"),
 
@@ -60,12 +60,12 @@ UNIT_CATEGORIES = {
 
     # ===== HALF-TRACKS / APCs =====
     "M3 Armored Personnel Carrier": ("halftrack", "us"),
-    "M3 Assault Carrier":           ("halftrack", "us"),
-    "250 Light Carrier":            ("halftrack", "wehr"),
+    # M3 Assault Carrier removed - it's a doctrine upgrade variant of M3 APC, not a unit
+    "250 Light Carrier":            ("halftrack", "dak"),  # DAK base T0, not Wehr
     "251 Medium Carrier":           ("halftrack", "wehr"),
 
     # ===== LIGHT TANKS =====
-    "M3 Stuart Light Tank":     ("light_tank", "us"),
+    "M3 Stuart Light Tank":     ("light_tank", "uk"),  # British Lend-Lease, not USF
     "M24 Chaffee Light Tank":   ("light_tank", "us"),
     "Carro Armato M13/40 Light Tank": ("light_tank", "dak"),
     "L6/40 Light Tank":         ("light_tank", "dak"),
@@ -77,8 +77,7 @@ UNIT_CATEGORIES = {
     "M4A1 Sherman Whizbang":    ("medium_tank", "us"),
     "M4A3E8 Sherman Easy Eight": ("medium_tank", "us"),
     "Panzer IV Medium Tank":    ("medium_tank", "wehr"),
-    "Command Panzer IV F Medium Tank": ("medium_tank", "wehr"),
-    "Panzer IV Command Tank":   ("medium_tank", "wehr"),
+    "Command Panzer IV Medium Tank": ("medium_tank", "wehr"),
     "Panzer III L Medium Tank": ("medium_tank", "dak"),
     "Flammpanzer III Medium Tank": ("medium_tank", "dak"),
     "Crusader II Medium Tank":  ("medium_tank", "uk"),
@@ -98,12 +97,12 @@ UNIT_CATEGORIES = {
 
     # ===== TANK DESTROYERS / ASSAULT GUNS =====
     "M18 Hellcat Tank Destroyer": ("tank_destroyer", "us"),
-    "Marder III Tank Destroyer":   ("tank_destroyer", "wehr"),
-    "Marder III M Tank Destroyer": ("tank_destroyer", "dak"),
+    "Marder III Tank Destroyer":   ("tank_destroyer", "dak"),  # DAK
+    "Marder III M Tank Destroyer": ("tank_destroyer", "wehr"), # Wehr
     "StuG III D Assault Gun":   ("tank_destroyer", "dak"),
     "StuG III G Assault Gun":   ("tank_destroyer", "wehr"),
     "Sturmpanzer IV Brummbär":  ("assault_tank", "wehr"),
-    "Panzerjäger Squad":        ("tank_destroyer", "wehr"),
+    "Panzerjäger Squad":        ("tank_destroyer", "dak"),  # DAK T1 base infantry tank-hunter
     "Archer Tank Destroyer":    ("tank_destroyer", "uk"),
     "Sherman VC Firefly Tank Destroyer": ("tank_destroyer", "uk"),
     "Semovente da 75/18 Assault Gun": ("tank_destroyer", "dak"),
@@ -118,13 +117,13 @@ UNIT_CATEGORIES = {
     "M8 Scott SPG":             ("artillery", "us"),
     "M3 75 mm Gun Motor Carriage": ("artillery", "us"),
     "Nebelwerfer 42 Rocket Launcher Team": ("artillery", "wehr"),
-    "Walking Stuka Rocket Launcher": ("artillery", "wehr"),
-    "Towed Cannone da 105/28 Field Howitzer": ("artillery", "dak"),
+    "Walking Stuka Rocket Launcher": ("artillery", "dak"),  # DAK T3
+    "Cannone da 105/28 Howitzer": ("artillery", "dak"),
 
     # ===== ELITE / SPECIAL INFANTRY =====
     "Bazooka Squad":            ("at_infantry", "us"),
-    "Assault Grenadier Squad":  ("elite_infantry", "wehr"),
-    "Kriegsmariner Squad":      ("elite_infantry", "wehr"),
+    "Assault Grenadier Squad":  ("elite_infantry", "dak"),  # DAK T1 base
+    # Kriegsmariner Squad removed - DAK Kriegsmarine BG callin, not in unit_db
     "SSF Commando Squad":       ("elite_infantry", "us"),
     "Bersaglieri Squad":        ("elite_infantry", "dak"),
     "Guastatori Squad":         ("elite_infantry", "dak"),

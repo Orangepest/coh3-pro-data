@@ -473,3 +473,12 @@ def build_unit_db():
 
 if __name__ == "__main__":
     build_unit_db()
+    print()
+    # Run the validator after building so we catch drift immediately
+    try:
+        from validate_canonical_roster import main as validate
+        rc = validate()
+        if rc != 0:
+            print("\n!!! Canonical roster validation FAILED - see above !!!")
+    except Exception as e:
+        print(f"(validator skipped: {e})")

@@ -109,52 +109,66 @@ def scrape_match_listing(page: int = 1, elo: int = MIN_ELO) -> list[int]:
     return unique_ids
 
 
-def scrape_patch_version(replay_id: int) -> str | None:
-    """Fetch the patch version from the replay overview page."""
+def scrape_replay_overview(replay_id: int) -> tuple[str | None, str | None]:
+    """Fetch patch version and map name from the replay overview page.
+    Returns (patch, map_name)."""
     url = f"{COHDB_BASE}/replays/{replay_id}"
     page_html = fetch_page(url)
     if not page_html:
-        return None
+        return None, None
+
     patch_match = re.search(
         r'<dd>\s*(\d+\.\d+(?:\.\d+)*)\s*</dd>\s*<dt[^>]*>Patch</dt>',
         page_html, re.DOTALL,
     )
-    return patch_match.group(1).strip() if patch_match else None
+    patch = patch_match.group(1).strip() if patch_match else None
+
+    # Map name is in the map image filename: /assets/{mapname}_large-{hash}.png
+    map_match = re.search(r'/assets/([a-z0-9_]+)_large-[a-f0-9]+\.png', page_html)
+    map_name = map_match.group(1) if map_match else None
+
+    return patch, map_name
 
 
-def scrape_build_orders(replay_id: int) -> tuple[list[dict], int | None, str | None]:
+def scrape_patch_version(replay_id: int) -> str | None:
+    """Backwards-compat wrapper - returns just the patch version."""
+    patch, _ = scrape_replay_overview(replay_id)
+    return patch
+
+
+def scrape_build_orders(replay_id: int) -> tuple[list[dict], int | None, str | None, str | None]:
     """
-    Scrape build order data from /replays/{id}/builds + patch from overview.
-    Returns (list of player build orders, match_duration_seconds, patch_version).
+    Scrape build order data from /replays/{id}/builds + patch + map from overview.
+    Returns (list of player build orders, match_duration_seconds, patch_version, map_name).
     """
     url = f"{COHDB_BASE}/replays/{replay_id}/builds"
     page_html = fetch_page(url)
     if not page_html:
-        return [], None, None
+        return [], None, None, None
 
     # Extract the JSON from data-timeline-players-value attribute
     players_match = re.search(
         r'data-timeline-players-value="([^"]+)"', page_html
     )
     if not players_match:
-        return [], None, None
+        return [], None, None, None
 
     # HTML-unescape and parse JSON
     raw = html.unescape(players_match.group(1))
     try:
         players_data = json.loads(raw)
     except json.JSONDecodeError:
-        return [], None, None
+        return [], None, None, None
 
     # Extract match length
     length_match = re.search(r'data-timeline-length-value="(\d+)"', page_html)
     duration_s = int(length_match.group(1)) if length_match else None
 
-    # Fetch patch from overview page
+    # Fetch patch + map from overview page
     time.sleep(REQUEST_DELAY)
-    patch = scrape_patch_version(replay_id)
+    patch, map_name = scrape_replay_overview(replay_id)
 
-    return players_data, duration_s, patch
+    return players_data, duration_s, patch, map_name
 
 
 def is_ai_player_name(name: str) -> bool:
@@ -172,7 +186,8 @@ def is_ai_player_name(name: str) -> bool:
 
 
 def store_replay_build_orders(replay_id: int, players_data: list[dict],
-                               duration_s: int | None, patch: str | None, conn):
+                               duration_s: int | None, patch: str | None,
+                               map_name: str | None, conn):
     """Store build order data for a replay. Skips replays with AI players."""
     # Skip games with any CPU/AI player - these are skirmishes, not 1v1 ranked
     for player in players_data:
@@ -186,13 +201,14 @@ def store_replay_build_orders(replay_id: int, players_data: list[dict],
 
     # Upsert the replay record
     conn.execute("""
-        INSERT INTO cohdb_replays (replay_id, duration_s, mode, patch, scraped_at)
-        VALUES (?, ?, 'ranked_1v1', ?, ?)
+        INSERT INTO cohdb_replays (replay_id, duration_s, mode, patch, map_name, scraped_at)
+        VALUES (?, ?, 'ranked_1v1', ?, ?, ?)
         ON CONFLICT(replay_id) DO UPDATE SET
             duration_s=excluded.duration_s,
             patch=excluded.patch,
+            map_name=COALESCE(excluded.map_name, cohdb_replays.map_name),
             scraped_at=excluded.scraped_at
-    """, (replay_id, duration_s, patch, now))
+    """, (replay_id, duration_s, patch, map_name, now))
 
     total_actions = 0
     for player in players_data:
@@ -247,14 +263,14 @@ def scrape_cohdb(max_pages: int = 50, elo: int = MIN_ELO):
                 continue
 
             print(f"    Replay {rid}:", end=" ", flush=True)
-            players_data, duration_s, patch = scrape_build_orders(rid)
+            players_data, duration_s, patch, map_name = scrape_build_orders(rid)
 
             if not players_data:
                 print("no build data")
                 time.sleep(REQUEST_DELAY)
                 continue
 
-            actions = store_replay_build_orders(rid, players_data, duration_s, patch, conn)
+            actions = store_replay_build_orders(rid, players_data, duration_s, patch, map_name, conn)
             conn.commit()
             total_replays += 1
             total_actions += actions

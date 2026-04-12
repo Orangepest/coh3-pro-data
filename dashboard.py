@@ -955,6 +955,7 @@ with tab_builds, safe_section("Build Orders"):
         # BG OVERALL WINRATES
         # =====================================================
         st.subheader("Battlegroup Overall Winrates")
+        bg_overall = pd.DataFrame()
         bg_overall = analyze.battlegroup_overall_winrates(bo, min_games=10)
         if not bg_overall.empty:
             bg_overall_chart = bg_overall.reset_index().sort_values("winrate_pct")
@@ -1204,46 +1205,48 @@ with tab_tech, safe_section("Tech Timings"):
             cat for unit, (cat, fac) in UNIT_CATEGORIES.items() if fac == mt_faction
         ))
         cat_labels_for_fac = [(_CL.get(c, c), c) for c in fac_cats]
-        chosen_label = col_mt_b.selectbox(
-            "Unit category",
-            [label for label, _ in cat_labels_for_fac],
-            index=min(len(cat_labels_for_fac) - 1,
-                      next((i for i, (l, c) in enumerate(cat_labels_for_fac)
-                            if c == "medium_tank"), 0)),
-            key="mt_cat",
-        )
-        chosen_cat = next(c for label, c in cat_labels_for_fac if label == chosen_label)
-        units_in_cat = [
-            u for u, (cat, fac) in UNIT_CATEGORIES.items()
-            if cat == chosen_cat and fac == mt_faction
-        ]
-        try:
-            corr = analyze.milestone_timing_winrate_correlation(
-                bo, units_in_cat, faction=mt_faction, bucket_minutes=2)
-            if not corr.empty:
-                # Filter to buckets with reasonable sample size
-                corr_filtered = corr[corr["games"] >= 3]
-                if not corr_filtered.empty:
-                    chart = corr_filtered.reset_index()
-                    fig_corr = px.bar(
-                        chart, x="bucket_min", y="winrate_pct",
-                        text="games",
-                        color="winrate_pct",
-                        color_continuous_scale="RdYlGn",
-                        range_color=[20, 80],
-                        labels={
-                            "bucket_min": f"Minutes to first {chosen_label} ({mt_faction})",
-                            "winrate_pct": "Win %",
-                        },
-                    )
-                    fig_corr.update_traces(texttemplate="n=%{text}", textposition="outside")
-                    fig_corr.update_layout(yaxis=dict(range=[0, 110]))
-                    st.plotly_chart(fig_corr, use_container_width=True)
-                    st.dataframe(chart, use_container_width=True, hide_index=True)
-                else:
-                    st.info("Not enough data for buckets >= 3 games")
-        except Exception as e:
-            st.error(f"Milestone correlation failed: {e}")
+        if not cat_labels_for_fac:
+            st.info(f"No unit categories defined for {mt_faction.upper()}")
+        else:
+            chosen_label = col_mt_b.selectbox(
+                "Unit category",
+                [label for label, _ in cat_labels_for_fac],
+                index=min(len(cat_labels_for_fac) - 1,
+                          next((i for i, (l, c) in enumerate(cat_labels_for_fac)
+                                if c == "medium_tank"), 0)),
+                key="mt_cat",
+            )
+            chosen_cat = next(c for label, c in cat_labels_for_fac if label == chosen_label)
+            units_in_cat = [
+                u for u, (cat, fac) in UNIT_CATEGORIES.items()
+                if cat == chosen_cat and fac == mt_faction
+            ]
+            try:
+                corr = analyze.milestone_timing_winrate_correlation(
+                    bo, units_in_cat, faction=mt_faction, bucket_minutes=2)
+                if not corr.empty:
+                    corr_filtered = corr[corr["games"] >= 3]
+                    if not corr_filtered.empty:
+                        chart = corr_filtered.reset_index()
+                        fig_corr = px.bar(
+                            chart, x="bucket_min", y="winrate_pct",
+                            text="games",
+                            color="winrate_pct",
+                            color_continuous_scale="RdYlGn",
+                            range_color=[20, 80],
+                            labels={
+                                "bucket_min": f"Minutes to first {chosen_label} ({mt_faction})",
+                                "winrate_pct": "Win %",
+                            },
+                        )
+                        fig_corr.update_traces(texttemplate="n=%{text}", textposition="outside")
+                        fig_corr.update_layout(yaxis=dict(range=[0, 110]))
+                        st.plotly_chart(fig_corr, use_container_width=True)
+                        st.dataframe(chart, use_container_width=True, hide_index=True)
+                    else:
+                        st.info("Not enough data for buckets >= 3 games")
+            except Exception as e:
+                st.error(f"Milestone correlation failed: {e}")
 
         st.markdown("---")
 
@@ -1478,7 +1481,7 @@ with tab_players, safe_section("Players"):
         if not df.empty:
             st.markdown("**Faction Winrate by Tier**")
             st.caption("Same data, sliced by skill. Higher tiers winning more is expected; the *gap* per faction tells you which factions reward skill the most.")
-            fwt = analyze.faction_winrate_by_tier(df, top_n=30)
+            fwt = analyze.faction_winrate_by_tier(df, top_n=30, tiers=pt)
             if not fwt.empty:
                 fwt_reset = fwt.reset_index()
                 fig_fwt = px.bar(
@@ -1501,7 +1504,7 @@ with tab_players, safe_section("Players"):
             st.markdown("**Battlegroup Picks by Tier**")
             st.caption("Which BGs do top players favor that the rest don't? High S-tier pickrate + low C-tier pickrate = a 'pro pick'.")
             min_bg_games = st.slider("Min games per BG/tier", 3, 20, 5, key="bg_tier_min")
-            bpt = analyze.bg_picks_by_tier(bo, top_n=30, min_games=min_bg_games)
+            bpt = analyze.bg_picks_by_tier(bo, top_n=30, min_games=min_bg_games, tiers=pt)
             if not bpt.empty:
                 bpt_reset = bpt.reset_index()
                 tier_filter = st.multiselect(
@@ -1533,7 +1536,7 @@ with tab_players, safe_section("Players"):
             col_a, col_b = st.columns(2)
             opener_n = col_a.slider("Opener depth", 3, 6, 5, key="opener_tier_depth")
             opener_min = col_b.slider("Min games", 2, 10, 3, key="opener_tier_min")
-            opt = analyze.opener_picks_by_tier(bo, first_n=opener_n, top_n=30, min_games=opener_min)
+            opt = analyze.opener_picks_by_tier(bo, first_n=opener_n, top_n=30, min_games=opener_min, tiers=pt)
             if not opt.empty:
                 opt_reset = opt.reset_index()
                 tier_pick = st.selectbox("Show tier", ["S", "A", "B", "C"], key="opener_tier_pick")
@@ -1730,11 +1733,10 @@ with tab_sql, safe_section("SQL Query"):
     )
 
     if st.button("Run Query"):
+        conn = get_conn()
         try:
-            conn = get_conn()
             conn.execute("PRAGMA query_only=ON")
             result = pd.read_sql_query(query, conn)
-            conn.close()
             st.success(f"{len(result)} rows returned")
             st.dataframe(result, use_container_width=True)
             st.download_button(
@@ -1745,3 +1747,5 @@ with tab_sql, safe_section("SQL Query"):
             )
         except Exception as e:
             st.error(f"Query error: {e}")
+        finally:
+            conn.close()

@@ -127,12 +127,13 @@ def player_tiers(top_n_threshold: int = 30) -> pd.DataFrame:
     return df
 
 
-def faction_winrate_by_tier(df: pd.DataFrame, top_n: int = 30) -> pd.DataFrame:
+def faction_winrate_by_tier(df: pd.DataFrame, top_n: int = 30, tiers: pd.DataFrame | None = None) -> pd.DataFrame:
     """Faction winrate broken down by player skill tier."""
     if df.empty:
         return pd.DataFrame()
 
-    tiers = player_tiers(top_n_threshold=top_n)
+    if tiers is None:
+        tiers = player_tiers(top_n_threshold=top_n)
     if tiers.empty:
         return pd.DataFrame()
 
@@ -157,7 +158,7 @@ def faction_winrate_by_tier(df: pd.DataFrame, top_n: int = 30) -> pd.DataFrame:
     return stats.drop(columns=["_t"]).set_index(["tier", "faction"])
 
 
-def bg_picks_by_tier(bo: pd.DataFrame, top_n: int = 30, min_games: int = 5) -> pd.DataFrame:
+def bg_picks_by_tier(bo: pd.DataFrame, top_n: int = 30, min_games: int = 5, tiers: pd.DataFrame | None = None) -> pd.DataFrame:
     """
     Battlegroup pick rates and winrates split by player skill tier.
     Compares what top-N players pick vs the rest.
@@ -174,7 +175,8 @@ def bg_picks_by_tier(bo: pd.DataFrame, top_n: int = 30, min_games: int = 5) -> p
     ).reset_index()
 
     # Attach tier via player_name == alias
-    tiers = player_tiers(top_n_threshold=top_n)
+    if tiers is None:
+        tiers = player_tiers(top_n_threshold=top_n)
     merged = first_bg.merge(
         tiers[["alias", "tier"]].rename(columns={"alias": "player_name"}),
         on="player_name",
@@ -207,6 +209,7 @@ def opener_picks_by_tier(
     first_n: int = 5,
     top_n: int = 30,
     min_games: int = 3,
+    tiers: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Top openers per skill tier - what do top players play differently?"""
     df = bo[bo["action_type"] == "production"].copy()
@@ -224,7 +227,8 @@ def opener_picks_by_tier(
     openers["unit_count"] = openers["opener"].apply(lambda s: s.count(" -> ") + 1)
     openers = openers[openers["unit_count"] == first_n]
 
-    tiers = player_tiers(top_n_threshold=top_n)
+    if tiers is None:
+        tiers = player_tiers(top_n_threshold=top_n)
     merged = openers.merge(
         tiers[["alias", "tier"]].rename(columns={"alias": "player_name"}),
         on="player_name",

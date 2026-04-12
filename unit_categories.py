@@ -44,7 +44,9 @@ UNIT_CATEGORIES = {
     "Scout Squad":              ("recon_infantry", "us"),
     "Pathfinder Squad":         ("recon_infantry", "us"),
     "Jäger Squad":              ("recon_infantry", "wehr"),
-    "Stoßtruppen Squad":        ("recon_infantry", "wehr"),
+
+    # ===== COMMAND / OFFICER SQUADS =====
+    "Captain Retinue":          ("officer", "us"),
 
     # ===== SNIPERS =====
     "Sniper (US)":              ("sniper", "us"),
@@ -63,12 +65,15 @@ UNIT_CATEGORIES = {
     "8 Rad Armored Car (DAK)":  ("armored_car", "dak"),  # DAK base T2
     "8 Rad Armored Car (WEHR)": ("armored_car", "wehr"), # Wehr Mechanized BG callin
     "Humber Armored Car":       ("armored_car", "uk"),
+    "254 Reconnaissance Tractor": ("armored_car", "dak"),  # DAK T2 recon vehicle
 
     # ===== HALF-TRACKS / APCs =====
     "M3 Armored Personnel Carrier": ("halftrack", "us"),
     # M3 Assault Carrier removed - it's a doctrine upgrade variant of M3 APC, not a unit
     "250 Light Carrier":            ("halftrack", "dak"),  # DAK base T0, not Wehr
     "251 Medium Carrier":           ("halftrack", "wehr"),
+    "CMP 15cwt Truck":              ("halftrack", "uk"),         # UK T2 utility vehicle
+    "18-tonne Recovery Half-track": ("halftrack", "dak"),        # DAK T2 repair vehicle
 
     # ===== LIGHT TANKS =====
     "M3 Stuart Light Tank":     ("light_tank", "uk"),  # British Lend-Lease, not USF
@@ -126,6 +131,8 @@ UNIT_CATEGORIES = {
     "Nebelwerfer 42 Rocket Launcher Team": ("artillery", "wehr"),
     "Walking Stuka Rocket Launcher": ("artillery", "dak"),  # DAK T3
     "Cannone da 105/28 Howitzer": ("artillery", "dak"),
+    "le.IG 18 Support Gun Team": ("artillery", "dak"),       # DAK T1 base
+    "Bishop Self-propelled Artillery": ("artillery", "uk"),   # UK T2 base, only non-doctrinal arty
 
     # ===== ELITE / SPECIAL INFANTRY =====
     "Bazooka Squad":            ("at_infantry", "us"),
@@ -135,6 +142,7 @@ UNIT_CATEGORIES = {
     "Bersaglieri Squad":        ("elite_infantry", "dak"),
     "Guastatori Squad":         ("elite_infantry", "dak"),
     "Polish Lancer Section":    ("elite_infantry", "uk"),
+    "Stoßtruppen Squad":        ("elite_infantry", "wehr"),  # T4 assault infantry
     "Foot Guards Section":      ("elite_infantry", "uk"),
     "Australian Light Infantry Section": ("elite_infantry", "uk"),
     "Canadian Shock Section":   ("elite_infantry", "uk"),
@@ -183,4 +191,5 @@ CATEGORY_LABELS = {
     "artillery": "Artillery / Rockets",
     "at_infantry": "AT Infantry",
     "elite_infantry": "Elite Infantry",
+    "officer": "Command / Officer Squads",
 }

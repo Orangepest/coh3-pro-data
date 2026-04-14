@@ -1466,7 +1466,7 @@ with tab_players, safe_section("Players"):
     st.subheader("Player Skill Tier Breakdown")
     st.caption(
         "Players are bucketed by **peak ELO** across any faction. "
-        "**S** = top 30 globally, **A** = 1900-2000, **B** = 1700-1900, **C** = 1600-1700. "
+        "**S** = 2000+, **A** = 1800-2000, **B** = 1700-1800, **C** = 1600-1700. "
         "How do top-tier players differ from the rest in faction prefs, BG picks, and openers?"
     )
 

@@ -100,9 +100,9 @@ def player_tiers(top_n_threshold: int = 30) -> pd.DataFrame:
     """
     Assign each player a skill tier based on their peak ELO across all factions.
     Tiers:
-      S - top N players by peak ELO (default top 30)
-      A - 1900-2000 ELO peak
-      B - 1700-1900 ELO peak
+      S - 2000+ ELO peak
+      A - 1800-2000 ELO peak
+      B - 1700-1800 ELO peak
       C - 1600-1700 ELO peak
     Returns DataFrame with columns: alias, peak_elo, tier
     """
@@ -119,11 +119,10 @@ def player_tiers(top_n_threshold: int = 30) -> pd.DataFrame:
     if df.empty:
         return df
 
-    # S = top N
     df["tier"] = "C"
     df.loc[df["peak_elo"] >= 1700, "tier"] = "B"
-    df.loc[df["peak_elo"] >= 1900, "tier"] = "A"
-    df.loc[df.index[:top_n_threshold], "tier"] = "S"
+    df.loc[df["peak_elo"] >= 1800, "tier"] = "A"
+    df.loc[df["peak_elo"] >= 2000, "tier"] = "S"
     return df
 
 

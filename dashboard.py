@@ -938,6 +938,86 @@ with tab_openers, safe_section("Openers"):
                             use_container_width=True, hide_index=True,
                         )
 
+        # =====================================================
+        # OPENER + BG ANALYSIS
+        # =====================================================
+        if with_winners is not None and not with_winners.empty:
+            st.markdown("---")
+            st.subheader("Opener + Battlegroup Combos")
+            st.caption(
+                "How does the BG pick change an opener's winrate? Same opener, "
+                "different BG = direct comparison. Also shows opener+BG vs "
+                "opener+BG matchups."
+            )
+
+            col_ob1, col_ob2, col_ob3 = st.columns(3)
+            ob_depth = col_ob1.slider("Opener length", 3, 6, 3, key="ob_depth")
+            ob_min = col_ob2.slider("Min games", 2, 20, 3, key="ob_min")
+            ob_faction = col_ob3.selectbox(
+                "Faction", ["All", "us", "wehr", "uk", "dak"], key="ob_faction")
+
+            obw = analyze.opener_bg_winrates(
+                with_winners,
+                first_n=ob_depth,
+                faction=ob_faction if ob_faction != "All" else None,
+                min_games=ob_min,
+            )
+            if not obw.empty:
+                obw_display = obw.reset_index()
+                obw_display.columns = ["Opener", "Battlegroup", "Games", "Wins", "Win %"]
+                st.dataframe(obw_display.head(30), use_container_width=True, hide_index=True)
+            else:
+                st.info("No opener+BG combos meet the threshold")
+
+            # Opener+BG matchups
+            st.markdown("**Opener+BG vs Opener+BG Matchups**")
+            st.caption("e.g. 3x Rifle (Armored BG) vs 3x Gren (Luftwaffe)")
+            col_ob4, col_ob5 = st.columns(2)
+            ob_fac_a = col_ob4.selectbox(
+                "Your faction", ["All", "us", "wehr", "uk", "dak"], key="ob_fac_a")
+            ob_fac_b = col_ob5.selectbox(
+                "Opponent faction", ["All", "us", "wehr", "uk", "dak"], key="ob_fac_b")
+            ob_mu_min = st.slider("Min games per matchup", 2, 10, 2, key="ob_mu_min")
+
+            obm = analyze.opener_bg_matchup_winrates(
+                with_winners,
+                first_n=ob_depth,
+                faction_a=ob_fac_a if ob_fac_a != "All" else None,
+                faction_b=ob_fac_b if ob_fac_b != "All" else None,
+                min_games=ob_mu_min,
+            )
+            if not obm.empty:
+                obm_display = obm.reset_index()
+                obm_display["your_build"] = obm_display["opener_a"] + " | " + obm_display["bg_a"]
+                obm_display["opp_build"] = obm_display["opener_b"] + " | " + obm_display["bg_b"]
+                fig_obm = px.bar(
+                    obm_display.head(20).sort_values("winrate_pct"),
+                    x="winrate_pct",
+                    y=obm_display.head(20).sort_values("winrate_pct").apply(
+                        lambda r: f"{r['your_build'][:50]} vs {r['opp_build'][:50]}", axis=1),
+                    orientation="h",
+                    color="winrate_pct",
+                    color_continuous_scale="RdYlGn",
+                    range_color=[0, 100],
+                    text="games",
+                    labels={"winrate_pct": "Your Win %", "y": ""},
+                )
+                fig_obm.update_traces(texttemplate="n=%{text}", textposition="outside")
+                fig_obm.update_layout(height=max(450, len(obm_display.head(20)) * 35))
+                st.plotly_chart(fig_obm, use_container_width=True)
+                with st.expander("Show data"):
+                    st.dataframe(
+                        obm_display[["opener_a", "bg_a", "opener_b", "bg_b", "games", "a_wins", "winrate_pct"]]
+                            .rename(columns={
+                                "opener_a": "Your Opener", "bg_a": "Your BG",
+                                "opener_b": "Opp Opener", "bg_b": "Opp BG",
+                                "games": "Games", "a_wins": "Wins", "winrate_pct": "Win %",
+                            }),
+                        use_container_width=True, hide_index=True,
+                    )
+            else:
+                st.info("No opener+BG matchups meet the threshold. Try lowering min games.")
+
     else:
         st.warning("No build order data. Run: `python3 run.py scrape-cohdb`")
 

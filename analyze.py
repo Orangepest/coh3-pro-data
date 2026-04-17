@@ -966,6 +966,122 @@ def opener_matchup_winrates(
     return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
 
 
+def _build_opener_bg_pairs(bo: pd.DataFrame, first_n: int = 4) -> pd.DataFrame:
+    """Helper: for each (replay_id, player_name), return opener string,
+    first BG pick, won, and faction. Used by opener+BG matchup functions."""
+    prod = bo[bo["action_type"] == "production"].copy()
+    prod = prod.dropna(subset=["won"])
+    if prod.empty:
+        return pd.DataFrame()
+
+    prod = prod.sort_values("seconds")
+    prod["order"] = prod.groupby(["replay_id", "player_name"]).cumcount() + 1
+    first = prod[prod["order"] <= first_n]
+
+    openers = first.groupby(["replay_id", "player_name"]).agg(
+        opener=("unit", lambda x: " -> ".join(x)),
+        won=("won", "first"),
+        faction=("faction_short", "first"),
+    ).reset_index()
+    openers["unit_count"] = openers["opener"].apply(lambda s: s.count(" -> ") + 1)
+    openers = openers[openers["unit_count"] == first_n]
+
+    # Attach first BG pick per player-game
+    bg = bo[bo["action_type"] == "battlegroup"].copy()
+    bg = bg.sort_values("seconds")
+    first_bg = bg.groupby(["replay_id", "player_name"]).agg(
+        bg=("unit", "first"),
+    ).reset_index()
+
+    merged = openers.merge(first_bg, on=["replay_id", "player_name"], how="left")
+    merged["bg"] = merged["bg"].fillna("No BG")
+    return merged
+
+
+def opener_bg_matchup_winrates(
+    bo: pd.DataFrame,
+    first_n: int = 4,
+    faction_a: str | None = None,
+    faction_b: str | None = None,
+    min_games: int = 2,
+) -> pd.DataFrame:
+    """Compute (opener + BG) vs (opener + BG) matchup winrates.
+
+    Returns DataFrame indexed by (opener_a, bg_a, opener_b, bg_b) with
+    games, a_wins, winrate_pct. e.g. "3x Rifle + Armored BG" vs
+    "3x Gren + Luftwaffe BG".
+    """
+    pairs = _build_opener_bg_pairs(bo, first_n=first_n)
+    if pairs.empty:
+        return pd.DataFrame()
+
+    # Need both players per replay
+    counts = pairs.groupby("replay_id").size()
+    valid = counts[counts == 2].index
+    pairs = pairs[pairs["replay_id"].isin(valid)]
+
+    rows = []
+    for rid, group in pairs.groupby("replay_id"):
+        if len(group) != 2:
+            continue
+        p1, p2 = group.iloc[0], group.iloc[1]
+        rows.append({
+            "opener_a": p1["opener"], "bg_a": p1["bg"], "faction_a": p1["faction"],
+            "opener_b": p2["opener"], "bg_b": p2["bg"], "faction_b": p2["faction"],
+            "a_won": int(p1["won"]),
+        })
+        rows.append({
+            "opener_a": p2["opener"], "bg_a": p2["bg"], "faction_a": p2["faction"],
+            "opener_b": p1["opener"], "bg_b": p1["bg"], "faction_b": p1["faction"],
+            "a_won": int(p2["won"]),
+        })
+
+    if not rows:
+        return pd.DataFrame()
+
+    mdf = pd.DataFrame(rows)
+    if faction_a:
+        mdf = mdf[mdf["faction_a"] == faction_a]
+    if faction_b:
+        mdf = mdf[mdf["faction_b"] == faction_b]
+    if mdf.empty:
+        return pd.DataFrame()
+
+    stats = mdf.groupby(["opener_a", "bg_a", "opener_b", "bg_b"]).agg(
+        games=("a_won", "count"),
+        a_wins=("a_won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["a_wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+    return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
+
+
+def opener_bg_winrates(
+    bo: pd.DataFrame,
+    first_n: int = 4,
+    faction: str | None = None,
+    min_games: int = 3,
+) -> pd.DataFrame:
+    """Winrate of each (opener, BG) combo. Shows how BG choice changes
+    an opener's effectiveness."""
+    pairs = _build_opener_bg_pairs(bo, first_n=first_n)
+    if pairs.empty:
+        return pd.DataFrame()
+
+    if faction:
+        pairs = pairs[pairs["faction"] == faction]
+    if pairs.empty:
+        return pd.DataFrame()
+
+    stats = pairs.groupby(["opener", "bg"]).agg(
+        games=("won", "count"),
+        wins=("won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+    stats = stats[stats["games"] >= min_games]
+    return stats.sort_values(["winrate_pct", "games"], ascending=[False, False])
+
+
 def list_openers_for_faction(
     bo: pd.DataFrame,
     faction: str,

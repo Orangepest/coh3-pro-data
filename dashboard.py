@@ -530,39 +530,23 @@ with tab_openers, safe_section("Openers"):
         bo_games = bo["replay_id"].nunique()
         st.caption(f"{bo_games} games | Patch: {selected_patch}")
 
-        # Opener analysis
-        st.subheader("Most Common Openers")
-        opener_depth = st.slider("First N units", 3, 8, 5, key="opener_depth")
-        op = opener_analysis(bo, opener_depth)
-        if not op.empty:
-            st.dataframe(op, use_container_width=True)
-
         # =====================================================
-        # OPENER WINRATES (NEW)
+        # OPENER WINRATES — primary opener section
         # =====================================================
-        st.subheader("Opener Winrates")
+        st.subheader("Openers by Faction")
         with_winners = bo.dropna(subset=["won"])
-        # Count player-games (one player in one match) - this is what we actually
-        # aggregate over in opener winrates
-        player_games_total = bo.groupby(["replay_id", "player_name"]).ngroups
-        player_games_with_won = with_winners.groupby(["replay_id", "player_name"]).ngroups
-        coverage = (player_games_with_won / max(1, player_games_total)) * 100
-        st.caption(
-            f"Win/loss data for {coverage:.0f}% of player-games "
-            f"({player_games_with_won} of {player_games_total})."
-        )
 
         if with_winners.empty:
             st.warning("No winner data yet. Run: `python3 backfill_winners.py`")
         else:
             col_a, col_b, col_c, col_d = st.columns(4)
-            wr_depth = col_a.slider("Opener length", 3, 8, 5, key="wr_opener_depth")
-            wr_min_games = col_b.slider("Min games", 3, 50, 5, key="wr_min_games")
-            wr_faction = col_c.selectbox(
+            wr_faction = col_a.selectbox(
                 "Faction",
                 ["All", "us", "wehr", "uk", "dak"],
                 key="wr_faction",
             )
+            wr_depth = col_b.slider("Opener length", 3, 8, 5, key="wr_opener_depth")
+            wr_min_games = col_c.slider("Min games", 3, 50, 5, key="wr_min_games")
             map_options = ["All maps"] + sorted(with_winners["map_name"].dropna().unique().tolist())
             wr_map = col_d.selectbox("Map", map_options, key="wr_map")
 

@@ -1528,7 +1528,9 @@ with tab_compare, safe_section("Unit Compare"):
             if not cat_data.empty:
                 first_arr = cat_data.groupby(["replay_id", "player_name", "unit"])["seconds"].min().reset_index()
                 first_arr["minutes"] = first_arr["seconds"] / 60
-                first_arr["faction"] = first_arr["unit"].map(lambda u: FACTION_LABEL[UNIT_CATEGORIES[u][1]])
+                first_arr["faction"] = first_arr["unit"].map(
+                    lambda u: FACTION_LABEL.get(UNIT_CATEGORIES[u][1], "?") if u in UNIT_CATEGORIES else "?"
+                )
 
                 fig2 = px.box(
                     first_arr, x="unit", y="minutes",

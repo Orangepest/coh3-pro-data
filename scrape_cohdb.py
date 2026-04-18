@@ -190,9 +190,16 @@ def store_replay_build_orders(replay_id: int, players_data: list[dict],
                                map_name: str | None, conn):
     """Store build order data for a replay. Skips replays with AI players."""
     # Skip games with any CPU/AI player - these are skirmishes, not 1v1 ranked
+    # Still insert a cohdb_replays row so we don't re-fetch on next run
     for player in players_data:
         if is_ai_player_name(player.get("name", "")):
-            return 0  # signal "skipped"
+            now = datetime.now(timezone.utc).isoformat()
+            conn.execute("""
+                INSERT INTO cohdb_replays (replay_id, duration_s, mode, patch, map_name, scraped_at)
+                VALUES (?, ?, 'ai_skipped', ?, ?, ?)
+                ON CONFLICT(replay_id) DO NOTHING
+            """, (replay_id, duration_s, patch, map_name, now))
+            return 0
 
     now = datetime.now(timezone.utc).isoformat()
 

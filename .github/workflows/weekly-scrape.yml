@@ -2,8 +2,8 @@ name: Weekly Data Scrape
 
 on:
   schedule:
-    # Every Sunday at 06:00 UTC
-    - cron: '0 6 * * 0'
+    # Every Saturday at 06:00 UTC
+    - cron: '0 6 * * 6'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:

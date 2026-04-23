@@ -65,14 +65,18 @@ def classify_action(unit: str, lede: str) -> str:
     return "ability"
 
 
-def fetch_page(url: str) -> str | None:
-    """Fetch a page with retries."""
+def fetch_page(url: str, turbo_frame: str | None = None) -> str | None:
+    """Fetch a page with retries. Optionally send a Turbo-Frame header
+    for Hotwire/Turbo SPA pages."""
+    headers = {
+        "User-Agent": "CoH3ProAnalysis/1.0 (research tool)",
+        "Accept": "text/html",
+    }
+    if turbo_frame:
+        headers["Turbo-Frame"] = turbo_frame
     for attempt in range(MAX_RETRIES):
         try:
-            resp = requests.get(url, timeout=30, headers={
-                "User-Agent": "CoH3ProAnalysis/1.0 (research tool)",
-                "Accept": "text/html",
-            })
+            resp = requests.get(url, timeout=30, headers=headers)
             if resp.status_code == 404:
                 return None
             resp.raise_for_status()
@@ -84,20 +88,30 @@ def fetch_page(url: str) -> str | None:
     return None
 
 
-def scrape_match_listing(page: int = 1, elo: int = MIN_ELO) -> list[int]:
-    """Scrape one page of the match listing. Returns list of match metadata."""
-    url = f"{COHDB_BASE}/matches?mode=ones&rating={elo}&page={page}"
+def scrape_match_listing(page: int = 1, elo: int = MIN_ELO,
+                         cursor: str | None = None) -> tuple[list[int], str | None]:
+    """Scrape one page of the match listing.
+
+    Returns (list_of_replay_ids, next_cursor_url_or_None).
+    Supports both old page-number pagination and new cursor-based pagination.
+    """
+    if cursor:
+        url = f"{COHDB_BASE}{cursor}"
+    else:
+        url = f"{COHDB_BASE}/matches?mode=ones&rating={elo}"
     print(f"  Fetching listing page {page}...", end=" ", flush=True)
 
-    page_html = fetch_page(url)
+    # Try Turbo-Frame header (new site format)
+    page_html = fetch_page(url, turbo_frame="matches-table")
+    if not page_html or 'href="/replays/' not in page_html:
+        # Fall back to plain request (old format)
+        page_html = fetch_page(url)
     if not page_html:
         print("failed")
-        return []
+        return [], None
 
-    # Extract replay IDs and basic metadata from table rows
-    # Each row links to /replays/{id}
+    # Extract replay IDs
     replay_ids = re.findall(r'href="/replays/(\d+)"', page_html)
-    # Deduplicate while preserving order (each match has 2 links: overview + download)
     seen = set()
     unique_ids = []
     for rid in replay_ids:
@@ -105,8 +119,17 @@ def scrape_match_listing(page: int = 1, elo: int = MIN_ELO) -> list[int]:
             seen.add(rid)
             unique_ids.append(int(rid))
 
+    # Extract next cursor for pagination
+    next_cursor = None
+    cursor_match = re.search(
+        r'src="(/matches\.turbo_stream\?[^"]+)"',
+        page_html,
+    )
+    if cursor_match:
+        next_cursor = html.unescape(cursor_match.group(1))
+
     print(f"found {len(unique_ids)} replays")
-    return unique_ids
+    return unique_ids, next_cursor
 
 
 def scrape_replay_overview(replay_id: int) -> tuple[str | None, str | None]:
@@ -117,14 +140,21 @@ def scrape_replay_overview(replay_id: int) -> tuple[str | None, str | None]:
     if not page_html:
         return None, None
 
+    # Old format: <dd>2.3.1</dd><dt>Patch</dt>
     patch_match = re.search(
         r'<dd>\s*(\d+\.\d+(?:\.\d+)*)\s*</dd>\s*<dt[^>]*>Patch</dt>',
         page_html, re.DOTALL,
     )
+    if not patch_match:
+        # New format (2026+): <span>Patch</span> ... <span>v2.3.1</span>
+        patch_match = re.search(r'>v(\d+\.\d+(?:\.\d+)*)</', page_html)
     patch = patch_match.group(1).strip() if patch_match else None
 
-    # Map name is in the map image filename: /assets/{mapname}_large-{hash}.png
+    # Old format: /assets/{mapname}_large-{hash}.png
     map_match = re.search(r'/assets/([a-z0-9_]+)_large-[a-f0-9]+\.png', page_html)
+    if not map_match:
+        # New format: map name in scenario image path /assets/scenarios/.../mapname_2p/
+        map_match = re.search(r'/assets/scenarios/[^/]+/[^/]+/([a-z0-9_]+)/', page_html)
     map_name = map_match.group(1) if map_match else None
 
     return patch, map_name
@@ -136,33 +166,127 @@ def scrape_patch_version(replay_id: int) -> str | None:
     return patch
 
 
+def _parse_builds_old_format(page_html: str) -> tuple[list[dict], int | None]:
+    """Parse the old data-timeline-players-value JSON format (pre-2026 site)."""
+    players_match = re.search(
+        r'data-timeline-players-value="([^"]+)"', page_html
+    )
+    if not players_match:
+        return [], None
+
+    raw = html.unescape(players_match.group(1))
+    try:
+        players_data = json.loads(raw)
+    except json.JSONDecodeError:
+        return [], None
+
+    length_match = re.search(r'data-timeline-length-value="(\d+)"', page_html)
+    duration_s = int(length_match.group(1)) if length_match else None
+    return players_data, duration_s
+
+
+def _parse_builds_new_format(page_html: str) -> tuple[list[dict], int | None]:
+    """Parse the new Hotwire/Turbo HTML format (2026+ site update).
+
+    Build orders are in data-tooltip-content-value attributes with
+    player names in <span class="text-sm font-semibold text-{color}"> tags.
+    """
+    # Extract the build_orders_section turbo frame content
+    section_match = re.search(
+        r'<turbo-frame id="build_orders_section">(.*?)</turbo-frame>',
+        page_html, re.DOTALL,
+    )
+    if not section_match:
+        return [], None
+
+    section = section_match.group(1)
+
+    # Find player names — they appear as colored spans before their build entries
+    # e.g. <span class="text-sm font-semibold text-lime-400">El Dorado</span>
+    player_name_pattern = r'<span class="text-sm font-semibold text-[a-z]+-\d+">([^<]+)</span>'
+    player_names = re.findall(player_name_pattern, section)
+    if not player_names:
+        return [], None
+
+    # Split the section by player name spans to get each player's block
+    split_pattern = r'<span class="text-sm font-semibold text-[a-z]+-\d+">[^<]+</span>'
+    blocks = re.split(split_pattern, section)
+    # First block is before first player name (header cruft), skip it
+    blocks = blocks[1:]
+
+    players_data = []
+    for i, block in enumerate(blocks):
+        if i >= len(player_names):
+            break
+        name = player_names[i]
+
+        # Extract all tooltip entries: "0:48 &mdash; Riflemen Squad"
+        tooltips = re.findall(
+            r'data-tooltip-content-value="([^"]+)"', block
+        )
+
+        actions = []
+        for tt in tooltips:
+            # Double-unescape: &amp;mdash; -> &mdash; -> —
+            decoded = html.unescape(html.unescape(tt))
+            # Handle entries with <br> (multiple actions in one tooltip)
+            for entry in re.split(r'<br\s*/?>', decoded):
+                entry = entry.strip()
+                # Parse "M:SS — Unit Name" (mdash or regular dash)
+                m = re.match(r'(\d+):(\d+)\s*[—–-]\s*(.+)', entry)
+                if m:
+                    minutes, seconds, unit = int(m.group(1)), int(m.group(2)), m.group(3).strip()
+                    total_seconds = minutes * 60 + seconds
+                    lede = ""
+                    if unit.startswith("Selects "):
+                        lede = "Selects "
+                        unit = unit[8:]  # strip "Selects " prefix
+                    elif unit.startswith("Construct "):
+                        lede = "Construct "
+                    actions.append({
+                        "lede": lede,
+                        "name": unit,
+                        "time": total_seconds,
+                    })
+
+        if actions:
+            players_data.append({
+                "name": name,
+                "actions": actions,
+            })
+
+    # Duration: look for duration text on the page
+    dur_match = re.search(r'(\d+):(\d+)\s*</span>\s*<span[^>]*>Duration', page_html, re.DOTALL)
+    if not dur_match:
+        # Try alternative: Duration label then value
+        dur_match = re.search(r'Duration</span>\s*<span[^>]*>(\d+):(\d+)', page_html, re.DOTALL)
+    duration_s = None
+    if dur_match:
+        duration_s = int(dur_match.group(1)) * 60 + int(dur_match.group(2))
+
+    return players_data, duration_s
+
+
 def scrape_build_orders(replay_id: int) -> tuple[list[dict], int | None, str | None, str | None]:
     """
     Scrape build order data from /replays/{id}/builds + patch + map from overview.
     Returns (list of player build orders, match_duration_seconds, patch_version, map_name).
+    Supports both old (data-timeline JSON) and new (Hotwire tooltip) formats.
     """
     url = f"{COHDB_BASE}/replays/{replay_id}/builds"
     page_html = fetch_page(url)
     if not page_html:
         return [], None, None, None
 
-    # Extract the JSON from data-timeline-players-value attribute
-    players_match = re.search(
-        r'data-timeline-players-value="([^"]+)"', page_html
-    )
-    if not players_match:
-        return [], None, None, None
+    # Try old format first (data-timeline-players-value JSON blob)
+    players_data, duration_s = _parse_builds_old_format(page_html)
 
-    # HTML-unescape and parse JSON
-    raw = html.unescape(players_match.group(1))
-    try:
-        players_data = json.loads(raw)
-    except json.JSONDecodeError:
-        return [], None, None, None
+    # Fall back to new format (Hotwire tooltips)
+    if not players_data:
+        players_data, duration_s = _parse_builds_new_format(page_html)
 
-    # Extract match length
-    length_match = re.search(r'data-timeline-length-value="(\d+)"', page_html)
-    duration_s = int(length_match.group(1)) if length_match else None
+    if not players_data:
+        return [], None, None, None
 
     # Fetch patch + map from overview page
     time.sleep(REQUEST_DELAY)
@@ -223,8 +347,9 @@ def store_replay_build_orders(replay_id: int, players_data: list[dict],
         actions = player.get("actions", [])
 
         for action in actions:
-            seconds = action.get("seconds", 0)
-            unit = action.get("unit", "")
+            # Support both old format (seconds/unit) and new format (time/name)
+            seconds = action.get("seconds", action.get("time", 0))
+            unit = action.get("unit", action.get("name", ""))
             lede = action.get("lede", "")
             action_type = classify_action(unit, lede)
 
@@ -254,8 +379,9 @@ def scrape_cohdb(max_pages: int = 50, elo: int = MIN_ELO):
 
     print(f"\n=== Scraping cohdb.com build orders (1v1, ELO >= {elo}) ===\n")
 
+    cursor = None
     for page in range(1, max_pages + 1):
-        replay_ids = scrape_match_listing(page, elo)
+        replay_ids, cursor = scrape_match_listing(page, elo, cursor=cursor)
         if not replay_ids:
             print("  No more results, stopping.")
             break

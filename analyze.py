@@ -1426,6 +1426,70 @@ def player_build_tendencies(bo: pd.DataFrame, player_name: str) -> dict:
     }
 
 
+def opener_trend_by_week(
+    bo: pd.DataFrame,
+    first_n: int = 4,
+    faction: str | None = None,
+    min_total_games: int = 15,
+) -> pd.DataFrame:
+    """Track opener popularity and winrate week-over-week.
+
+    Returns DataFrame with (week, opener, games, winrate_pct, pickrate_pct).
+    Uses cohdb scraped_at as proxy for game date.
+    """
+    df = bo[bo["action_type"] == "production"].copy()
+    df = df.dropna(subset=["won"])
+    if faction:
+        df = df[df["faction_short"] == faction]
+    if df.empty:
+        return pd.DataFrame()
+
+    # Need scraped_at → week. Join via replay_id to cohdb_replays.
+    conn = get_conn()
+    scrape_dates = pd.read_sql_query(
+        "SELECT replay_id, DATE(scraped_at) as game_date FROM cohdb_replays",
+        conn,
+    )
+    conn.close()
+    df = df.merge(scrape_dates, on="replay_id", how="left")
+    df = df.dropna(subset=["game_date"])
+    df["week"] = pd.to_datetime(df["game_date"]).dt.to_period("W").astype(str)
+
+    df = df.sort_values("seconds")
+    df["order"] = df.groupby(["replay_id", "player_name"]).cumcount() + 1
+    first = df[df["order"] <= first_n]
+
+    openers = first.groupby(["replay_id", "player_name"]).agg(
+        opener=("unit", lambda x: " -> ".join(x)),
+        won=("won", "first"),
+        week=("week", "first"),
+    ).reset_index()
+    openers["unit_count"] = openers["opener"].apply(lambda s: s.count(" -> ") + 1)
+    openers = openers[openers["unit_count"] == first_n]
+
+    # Filter to openers with enough total games
+    total_counts = openers["opener"].value_counts()
+    popular = total_counts[total_counts >= min_total_games].index
+    openers = openers[openers["opener"].isin(popular)]
+
+    if openers.empty:
+        return pd.DataFrame()
+
+    stats = openers.groupby(["week", "opener"]).agg(
+        games=("won", "count"),
+        wins=("won", "sum"),
+    )
+    stats["winrate_pct"] = (stats["wins"] / stats["games"] * 100).round(1)
+
+    # Pickrate per week
+    week_totals = openers.groupby("week").size()
+    stats["pickrate_pct"] = stats.apply(
+        lambda row: round(row["games"] / week_totals.get(row.name[0], 1) * 100, 1),
+        axis=1,
+    )
+    return stats.sort_index()
+
+
 def meta_trends(df: pd.DataFrame) -> pd.DataFrame:
     """Faction pick rates and win rates over time (monthly)."""
     if "month" not in df.columns:

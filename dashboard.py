@@ -1785,10 +1785,63 @@ with tab_trends, safe_section("Meta Trends"):
             )
             st.plotly_chart(fig2, use_container_width=True)
 
-            st.dataframe(mt, use_container_width=True)
+            with st.expander("Show data"):
+                st.dataframe(mt, use_container_width=True)
         else:
             st.info("Not enough data for trend analysis")
-    else:
+
+    # =====================================================
+    # OPENER POPULARITY TRENDS
+    # =====================================================
+    if not bo.empty:
+        st.markdown("---")
+        st.subheader("Opener Popularity Trends")
+        st.caption(
+            "How are openers shifting week to week? Track which builds are rising "
+            "or falling in pickrate and winrate over time."
+        )
+        col_t1, col_t2, col_t3 = st.columns(3)
+        trend_faction = col_t1.selectbox(
+            "Faction", ["us", "wehr", "uk", "dak"], key="trend_faction")
+        trend_depth = col_t2.slider("Opener length", 3, 6, 4, key="trend_depth")
+        trend_min = col_t3.slider("Min total games", 10, 50, 15, key="trend_min")
+
+        trends = analyze.opener_trend_by_week(
+            bo, first_n=trend_depth, faction=trend_faction, min_total_games=trend_min)
+        if not trends.empty:
+            tr = trends.reset_index()
+
+            st.markdown("**Pickrate over time**")
+            fig_tr = px.line(
+                tr, x="week", y="pickrate_pct", color="opener",
+                markers=True,
+                labels={"pickrate_pct": "Pick %", "week": "Week", "opener": "Opener"},
+            )
+            fig_tr.update_layout(height=450, legend=dict(
+                orientation="h", yanchor="top", y=-0.3, font=dict(size=10)))
+            st.plotly_chart(fig_tr, use_container_width=True)
+
+            st.markdown("**Winrate over time**")
+            fig_wr = px.line(
+                tr, x="week", y="winrate_pct", color="opener",
+                markers=True,
+                labels={"winrate_pct": "Win %", "week": "Week", "opener": "Opener"},
+            )
+            fig_wr.update_layout(
+                height=450,
+                yaxis=dict(range=[20, 80]),
+                shapes=[dict(type="line", x0=tr["week"].iloc[0], x1=tr["week"].iloc[-1],
+                             y0=50, y1=50, line=dict(color="white", width=1, dash="dash"))],
+                legend=dict(orientation="h", yanchor="top", y=-0.3, font=dict(size=10)),
+            )
+            st.plotly_chart(fig_wr, use_container_width=True)
+
+            with st.expander("Show data"):
+                st.dataframe(tr, use_container_width=True, hide_index=True)
+        else:
+            st.info(f"Not enough data for {trend_faction.upper()} opener trends")
+
+    if df.empty and bo.empty:
         st.warning("No match data with timestamps. Run: `python3 run.py scrape-matches`")
 
 

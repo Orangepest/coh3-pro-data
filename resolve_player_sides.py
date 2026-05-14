@@ -43,10 +43,13 @@ FACTION_TO_SIDE = {
 
 # Map our codes to cohdb faction slugs
 FACTION_TO_SLUGS = {
-    "us": ["americans"],
-    "uk": ["british", "british_africa"],
-    "wehr": ["germans"],
-    "dak": ["afrika_korps"],
+    # singular forms are the canonical scheme (Relic matches/match_players);
+    # plurals + afrika_korps kept for backward-compat with any pre-normalization
+    # data still in flight.
+    "us": ["american", "americans"],
+    "uk": ["british_africa", "british"],
+    "wehr": ["german", "germans"],
+    "dak": ["dak", "afrika_korps"],
 }
 
 

@@ -483,6 +483,11 @@ def scrape_cohdb(max_pages: int = 50, elo: int = MIN_ELO):
     """
     init_db()
     conn = get_conn()
+    # cohdb references many Relic match_ids that aren't in our `matches` table
+    # (we only ingest matches for our pro-player list, but cohdb shows every
+    # ranked 1v1 at >=1600 ELO). The cohdb_replays.match_id FK to matches
+    # would block legit inserts -- relax it for this connection.
+    conn.execute("PRAGMA foreign_keys=OFF")
 
     total_replays = 0
     total_actions = 0

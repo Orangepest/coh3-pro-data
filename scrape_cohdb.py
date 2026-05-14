@@ -204,7 +204,7 @@ def _parse_builds_new_format(page_html: str) -> tuple[list[dict], int | None]:
     # Find player names — they appear as colored spans before their build entries
     # e.g. <span class="text-sm font-semibold text-lime-400">El Dorado</span>
     player_name_pattern = r'<span class="text-sm font-semibold text-[a-z]+-\d+">([^<]+)</span>'
-    player_names = re.findall(player_name_pattern, section)
+    player_names = [html.unescape(n) for n in re.findall(player_name_pattern, section)]
     if not player_names:
         return [], None
 

@@ -16,6 +16,7 @@ from config import (
     MAX_RETRIES,
 )
 from db import get_conn, init_db
+from scrape_cohdb import is_ai_player_name
 
 
 def fetch_leaderboard_page(leaderboard_id: int, start: int, count: int) -> dict:
@@ -87,6 +88,11 @@ def scrape_faction_leaderboard(faction: str, leaderboard_id: int):
             alias = member.get("alias", "")
             steam_id = member.get("name", "")
             country = member.get("country", "")
+
+            # Skip CPU/AI entries — they occasionally appear on faction
+            # leaderboards (seen pid=269021 "CPU-Easy" at ELO >= 1600).
+            if is_ai_player_name(alias):
+                continue
 
             # Upsert player
             conn.execute("""

@@ -87,9 +87,9 @@ def parse_listing(page_html: str) -> list[dict]:
         factions = FACTION_IMG_RE.findall(row)
         if len(factions) < 2:
             continue
+        # Names may be < 2 when a player's profile is private/deleted.
+        # Still record winner_side + faction sides; missing names become None.
         names = PLAYER_LINK_RE.findall(row)
-        if len(names) < 2:
-            continue
         victor = VICTOR_RE.search(row)
         if not victor:
             continue
@@ -99,16 +99,16 @@ def parse_listing(page_html: str) -> list[dict]:
         p1_side = SIDE_OF_FACTION.get(p1_faction, "?")
         p2_side = SIDE_OF_FACTION.get(p2_faction, "?")
         winner_side = victor.group(1).lower()
+        p1_name = html.unescape(names[0]).strip() if len(names) > 0 else None
+        p2_name = html.unescape(names[1]).strip() if len(names) > 1 else None
 
         matches.append({
             "replay_id": replay_id,
             "winner_side": winner_side,
             "players": [
-                {"name": html.unescape(names[0]).strip(),
-                 "faction_slug": p1_faction, "side": p1_side,
+                {"name": p1_name, "faction_slug": p1_faction, "side": p1_side,
                  "won": 1 if p1_side == winner_side else 0},
-                {"name": html.unescape(names[1]).strip(),
-                 "faction_slug": p2_faction, "side": p2_side,
+                {"name": p2_name, "faction_slug": p2_faction, "side": p2_side,
                  "won": 1 if p2_side == winner_side else 0},
             ],
         })
@@ -124,6 +124,10 @@ def store_match_result(match: dict, conn):
     )
     conn.execute("DELETE FROM cohdb_replay_players WHERE replay_id = ?", (rid,))
     for p in match["players"]:
+        # Skip players with no resolvable name (private/deleted profile).
+        # winner_side at the replay level is still recorded above.
+        if not p["name"]:
+            continue
         conn.execute("""
             INSERT OR IGNORE INTO cohdb_replay_players
                 (replay_id, player_name, faction_slug, side, won)
@@ -176,6 +180,16 @@ def backfill(max_pages: int = 500):
         time.sleep(REQUEST_DELAY)
 
     print(f"\n=== BACKFILL COMPLETE: {updated} replays updated ===")
+
+    # Scrub cohdb name-resolution phantoms (e.g. "Coastal Reserves Squad"
+    # mis-attributed to DAK players). Faction info is now populated, so we
+    # can safely identify and delete impossible (unit, faction) rows.
+    from scrape_cohdb import scrub_phantom_units
+    print("\n=== Scrubbing cohdb name-resolution phantoms ===")
+    scrubbed = scrub_phantom_units(conn)
+    print(f"  Total scrubbed: {scrubbed}")
+
+    conn.commit()
     conn.close()
 
 

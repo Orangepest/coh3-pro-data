@@ -568,18 +568,60 @@ with tab_openers, safe_section("Openers"):
 
                 # Top 25 winning openers
                 top_wins = wr_result.head(25).reset_index()
+
+                # When filtered to a single faction the first unit is usually
+                # identical on every row (e.g. "Kradschützen Motorcycle Team")
+                # -- strip the longest common ' -> ' prefix so the differences
+                # are what you actually see.
+                opener_labels = list(top_wins["opener"])
+                if len(opener_labels) > 1:
+                    split = [s.split(" -> ") for s in opener_labels]
+                    common = 0
+                    for i in range(min(len(s) for s in split)):
+                        tokens = {s[i] for s in split}
+                        if len(tokens) == 1:
+                            common += 1
+                        else:
+                            break
+                    if common > 0:
+                        opener_labels = [
+                            " -> ".join(s[common:]) or " -> ".join(s)
+                            for s in split
+                        ]
+
+                # Bake sample size into the y-label and truncate long chains.
+                def _trim(s, n=70):
+                    return s if len(s) <= n else s[: n - 1] + "…"
+
+                games_col = top_wins["games"].astype(int).tolist()
+                y_labels = [
+                    f"{_trim(opener_labels[i])}  (n={games_col[i]})"
+                    for i in range(len(top_wins))
+                ]
+                top_wins = top_wins.assign(_label=y_labels)
+
+                # Center the color scale on 50% so above/below is immediate.
+                wr_min = float(top_wins["winrate_pct"].min())
+                wr_max = float(top_wins["winrate_pct"].max())
+                span = max(abs(50 - wr_min), abs(wr_max - 50), 5)
                 fig = px.bar(
                     top_wins.sort_values("winrate_pct"),
-                    x="winrate_pct", y="opener",
+                    x="winrate_pct", y="_label",
                     orientation="h",
                     color="winrate_pct",
                     color_continuous_scale="RdYlGn",
-                    range_color=[30, 70],
-                    text="games",
-                    labels={"winrate_pct": "Win Rate %", "opener": ""},
-                    hover_data=["wins", "games"],
+                    color_continuous_midpoint=50,
+                    range_color=[50 - span, 50 + span],
+                    labels={"winrate_pct": "Win Rate %", "_label": ""},
+                    hover_data={
+                        "opener": True, "wins": True, "games": True, "_label": False,
+                    },
                 )
-                fig.update_traces(texttemplate="n=%{text}", textposition="outside")
+                fig.update_traces(texttemplate="%{x:.1f}%", textposition="outside")
+                fig.add_vline(
+                    x=50, line_dash="dash", line_color="#888", line_width=1,
+                    annotation_text="50%", annotation_position="top",
+                )
                 fig.update_layout(height=max(450, len(top_wins) * 30))
                 st.plotly_chart(fig, use_container_width=True)
                 with st.expander("Show data"):

@@ -10,10 +10,10 @@ from config import (
     RELIC_API_BASE,
     RELIC_TITLE,
     RACE_IDS,
-    MATCH_TYPES,
     MIN_ELO,
     REQUEST_DELAY,
     MAX_RETRIES,
+    patch_for_timestamp,
 )
 from db import get_conn, init_db
 
@@ -41,10 +41,23 @@ def parse_and_store_matches(data: dict, conn):
     now = datetime.now(timezone.utc).isoformat()
 
     profiles = {}
+    # Primary source: top-level `profiles` array - has alias/country/steam_id
+    # resolved for every player in the response (queried pro + all opponents).
+    # The older statGroups[].members[] path is unreliable - it often lacks
+    # alias for opponents.
+    for profile in data.get("profiles", []):
+        pid = profile.get("profile_id")
+        if pid:
+            profiles[pid] = {
+                "alias": profile.get("alias", ""),
+                "steam_id": profile.get("name", ""),
+                "country": profile.get("country", ""),
+            }
+    # Fall back to statGroups if `profiles` doesn't have an entry
     for sg in data.get("statGroups", []):
         for member in sg.get("members", []):
             pid = member.get("profile_id")
-            if pid:
+            if pid and pid not in profiles:
                 profiles[pid] = {
                     "alias": member.get("alias", ""),
                     "steam_id": member.get("name", ""),
@@ -77,11 +90,12 @@ def parse_and_store_matches(data: dict, conn):
         start_time = match.get("startgametime", 0)
         completion_time = match.get("completiontime", 0)
         duration_s = (completion_time - start_time) if (completion_time and start_time) else None
+        patch = patch_for_timestamp(start_time) if start_time else None
 
         conn.execute("""
-            INSERT OR IGNORE INTO matches (match_id, map_name, match_type, start_time, duration_s, scraped_at)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (match_id, map_name, match_type, start_time, duration_s, now))
+            INSERT OR IGNORE INTO matches (match_id, map_name, match_type, start_time, duration_s, scraped_at, patch)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (match_id, map_name, match_type, start_time, duration_s, now, patch))
 
         # Parse match players from the nested report results
         match_reports = match.get("matchhistoryreportresults", [])
@@ -95,15 +109,16 @@ def parse_and_store_matches(data: dict, conn):
             result_type = report.get("resulttype", -1)
             result = "win" if result_type == 1 else "loss" if result_type == 0 else "unknown"
 
-            # ELO data from matchhistoryitems if available
-            match_items = match.get("matchhistoryitems", [])
+            # ELO data lives in matchhistorymember[] (one entry per player).
+            # NOTE: NOT matchhistoryitems — that's inventory/cosmetic items
+            # and never contains rating fields. Easy bug to make (similar names).
             elo_before = None
             elo_after = None
             elo_diff = None
-            for item in match_items:
-                if item.get("profile_id") == pid:
-                    elo_before = item.get("oldrating")
-                    elo_after = item.get("newrating")
+            for member in match.get("matchhistorymember", []):
+                if member.get("profile_id") == pid:
+                    elo_before = member.get("oldrating")
+                    elo_after = member.get("newrating")
                     if elo_before is not None and elo_after is not None:
                         elo_diff = elo_after - elo_before
                     break

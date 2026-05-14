@@ -6,8 +6,6 @@ Run: streamlit run dashboard.py
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
-import sqlite3
 import traceback
 from contextlib import contextmanager
 
@@ -60,7 +58,7 @@ category_arrival_at_minute = analyze.category_arrival_at_minute
 
 from unit_categories import all_categories, CATEGORY_LABELS
 from db import get_conn
-from config import MIN_ELO, DB_PATH
+from config import MIN_ELO
 
 # --- Page config ---
 st.set_page_config(
@@ -82,8 +80,8 @@ FACTION_ORDER = ["american", "british", "dak", "german"]
 
 # --- Cached data loading ---
 @st.cache_data(ttl=300)
-def get_matches():
-    return load_matches_df()
+def get_matches(patch):
+    return load_matches_df(patch=patch if patch != "All patches" else None)
 
 
 @st.cache_data(ttl=300)
@@ -110,9 +108,13 @@ try:
 except Exception as e:
     st.sidebar.error(f"Failed to load patches: {e}")
     patches_df = pd.DataFrame()
-patch_options = ["All patches"]
+# Default to the latest patch so new-patch data becomes the active view as soon
+# as the first replays/matches for it land. "All patches" stays available as
+# the last option for cross-patch historical comparisons.
 if not patches_df.empty:
-    patch_options += patches_df["patch"].tolist()
+    patch_options = patches_df["patch"].tolist() + ["All patches"]
+else:
+    patch_options = ["All patches"]
 selected_patch = st.sidebar.selectbox("Patch", patch_options)
 
 # Ragequit filter - exclude super-short matches where someone disconnected
@@ -127,7 +129,7 @@ st.sidebar.markdown("Data sources: cohdb.com, Relic API, coh3stats.com")
 
 # --- Load data (defensive, never crash the dashboard) ---
 try:
-    df = get_matches()
+    df = get_matches(selected_patch)
 except Exception as e:
     st.sidebar.error(f"Failed to load matches: {e}")
     df = pd.DataFrame()
@@ -447,7 +449,7 @@ map, not about specific players.
 may behave differently — at lower skill, positional advantage matters less because
 mistakes dominate.
 
-**Patch-specific:** Data is from patch 2.3.1 only. Spawn balance may shift on patches.
+**Patch-specific:** Data is filtered to the patch you've selected in the sidebar. Spawn balance may shift on patches.
 
 **Some maps are missing labels** (bologna, djebel, villa_fiore, egletons, desert_village,
 tuscan_vineyard, cliff_crossing) — they show 'slot 0/1' instead of physical positions.

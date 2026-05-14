@@ -5,21 +5,21 @@ Run directly for a full report, or import individual functions.
 """
 
 import pandas as pd
-from datetime import datetime, timezone
 from db import get_conn
-from config import MIN_ELO
+from config import MIN_ELO, normalize_map_name
 
 
-def load_matches_df() -> pd.DataFrame:
-    """Load all match data as a denormalized DataFrame."""
+def load_matches_df(patch: str | None = None) -> pd.DataFrame:
+    """Load all match data as a denormalized DataFrame, optionally filtered by patch."""
     conn = get_conn()
-    df = pd.read_sql_query("""
+    query = """
         SELECT
             m.match_id,
             m.map_name,
             m.match_type,
             m.start_time,
             m.duration_s,
+            m.patch,
             mp.profile_id,
             mp.faction,
             mp.elo_before,
@@ -32,12 +32,23 @@ def load_matches_df() -> pd.DataFrame:
         JOIN match_players mp ON m.match_id = mp.match_id
         LEFT JOIN players p ON mp.profile_id = p.profile_id
         WHERE m.match_type IN ('ranked_1v1', 'automatch_1v1', 'custom_1v1')
-    """, conn)
+    """
+    params = ()
+    if patch:
+        query += " AND m.patch = ?"
+        params = (patch,)
+    df = pd.read_sql_query(query, conn, params=params)
     conn.close()
 
-    if not df.empty and "start_time" in df.columns:
-        df["date"] = pd.to_datetime(df["start_time"], unit="s", utc=True, errors="coerce")
-        df["month"] = df["date"].dt.to_period("M")
+    if not df.empty:
+        if "map_name" in df.columns:
+            df["map_name"] = df["map_name"].map(normalize_map_name)
+        if "start_time" in df.columns:
+            df["date"] = pd.to_datetime(df["start_time"], unit="s", utc=True, errors="coerce")
+            # Convert to naive datetime before .to_period to silence the
+            # pandas tz-dropped UserWarning. We only need month granularity
+            # for plotting so the tz info is incidental.
+            df["month"] = df["date"].dt.tz_convert(None).dt.to_period("M")
     return df
 
 
@@ -546,6 +557,9 @@ def load_build_orders_df(patch: str | None = None) -> pd.DataFrame:
     conn.close()
     df["minutes"] = df["seconds"] / 60
 
+    if not df.empty and "map_name" in df.columns:
+        df["map_name"] = df["map_name"].map(normalize_map_name)
+
     # Disambiguate shared unit names by appending faction
     if not df.empty:
         ambig_mask = df["unit"].isin(AMBIGUOUS_SHARED_NAMES) & df["faction_short"].notna()
@@ -560,12 +574,25 @@ def load_build_orders_df(patch: str | None = None) -> pd.DataFrame:
 
 
 def available_patches() -> pd.DataFrame:
-    """List all patches in the database with game counts."""
+    """List all patches in the database with game counts.
+
+    Unions patches from both cohdb_replays (build-order side) and matches
+    (Relic API side) so the new patch appears as soon as the first match
+    lands, even before cohdb starts tagging replays under it.
+    """
     conn = get_conn()
     df = pd.read_sql_query("""
-        SELECT patch, COUNT(*) as games
-        FROM cohdb_replays
-        WHERE patch IS NOT NULL
+        SELECT patch, SUM(games) AS games FROM (
+            SELECT patch, COUNT(*) AS games
+            FROM cohdb_replays
+            WHERE patch IS NOT NULL
+            GROUP BY patch
+            UNION ALL
+            SELECT patch, COUNT(DISTINCT match_id) AS games
+            FROM matches
+            WHERE patch IS NOT NULL
+            GROUP BY patch
+        )
         GROUP BY patch
         ORDER BY patch DESC
     """, conn)

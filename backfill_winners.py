@@ -27,10 +27,14 @@ SIDE_OF_FACTION = {
     "afrika_korps": "axis",
 }
 
-# Normalize new-site singular slugs to the plural form used in stored data
+# Normalize new-site singular slugs to the plural form used in stored data.
+# Also map "dak" -> "afrika_korps" since cohdb's new Hotwire format
+# sometimes emits the short form while the canonical (SIDE_OF_FACTION
+# keys, resolve_player_sides) uses "afrika_korps".
 FACTION_SLUG_NORMALIZE = {
     "american": "americans",
     "german": "germans",
+    "dak": "afrika_korps",
 }
 
 

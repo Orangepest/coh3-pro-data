@@ -3,13 +3,17 @@ Database schema and helpers for the CoH3 pro scene data pipeline.
 """
 
 import sqlite3
-from config import DB_PATH
+from config import DB_PATH, PATCH_HISTORY
 
 
 def get_conn() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=30)
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA foreign_keys=ON")
+    # Retry up to 30s on a busy lock instead of failing immediately. With
+    # concurrent backfill scripts hitting the same DB this avoids spurious
+    # "database is locked" errors.
+    conn.execute("PRAGMA busy_timeout = 30000")
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -50,9 +54,25 @@ def init_db():
             match_type      TEXT,
             start_time      INTEGER,
             duration_s      INTEGER,
-            scraped_at      TEXT
+            scraped_at      TEXT,
+            patch           TEXT
         )
     """)
+
+    # Add patch column if upgrading from older schema
+    try:
+        c.execute("ALTER TABLE matches ADD COLUMN patch TEXT")
+    except sqlite3.OperationalError:
+        pass  # column already exists
+
+    # Backfill patch on any rows missing it, using PATCH_HISTORY windows
+    for i, (name, start) in enumerate(PATCH_HISTORY):
+        end = PATCH_HISTORY[i + 1][1] if i + 1 < len(PATCH_HISTORY) else 2_147_483_647
+        c.execute(
+            "UPDATE matches SET patch = ? "
+            "WHERE patch IS NULL AND start_time >= ? AND start_time < ?",
+            (name, start, end),
+        )
 
     c.execute("""
         CREATE TABLE IF NOT EXISTS match_players (
@@ -97,6 +117,14 @@ def init_db():
     except sqlite3.OperationalError:
         pass
 
+    # Add is_aborted flag: 1 = ragequit / instant abort (duration < 2 min OR
+    # fewer than 5 build_order actions). Set at scrape time going forward;
+    # init_db backfills retroactively.
+    try:
+        c.execute("ALTER TABLE cohdb_replays ADD COLUMN is_aborted INTEGER DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+
     # Per-player faction/side/result mapping for cohdb replays
     c.execute("""
         CREATE TABLE IF NOT EXISTS cohdb_replay_players (
@@ -130,6 +158,7 @@ def init_db():
     c.execute("CREATE INDEX IF NOT EXISTS idx_mp_profile ON match_players(profile_id)")
     c.execute("CREATE INDEX IF NOT EXISTS idx_matches_time ON matches(start_time)")
     c.execute("CREATE INDEX IF NOT EXISTS idx_matches_map ON matches(map_name)")
+    c.execute("CREATE INDEX IF NOT EXISTS idx_matches_patch ON matches(patch)")
     c.execute("CREATE INDEX IF NOT EXISTS idx_bo_replay ON build_orders(replay_id)")
     c.execute("CREATE INDEX IF NOT EXISTS idx_bo_player ON build_orders(player_name)")
     c.execute("CREATE INDEX IF NOT EXISTS idx_bo_unit ON build_orders(unit)")

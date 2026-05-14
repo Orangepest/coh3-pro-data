@@ -19,6 +19,83 @@ ALIASES = {
     "Towed ML 4.2-inch Heavy Mortar": "ML 4.2-inch Heavy Mortar Team",
     "Borgward IV Wanze Demolition Vehicle": "Borgward IV Wanze",
     "Command Panzer IV F Medium Tank": "Command Panzer IV Medium Tank",
+
+    # --- Doctrinal callin squads (BG-unlocked or paradrop deployment) ---
+    # These represent unit-creation events but cohdb uses non-canonical
+    # names or names absent from unit_db.json. Aliasing them counts the
+    # action as production for opener / unit-popularity analysis.
+
+    # DAK - Kriegsmarine BG: HQ-recruited after picking the BG
+    "Kriegsmariner Squad": "Kriegsmariner Squad",
+    # DAK - Italian Combined Arms BG callin (note: "Italian Infantry" is
+    # also a BG name; the BATTLEGROUP_KEYWORDS check fires first when
+    # lede=="Selects ", so this only applies to non-selects squad events)
+    "Italian Infantry": "Italian Infantry",
+    # NOTE: "Coastal Reserve" and "Coastal Reserves" (no "Squad" suffix)
+    # are Wehrmacht ABILITIES, not units — do NOT alias them. They must
+    # stay 'ability'. The DAK Italian Coastal BG callin is the longer
+    # "Coastal Reserves Squad" (with Squad), which is already in unit_db.
+
+    # UK - doctrinal callins (Australian Defence / Indian Artillery / etc.)
+    "Volunteer Infantry": "Volunteer Infantry",
+
+    # Wehr - paradrop deployment (action of dropping a doctrinal squad)
+    "Fallschirmjäger Squad Paradrop": "Fallschirmjäger Squad",
+    "Fallschirmpioneer Squad Paradrop": "Fallschirmpioneer Squad",
+    # USF - paradrop deployment
+    "Paratrooper Squad Paradrop": "Paratrooper Squad",
+
+    # NOTE: Squad-conversion abilities are intentionally NOT aliased.
+    # "Transfer Orders - Jäger Squad" / "Convert to Ranger Squad" /
+    # "Convert to Sturmpioneer Squad" all transform an existing squad
+    # (Grenadier -> Jäger, Riflemen -> Ranger, Pioneer -> Sturmpioneer)
+    # rather than recruiting a fresh squad. Treating them as production
+    # would double-count the original squad. They stay 'ability'.
+
+    # --- DAK callin tree (T0 HQ callins) ---
+    # Per project memory: DAK has a "T0 callin tree" — Panzerjäger, Towed
+    # Pak, Towed le.IG, 250 Assault HT callins from HQ via ability, then
+    # upgraded by a T4 ability into Tiger / double StuG / Panzer III+eng /
+    # Panzer IV+gren callins. Each "Group" string is a unit-creation event.
+    "Panzerjäger Mechanized Group": "Panzerjäger Squad",
+    "Pak 38 Mechanized Group": "Pak 38 Anti-tank Gun Team",
+    "le.IG 18 Mechanized Group": "le.IG 18 Support Gun Team",
+    "Assault Mechanized Group": "Assault Mechanized Group",  # 250 Assault HT w/ Assault Grens
+    "Panzer III Assault Group": "Panzer III Assault Group",   # T4-upgraded callin
+    "Panzer IV Assault Group": "Panzer IV Assault Group",     # T4-upgraded callin
+    "StuG Assault Group": "StuG Assault Group",                # Wehr Breakthrough / DAK T4
+
+    # --- Wehr BG callins ---
+    "Mechanized Assault Group": "Mechanized Assault Group",   # Wehr Mechanized BG
+
+    # --- Paradrop weapon teams (paradrop = unit deployment, new squad) ---
+    "LG40 Recoilless Gun Paradrop": "LG40 Recoilless Gun Paradrop",     # Wehr Luftwaffe BG
+    "Anti-tank Gun Team Paradrop": "Anti-tank Gun Team Paradrop",       # USF Airborne
+    "Heavy Machine Gun Paradrop": "Heavy Machine Gun Paradrop",          # USF Airborne
+    "Commando Section Paradrop": "Commando Section Paradrop",            # UK Special Ops
+    "Commando Support Section Paradrop": "Commando Support Section Paradrop",  # UK Special Ops
+    "M1 Pack Howitzer Paradrop": "M1 Pack Howitzer Paradrop",            # UK doctrinal
+
+    # --- USF doctrinal callins ---
+    "Pathfinders": "Pathfinders",                              # USF doctrinal scout squad
+    "Resistance Fighter Infiltration": "Resistance Fighter Squad",
+    "Saboteur Infiltration": "Saboteur Infiltration",          # UK Special Ops partisan
+    "Paradrop Reinforcements": "Paradrop Reinforcements",     # USF Airborne paratrooper drop
+
+    # --- DAK doctrinal vehicle ---
+    "2.5-tonne Medical Truck": "2.5-tonne Medical Truck",      # DAK medical truck callin
+
+    # --- Tank/vehicle cohdb naming variants ---
+    # cohdb sometimes drops the version suffix ("IV", "F") from unit_db's
+    # canonical name. These map to the existing canonical entries.
+    "Centaur Medium Tank": "Centaur IV Medium Tank",             # UK doctrinal
+    "Panzer IV Command Tank": "Command Panzer IV Medium Tank",   # Wehr Mechanized BG callin
+    "Towed M5 3-inch Anti-tank Gun": "M5 3-inch Anti-tank Gun",  # USF doctrinal
+
+    # --- Squad name variants (cohdb drops "Squad" suffix) ---
+    # USF Heavy Weapons / Special Ops BG callin. Distinct from "Assault
+    # Grenadiers" (Wehr) which is a squad UPGRADE, NOT a unit.
+    "Assault Engineers": "Assault Engineer Squad",
 }
 
 

@@ -21,6 +21,67 @@ from unit_names import is_unit
 COHDB_BASE = "https://cohdb.com"
 MATCHES_PER_PAGE = 20  # cohdb returns 20 per page
 
+# Unit/faction pairs that cohdb mis-attributes due to name-resolution quirks
+# (an sbps_id existing in faction A's data file but the BG that uses it being
+# faction B-only). When we see one of these in build_orders attributed to the
+# wrong faction, it's noise — delete on sight via scrub_phantom_units().
+# Append new entries as they're discovered.
+EXCLUDE_BY_FACTION = {
+    # Italian Coastal Battlegroup is 100% Wehrmacht (215/215 picks in our
+    # data), but `coastal_reserve_ak` exists in DAK's sbps file. Cohdb's
+    # name-lookup falls through to "Coastal Reserves Squad" for some DAK
+    # callin actions whose IDs don't resolve cleanly. Drop on DAK.
+    ("Coastal Reserves Squad", "afrika_korps"),
+
+    # --- Single-row faction mis-attributions (cohdb player_name -> faction
+    # join occasionally failing for unicode/special-char names) ---
+    # DAK-exclusive units tagged to wrong factions:
+    ("Kradschützen Motorcycle Team", "americans"),
+    ("2.5-tonne Medical Truck", "germans"),
+    ("Construct Panzerarmee Kommand", "germans"),
+    ("Guastatori Squad", "germans"),
+    ("Flaktürme", "germans"),
+    ("Advanced Optics", "germans"),
+    ("Resource Caching", "germans"),
+    # Wehr-exclusive units tagged to wrong factions:
+    ("GrW 34 Mortar Team", "afrika_korps"),
+    ("StuG III G Assault Gun", "afrika_korps"),  # DAK has StuG III D, not G
+    ("Medical Station", "afrika_korps"),
+}
+
+
+def scrub_phantom_units(conn=None):
+    """Delete build_orders rows where (unit, player_faction) is a known
+    cohdb name-resolution phantom. Faction info is sourced from
+    cohdb_replay_players (populated by backfill_winners.py), so this must
+    run AFTER the backfill pass. Safe to re-run; deletions are idempotent.
+    """
+    from db import get_conn
+    owns_conn = conn is None
+    if owns_conn:
+        conn = get_conn()
+    total = 0
+    for unit, faction in EXCLUDE_BY_FACTION:
+        n = conn.execute(
+            """
+            DELETE FROM build_orders
+            WHERE unit = ?
+              AND (replay_id, player_name) IN (
+                  SELECT replay_id, player_name
+                  FROM cohdb_replay_players
+                  WHERE faction_slug = ?
+              )
+            """,
+            (unit, faction),
+        ).rowcount
+        if n:
+            print(f"  scrubbed {n} phantom {unit!r} for {faction}")
+        total += n
+    if owns_conn:
+        conn.commit()
+        conn.close()
+    return total
+
 # Keywords that indicate tech/building actions (constructions and tier unlocks)
 TECH_KEYWORDS = [
     "construct ", "unlock ", "upgrade ",
@@ -30,12 +91,42 @@ TECH_KEYWORDS = [
     "infantry training", "armored vehicle training",
 ]
 
-# Keywords that indicate battlegroup selection (when lede="Selects ")
-BATTLEGROUP_KEYWORDS = [
-    "battlegroup", "airborne", "armored", "infantry reserves",
-    "mechanized battlegroup", "special operations", "breakthrough",
-    "italian infantry", "canadian shock", "indian artillery", "gurkha",
-]
+# Exact-match set of battlegroup names as they appear in cohdb data.
+# Used in classify_action() so substring keywords don't catch unit names
+# that happen to contain BG-like words (e.g. "8 Rad Armored Car" was
+# matching "armored", "Canadian Shock Section" was matching "canadian
+# shock", "Gurkha Rifles Section" was matching "gurkha").
+# Append new entries when Relic ships a new battlegroup.
+BATTLEGROUP_NAMES = {
+    # Every faction's BGs that we've seen in cohdb listings (patch 2.3.1).
+    # Some names appear without the "Battlegroup" suffix - cohdb naming
+    # is inconsistent.
+    "Luftwaffe Battlegroup",
+    "Special Operations Battlegroup",
+    "Mechanized Battlegroup",
+    "Armored Battlegroup",
+    "Airborne Battlegroup",
+    "Infantry Reserves",  # Wehr - no suffix
+    "Canadian Shock Battlegroup",
+    "Breakthrough Battlegroup",
+    "Breakthrough",  # short variant
+    "Australian Defense Battlegroup",
+    "Battlefield Espionage Battlegroup",
+    "Heavy Armor Battlegroup",
+    "Italian Combined Arms Battlegroup",
+    "Italian Infantry",  # DAK - no suffix (ambiguous with squad callin name)
+    "Armored Support Battlegroup",
+    "Kriegsmarine Battlegroup",
+    "Terror Battlegroup",
+    "Indian Artillery Battlegroup",
+    "Italian Coastal Battlegroup",
+    "Polish Cavalry Battlegroup",
+    "Panzerjäger Kommand Battlegroup",
+    "Advanced Infantry Battlegroup",
+    "Last Stand Battlegroup",
+    "Air and Sea Battlegroup",
+    "Italian Partisan Battlegroup",
+}
 
 def classify_action(unit: str, lede: str) -> str:
     """
@@ -52,10 +143,21 @@ def classify_action(unit: str, lede: str) -> str:
             return "tech"
 
     if lede == "Selects ":
-        # Battlegroup picks have "battlegroup" in the name
-        for kw in BATTLEGROUP_KEYWORDS:
-            if kw in unit_lower:
-                return "battlegroup"
+        # 1) Exact-match BG names take precedence (avoids "armored" /
+        #    "canadian shock" / "gurkha" / "italian infantry" substring
+        #    keywords catching unit names).
+        if unit in BATTLEGROUP_NAMES:
+            return "battlegroup"
+        # 2) Doctrinal callin: "Selects <Squad Name>" recruits or callins a
+        #    squad/unit via the picked battlegroup (e.g. Kriegsmariner Squad,
+        #    SSF Commando Squad, Australian Light Infantry Section, 8 Rad
+        #    via Wehr Mechanized BG). If it's a recognized squad/unit,
+        #    count it as production so it surfaces in opener / unit-
+        #    popularity analysis. True abilities/upgrades (Bersaglieri
+        #    Bolster, Veteran Squad Leaders, etc.) aren't unit names and
+        #    fall through to ability.
+        if is_unit(unit):
+            return "production"
         return "ability"
 
     # Empty lede: real production unit or an ability/call-in usage
@@ -132,13 +234,13 @@ def scrape_match_listing(page: int = 1, elo: int = MIN_ELO,
     return unique_ids, next_cursor
 
 
-def scrape_replay_overview(replay_id: int) -> tuple[str | None, str | None]:
-    """Fetch patch version and map name from the replay overview page.
-    Returns (patch, map_name)."""
+def scrape_replay_overview(replay_id: int) -> tuple[str | None, str | None, int | None]:
+    """Fetch patch, map name, and Relic match_id from the replay overview page.
+    Returns (patch, map_name, match_id)."""
     url = f"{COHDB_BASE}/replays/{replay_id}"
     page_html = fetch_page(url)
     if not page_html:
-        return None, None
+        return None, None, None
 
     # Old format: <dd>2.3.1</dd><dt>Patch</dt>
     patch_match = re.search(
@@ -153,16 +255,23 @@ def scrape_replay_overview(replay_id: int) -> tuple[str | None, str | None]:
     # Old format: /assets/{mapname}_large-{hash}.png
     map_match = re.search(r'/assets/([a-z0-9_]+)_large-[a-f0-9]+\.png', page_html)
     if not map_match:
-        # New format: map name in scenario image path /assets/scenarios/.../mapname_2p/
-        map_match = re.search(r'/assets/scenarios/[^/]+/[^/]+/([a-z0-9_]+)/', page_html)
+        # New cohdb format (Hotwire/Turbo): map image at
+        # /assets/scenarios/<mode>/<mapname>/<mapname>_mm_handmade-<hash>.webp
+        # The map name is the SECOND path segment after "scenarios", not the third.
+        map_match = re.search(r'/assets/scenarios/[^/]+/([a-z0-9_]+)/', page_html)
     map_name = map_match.group(1) if map_match else None
 
-    return patch, map_name
+    # Relic match_id from <title>Match 70183461 - cohdb - ...</title>.
+    # Unlocks cross-source join to matches/match_players.
+    mid_match = re.search(r'<title>\s*Match (\d+)', page_html)
+    match_id = int(mid_match.group(1)) if mid_match else None
+
+    return patch, map_name, match_id
 
 
 def scrape_patch_version(replay_id: int) -> str | None:
     """Backwards-compat wrapper - returns just the patch version."""
-    patch, _ = scrape_replay_overview(replay_id)
+    patch, _, _ = scrape_replay_overview(replay_id)
     return patch
 
 
@@ -267,16 +376,16 @@ def _parse_builds_new_format(page_html: str) -> tuple[list[dict], int | None]:
     return players_data, duration_s
 
 
-def scrape_build_orders(replay_id: int) -> tuple[list[dict], int | None, str | None, str | None]:
+def scrape_build_orders(replay_id: int) -> tuple[list[dict], int | None, str | None, str | None, int | None]:
     """
-    Scrape build order data from /replays/{id}/builds + patch + map from overview.
-    Returns (list of player build orders, match_duration_seconds, patch_version, map_name).
+    Scrape build order data from /replays/{id}/builds + patch + map + match_id from overview.
+    Returns (player build orders, duration_s, patch, map_name, relic_match_id).
     Supports both old (data-timeline JSON) and new (Hotwire tooltip) formats.
     """
     url = f"{COHDB_BASE}/replays/{replay_id}/builds"
     page_html = fetch_page(url)
     if not page_html:
-        return [], None, None, None
+        return [], None, None, None, None
 
     # Try old format first (data-timeline-players-value JSON blob)
     players_data, duration_s = _parse_builds_old_format(page_html)
@@ -286,13 +395,13 @@ def scrape_build_orders(replay_id: int) -> tuple[list[dict], int | None, str | N
         players_data, duration_s = _parse_builds_new_format(page_html)
 
     if not players_data:
-        return [], None, None, None
+        return [], None, None, None, None
 
-    # Fetch patch + map from overview page
+    # Fetch patch + map + match_id from overview page
     time.sleep(REQUEST_DELAY)
-    patch, map_name = scrape_replay_overview(replay_id)
+    patch, map_name, match_id = scrape_replay_overview(replay_id)
 
-    return players_data, duration_s, patch, map_name
+    return players_data, duration_s, patch, map_name, match_id
 
 
 def is_ai_player_name(name: str) -> bool:
@@ -311,7 +420,8 @@ def is_ai_player_name(name: str) -> bool:
 
 def store_replay_build_orders(replay_id: int, players_data: list[dict],
                                duration_s: int | None, patch: str | None,
-                               map_name: str | None, conn):
+                               map_name: str | None, conn,
+                               match_id: int | None = None):
     """Store build order data for a replay. Skips replays with AI players."""
     # Skip games with any CPU/AI player - these are skirmishes, not 1v1 ranked
     # Still insert a cohdb_replays row so we don't re-fetch on next run
@@ -319,10 +429,10 @@ def store_replay_build_orders(replay_id: int, players_data: list[dict],
         if is_ai_player_name(player.get("name", "")):
             now = datetime.now(timezone.utc).isoformat()
             conn.execute("""
-                INSERT INTO cohdb_replays (replay_id, duration_s, mode, patch, map_name, scraped_at)
-                VALUES (?, ?, 'ai_skipped', ?, ?, ?)
+                INSERT INTO cohdb_replays (replay_id, duration_s, mode, patch, map_name, match_id, scraped_at)
+                VALUES (?, ?, 'ai_skipped', ?, ?, ?, ?)
                 ON CONFLICT(replay_id) DO NOTHING
-            """, (replay_id, duration_s, patch, map_name, now))
+            """, (replay_id, duration_s, patch, map_name, match_id, now))
             return 0
 
     now = datetime.now(timezone.utc).isoformat()
@@ -332,14 +442,15 @@ def store_replay_build_orders(replay_id: int, players_data: list[dict],
 
     # Upsert the replay record
     conn.execute("""
-        INSERT INTO cohdb_replays (replay_id, duration_s, mode, patch, map_name, scraped_at)
-        VALUES (?, ?, 'ranked_1v1', ?, ?, ?)
+        INSERT INTO cohdb_replays (replay_id, duration_s, mode, patch, map_name, match_id, scraped_at)
+        VALUES (?, ?, 'ranked_1v1', ?, ?, ?, ?)
         ON CONFLICT(replay_id) DO UPDATE SET
             duration_s=excluded.duration_s,
             patch=excluded.patch,
             map_name=COALESCE(excluded.map_name, cohdb_replays.map_name),
+            match_id=COALESCE(excluded.match_id, cohdb_replays.match_id),
             scraped_at=excluded.scraped_at
-    """, (replay_id, duration_s, patch, map_name, now))
+    """, (replay_id, duration_s, patch, map_name, match_id, now))
 
     total_actions = 0
     for player in players_data:
@@ -396,14 +507,14 @@ def scrape_cohdb(max_pages: int = 50, elo: int = MIN_ELO):
                 continue
 
             print(f"    Replay {rid}:", end=" ", flush=True)
-            players_data, duration_s, patch, map_name = scrape_build_orders(rid)
+            players_data, duration_s, patch, map_name, match_id = scrape_build_orders(rid)
 
             if not players_data:
                 print("no build data")
                 time.sleep(REQUEST_DELAY)
                 continue
 
-            actions = store_replay_build_orders(rid, players_data, duration_s, patch, map_name, conn)
+            actions = store_replay_build_orders(rid, players_data, duration_s, patch, map_name, conn, match_id=match_id)
             conn.commit()
             total_replays += 1
             total_actions += actions

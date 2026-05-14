@@ -1,5 +1,5 @@
 """
-CoH3 1v1 Pro Scene Dashboard
+CoH3 1v1 Pro Scene Dashboard — v2 (patch-aware: load_matches_df accepts `patch=`)
 Run: streamlit run dashboard.py
 """
 

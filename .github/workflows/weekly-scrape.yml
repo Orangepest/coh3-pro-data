@@ -11,9 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      # Force unbuffered stdout so per-replay progress lines appear in
+      # GitHub Actions logs in real time instead of in 4-8 KB chunks.
+      PYTHONUNBUFFERED: "1"
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - uses: actions/setup-python@v5
         with:
